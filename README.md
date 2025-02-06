@@ -6,3 +6,4 @@ Hiervoor gaan we een online kaart spel maken. Spelers gaan kaarten moeten verdie
 
 ### team:
 
+Alle documentatie zoals foto's , video's, en documenten zullen worden gedeeld in de documentatie folder.
