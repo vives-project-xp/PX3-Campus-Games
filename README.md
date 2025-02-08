@@ -7,9 +7,9 @@ Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten ver
 ### team:
 (taken: frontend, backend, graphics designer, game logic, database, ambassadeur)
 
-Verstraete Domien: Front/Back-end developer
+- Verstraete Domien: Front/Back-end developer
 
-Brassaert Arthur: Frontend developer
+- Brassaert Arthur: Frontend developer
 
 
 Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 'Documentatie'. Maak voor elk onderwerp een aparte map binnen de 'Documentatie'-map, zodat alles overzichtelijk en gestructureerd blijft.
