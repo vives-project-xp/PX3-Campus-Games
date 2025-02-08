@@ -1,9 +1,13 @@
 ### Vives Card Game
 
-Ons doel is om een game te maken die alle opleidingen zou kunnen  verenigen om samen te spelen en meer te socializen.
+Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
 
-Hiervoor gaan we een online kaart spel maken. Spelers gaan kaarten moeten verdienen, traden en battelen voor kaarten en scores.
+Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
 
 ### team:
+(taken: frontend, backend, graphics designer, game logic, database, ambassadeur)
 
-Alle documentatie zoals foto's , video's, en documenten zullen worden gedeeld in de documentatie folder.
+Verstraete Domien: Front/Back-end developer
+
+
+Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 'Documentatie'. Maak voor elk onderwerp een aparte map binnen de 'Documentatie'-map, zodat alles overzichtelijk en gestructureerd blijft.
