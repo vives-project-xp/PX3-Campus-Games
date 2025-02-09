@@ -11,5 +11,6 @@ Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten ver
 
 - Brassaert Arthur: Frontend developer
 
+- Meuleman Joshua: Back-end developer/database/3D designer
 
 Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 'Documentatie'. Maak voor elk onderwerp een aparte map binnen de 'Documentatie'-map, zodat alles overzichtelijk en gestructureerd blijft.
