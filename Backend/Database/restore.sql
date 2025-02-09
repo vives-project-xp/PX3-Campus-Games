@@ -18,7 +18,7 @@ CREATE TABLE scores_weekly (
     score INT DEFAULT 0,
     week_number INT NOT NULL,
     year INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE 
 );
 
 -- Maak de totale scores tabel aan
