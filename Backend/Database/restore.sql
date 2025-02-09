@@ -1,11 +1,11 @@
 -- Maak een nieuwe database aan
-CREATE DATABASE kaartspel_db;
+CREATE DATABASE if not EXISTS kaartspel_db;
 USE kaartspel_db;
 
 -- Maak de users tabel aan
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     opleiding VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
