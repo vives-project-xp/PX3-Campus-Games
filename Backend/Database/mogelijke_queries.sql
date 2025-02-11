@@ -4,7 +4,7 @@ INSERT INTO users (name, opleiding, password) VALUES ('Gebruikersnaam', 'Opleidi
 -- Een gebruiker opzoeken bij inloggen
 SELECT id, password FROM users WHERE name = 'Gebruikersnaam';
 
--- Score ophalen per gebruiker
+-- Score ophalen per gebruiker geparameteriseerd
 SELECT total_score FROM scores_total WHERE user_id = 1;
 
 -- Score per week ophalen
