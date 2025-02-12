@@ -5,6 +5,7 @@
       <div v-for="card in cards" :key="card.id">
         <h3>{{ card.name }}</h3>
         <img :src="getImageUrl(card.image)" :alt="card.name">
+        <h4>Rarity: {{ card.rarity }}</h4>
         <p>Attack: {{ card.attack }}</p>
         <p>Defense: {{ card.defense }}</p>
         <p>Health: {{ card.health }}</p>
