@@ -1,18 +1,18 @@
 <template>
     <div>
-      <h2>Battle Page</h2>
+      <h2>Home Page</h2>
       <p>Not finished yet.</p>
     </div>
   </template>
   
   <script>
   export default {
-    name: 'battle-page'
+    name: 'home-page'
   };
   </script>
 
- <style scoped>
- h2 {
-  font-size: 40px;
- }
- </style>
+  <style scoped>
+  h2 {
+    font-size:40px;
+  }
+  </style>

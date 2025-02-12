@@ -19,11 +19,13 @@
   <style scoped>
   header {
     background-color: #f0f0f0;
-    padding: 20px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 15px;
+    font-size: large;
   }
   
   nav {
