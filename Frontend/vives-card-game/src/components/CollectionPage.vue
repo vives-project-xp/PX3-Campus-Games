@@ -5,7 +5,7 @@
       <div v-for="card in cards" :key="card.id">
         <h3>{{ card.name }}</h3>
         <img :src="getImageUrl(card.image)" :alt="card.name">
-        <h4>Rarity: {{ card.rarity }}</h4>
+        <p1>Rarity: {{ card.rarity }}</p1>
         <p>Attack: {{ card.attack }}</p>
         <p>Defense: {{ card.defense }}</p>
         <p>Health: {{ card.health }}</p>
@@ -17,13 +17,13 @@
 
 <script>
 import { useRoute } from 'vue-router';
-import { computed, ref } from 'vue'; // Removed onMounted
+import { computed, ref } from 'vue'; 
 
 export default {
   name: 'collection-page',
   setup() {
     const route = useRoute();
-    const cards = ref(require('../assets/cards.json')); // Directly import JSON
+    const cards = ref(require('../assets/cards.json')); 
     const selectedCards = ref([]);
 
     const isCollectionRoute = computed(() => {
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style scoped>
-/* (Your styles) */
+
 .card-collection {
   padding: 0px;
   font-size: 20px;
@@ -63,5 +63,10 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
+}
+
+p1{
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

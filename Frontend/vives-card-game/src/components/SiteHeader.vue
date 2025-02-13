@@ -4,8 +4,10 @@
       <nav>
         <router-link to="/">Home</router-link>
         <router-link to="/collection">Collection</router-link>
+        <router-link to="/trading">Trade</router-link>
         <router-link to="/battle">Battle</router-link>
         <router-link to="/shop">Shop</router-link>
+        <router-link to="/account">Account</router-link>
         </nav>
     </header>
   </template>
