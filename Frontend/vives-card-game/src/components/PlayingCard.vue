@@ -1,5 +1,3 @@
-<!-- component voor en kaart -->
-
 <template>
   <div class="card" :class="{ 'selected': isSelected, 'damaged': health < 20 }">
     <img :src="cardImage" :alt="cardName" class="card-image">
@@ -18,6 +16,7 @@ export default {
   name: 'playing-card',
   props: {
     cardName: { type: String, required: true },
+    cardRarity: { type: String, required: true },
     cardImage: { type: String, required: true },
     attack: { type: Number, required: true },
     defense: { type: Number, required: true },
@@ -39,7 +38,6 @@ export default {
 </script>
 
 <style scoped>
-/* (Your existing styles for .card, .card-image, etc. are correct) */
 .card {
   border: 1px solid #ddd;
   border-radius: 8px;

@@ -1,7 +1,15 @@
 <template>
     <div>
-      <h2>Home page</h2>
-      <p>Not finished yet.</p>
+      <h2>Our goal</h2>
+      <p>(doel)</p>
+      <h2>The game</h2>
+      <p>(algemene werking van het spel)</p>
+      <h2>The cards</h2>
+      <p>(uitleg over de kaarten)</p>
+      <h2>Leaderbord</h2>
+      <p>(uitleg over leaderbord)</p>
+      <h2>The team</h2>
+      <p>(opsomming teamleden + takenverdeling)</p>
     </div>
   </template>
   

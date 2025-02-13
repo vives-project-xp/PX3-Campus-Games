@@ -1,6 +1,6 @@
 <template>
   <div class="card-collection">
-    <h2 v-if="isCollectionRoute">Your Cards:</h2>
+    <h2 v-if="isCollectionRoute">Your cards:</h2>
     <div class="card-grid" v-if="cards.length > 0">
       <div v-for="card in cards" :key="card.id">
         <h3>{{ card.name }}</h3>
@@ -23,7 +23,7 @@ export default {
   name: 'collection-page',
   setup() {
     const route = useRoute();
-    const cards = ref(require('../assets/cards.json')); 
+    const cards = ref(require('../assets/testCards.json')); 
     const selectedCards = ref([]);
 
     const isCollectionRoute = computed(() => {
@@ -62,10 +62,10 @@ export default {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
+  gap: 30px;
 }
 
-p1{
+p1 {
   font-size: 20px;
   font-weight: bold;
 }
