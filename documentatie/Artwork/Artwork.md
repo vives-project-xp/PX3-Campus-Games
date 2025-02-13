@@ -14,7 +14,7 @@ Genereerd meerdere images met veel keuzen uit prompts. Niet mogelijk om te bewer
 [canva](https://www.canva.com)
 Heel basic generation, geen prompts, geen voorbeelden, subscrtiptie nodig.
 
-[PXLR]
+[pixlr](https://pixlr.com)
 Redelijk basic generatie. Geen prompts, geen manier om te bewerken, Zelfs met subsctriptie klein beperkt aantal generaties.
 
 [Adobe Express](https://www.adobe.com/nl/express/?promoid=Y69SGP43&mv=other)
