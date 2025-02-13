@@ -55,9 +55,23 @@ const getUserBy = async (req, res) => {
 };
 
 
+const deleteUser = async (req, res) => {
+    try {
+        let oldUser = await db.execute('SELECT * FROM users WHERE id = ?', [req.params.id]);
+        const { id } = req.params;
+        const [result] = await db.execute('DELETE FROM users WHERE id = ?', [id]);
+        // show the deleted oldUser info thats deleted
+        res.json({ message: 'User deleted', oldUser: oldUser[0] });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            }
+};
+
+
 
 export {
     addUser,
     getAllUsers,
     getUserBy,
+    deleteUser,
 }
