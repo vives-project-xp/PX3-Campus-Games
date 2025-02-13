@@ -25,6 +25,17 @@ const addUser = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+        const [users] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 export {
-    addUser
+    addUser,
+    getAllUsers
 }
