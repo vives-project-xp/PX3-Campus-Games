@@ -1,10 +1,20 @@
 ## General GitHub Guide
 
+### **BEFORE COMMIT 1 PUSH? CHECK STATUS:**
+```bash
+git status
+```
+
 ### **COMMIT & PUSH**
 Modify files, then add, commit, and push:
 ```bash
 git add .
 git commit -m "Added chat functionality"
+git push origin *your-branch-name* 
+```
+if **git push** does not work, try "git pull" first, then push again:
+```bash
+git pull
 git push origin *your-branch-name*
 ```
 
@@ -13,17 +23,17 @@ git push origin *your-branch-name*
   ```bash
   git branch
   ```
-- To create a new branch (e.g., `feature-chat`):
+- To create a new branch:
   ```bash
-  git branch feature-chat
+  git branch *your-branch-name*
   ```
 - To start working in your new branch:
   ```bash
-  git checkout feature-chat
+  git checkout *your-branch-name*
   ```
-  *(Git 2.23+ shortcut:)*
+  *(work in new branch, Git 2.23+ shortcut:)*
   ```bash
-  git switch feature-chat
+  git switch *your-branch-name*
   ```
 
 ### **MERGING BRANCHES**
@@ -35,7 +45,7 @@ git push origin *your-branch-name*
    ```bash
    git pull origin *your-branch-name*
    ```
-3. Merge the feature branch:
+3. Merge your branch:
    ```bash
    git merge *your-branch-name*
    ```
@@ -70,11 +80,25 @@ git pull
 git stash pop
 ```
 
-#### **3. (FORCE) Make local branch identical to remote branch (All local changes lost):**
+#### **3. (FORCE) Make local branch identical to remote branch (All local changes are lost):**
 ```bash
 git fetch --all
 git reset --hard origin/*your-branch-name*
 ```
+
+
+### **Additional (Important) Things**
+
+#### **1. VIEW COMMIT HISTORY:**
+```bash
+git log
+```
+
+#### **2.REVERT CHANGES/COMMIT:**
+```bash
+git revert *commit-id*
+```
+
 
 ### **Additional Tips**
 ✅ **Use clear branch names** (e.g., `feature-login`, `bugfix-scoreboard`).
