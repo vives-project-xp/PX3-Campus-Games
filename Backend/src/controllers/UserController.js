@@ -14,7 +14,7 @@ const addUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // ✅ Insert user into DB
-        const [result] = await db.execute(
+        const [result] = await pool.query(
             'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
@@ -25,6 +25,19 @@ const addUser = async (req, res) => {
     }
 };
 
+const ShowAllUsers = async () => {
+    try {
+        // Fetch all users from the database
+        const [users] = await pool.query('SELECT name, opleiding, id, password FROM users');
+        return users;
+    } catch (error) {
+        console.error('❌ Error:', error);
+        throw error;
+    }
+};
+
+
 export {
-    addUser
+    addUser,
+    ShowAllUsers,
 }
