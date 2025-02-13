@@ -8,7 +8,7 @@
 </template>
   
 <script>
-  import AppHeader from './components/SiteHeader.vue';
+  import AppHeader from './components/NavigationBar.vue';
   
   export default {
    name: 'App',

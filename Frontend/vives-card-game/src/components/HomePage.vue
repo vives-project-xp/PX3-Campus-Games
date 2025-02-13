@@ -1,15 +1,15 @@
 <template>
     <div>
-      <h2>Our goal</h2>
-      <p>(doel)</p>
       <h2>The game</h2>
-      <p>(algemene werking van het spel)</p>
+      <p>(tutorial?)</p>
+      <h2>Leaderboard</h2>
+      <p>(leaderboard)</p>
       <h2>The cards</h2>
-      <p>(uitleg over de kaarten)</p>
-      <h2>Leaderbord</h2>
-      <p>(uitleg over leaderbord)</p>
+      <p>(how the cards/ modifiers work, library of all the cards in the game?)</p>
+      <h2>Our goal</h2>
+      <p>(goal)</p>
       <h2>The team</h2>
-      <p>(opsomming teamleden + takenverdeling)</p>
+      <p>(team)</p>
     </div>
   </template>
   

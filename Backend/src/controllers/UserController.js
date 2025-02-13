@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { registerSchema } from '../middleware/validation.js';
 
-export const addUser = async (req, res) => {
+const addUser = async (req, res) => {
     try {
         // ✅ Validate input
         const { error } = registerSchema.validate(req.body);
@@ -15,7 +15,7 @@ export const addUser = async (req, res) => {
 
         // ✅ Insert user into DB
         const [result] = await db.execute(
-            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
 
@@ -24,3 +24,7 @@ export const addUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export {
+    addUser
+}

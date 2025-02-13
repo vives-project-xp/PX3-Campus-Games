@@ -3,12 +3,7 @@
     <h2 v-if="isCollectionRoute">Your cards:</h2>
     <div class="card-grid" v-if="cards.length > 0">
       <div v-for="card in cards" :key="card.id">
-        <h3>{{ card.name }}</h3>
         <img :src="getImageUrl(card.image)" :alt="card.name">
-        <p1>Rarity: {{ card.rarity }}</p1>
-        <p>Attack: {{ card.attack }}</p>
-        <p>Defense: {{ card.defense }}</p>
-        <p>Health: {{ card.health }}</p>
       </div>
     </div>
     <div v-else>No cards found.</div>
