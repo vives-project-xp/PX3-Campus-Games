@@ -15,12 +15,7 @@
 export default {
   name: 'playing-card',
   props: {
-    cardName: { type: String, required: true },
-    cardRarity: { type: String, required: true },
     cardImage: { type: String, required: true },
-    attack: { type: Number, required: true },
-    defense: { type: Number, required: true },
-    health: { type: Number, required: true },
     isSelected: { type: Boolean, default: false }
   },
   computed: {
@@ -42,10 +37,11 @@ export default {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 12px;
-  width: 150px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   background-color: white;
+  width: 20px;
+  height: 20px;
 }
 
 .card:hover {
@@ -63,8 +59,12 @@ export default {
 }
 
 .card-image {
-  width: 100%;
+  max-width: 100%;
+  max-height:150px;
+  width: auto;
   height: auto;
+  display: block;
+  margin: 0 auto;
   border-bottom: 1px solid #eee;
   margin-bottom: 8px;
 }

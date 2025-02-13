@@ -21,7 +21,7 @@
   <style scoped>
   header {
     background-color: #f0f0f0;
-    padding: 5px;
+    padding: 10px;
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
