@@ -21,7 +21,7 @@
   <style scoped>
   header {
     background-color: #f0f0f0;
-    padding: 15px;
+    padding: 5px;
     border-bottom: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
@@ -33,21 +33,24 @@
   nav {
     display: flex;
     gap: 20px;
+    border-color: #e00020;
   }
   
   nav a {
     text-decoration: none;
     color: #2c3e50;
-    padding: 5px 10px;
+    padding: 10px 15px;
     border-radius: 5px;
+    font-size: 125%;
   }
   
   nav a.router-link-exact-active {
-    background-color: #2c3e50;
+    background-color: #e00020;
     color: white;
   }
   
   h1 {
       margin: 0;
+      font-size: 50px;
   }
   </style>
