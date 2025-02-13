@@ -15,7 +15,7 @@ export const addUser = async (req, res) => {
 
         // ✅ Insert user into DB
         const [result] = await db.execute(
-            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
 
