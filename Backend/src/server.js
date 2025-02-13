@@ -19,10 +19,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`vives-card-game-backend app listening on port ${port}`)
 })
-// print dotenf file
-
-console.log(process.env.DB_PORT);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASS);
-console.log(process.env.DB_DTBS);
-console.log(process.env.DB_HOST);

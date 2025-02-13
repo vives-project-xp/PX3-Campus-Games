@@ -19,15 +19,4 @@ const pool = mysql.createPool({
     connectionLimit: 10 // Limit the number of connections to the database
 });
 
-// ✅ Test the database connection
-(async () => {
-    try {
-        const connection = await pool.getConnection();
-        console.log("✅ Successfully connected to the database.");
-        connection.release(); // Release the connection back to the pool
-    } catch (error) {
-        console.error("❌ Unable to connect to the database:", error.message);
-    }
-})();
-
 export default pool;  // Export the pool for use in other modules
