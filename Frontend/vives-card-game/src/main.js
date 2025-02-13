@@ -5,12 +5,16 @@ import CollectionPage from './components/CollectionPage.vue';
 import BattlePage from './components/BattlePage.vue';
 import ShopPage from './components/ShopPage.vue';
 import HomePage from './components/HomePage.vue';
+import TradingPage from './components/TradingPage.vue';
+import AccountPage from './components/AccountPage.vue';
 
 const routes = [
-  { path: '/', component: HomePage }, // Use HomePage for the root route
+  { path: '/', component: HomePage },
   { path: '/collection', component: CollectionPage },
   { path: '/battle', component: BattlePage },
   { path: '/shop', component: ShopPage },
+  { path: '/trading', component: TradingPage },
+  { path: '/account', component: AccountPage },
 ];
 
 const router = createRouter({
@@ -19,5 +23,5 @@ const router = createRouter({
 });
 
 const app = createApp(App);
-app.use(router); // Use the router
+app.use(router);
 app.mount('#app');

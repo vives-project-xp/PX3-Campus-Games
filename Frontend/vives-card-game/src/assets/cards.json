@@ -3,7 +3,7 @@
        "id": 1,
        "name": "Programmeur",
        "rarity": "common",
-       "image": "/artwork/programmeur.png",
+       "image": "/artwork/test1.png",
        "attack": 10,
        "defense": 5,
        "health": 60
@@ -12,16 +12,16 @@
        "id": 2,
        "name": "Dokter",
        "rarity": "rare",
-       "image": "/artwork/dokter.png",
+       "image": "/artwork/test2.png",
        "attack": 6,
        "defense": 8,
        "health": 45
    },
    {
        "id": 3,
-       "name": "Pedro Calleeuw",
+       "name": "Leerkracht",
        "rarity": "legendary",
-       "image": "/artwork/pedro-calleeuw.png",
+       "image": "/artwork/test3.png",
        "attack": 50,
        "defense": 50,
        "health": 300
