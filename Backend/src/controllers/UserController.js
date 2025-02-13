@@ -25,19 +25,17 @@ const addUser = async (req, res) => {
     }
 };
 
-const ShowAllUsers = async () => {
+const getAllUsers = async (req, res) => {
     try {
-        // Fetch all users from the database
-        const [users] = await pool.query('SELECT name, opleiding, id, password FROM users');
-        return users;
-    } catch (error) {
-        console.error('❌ Error:', error);
-        throw error;
+        const [result] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
+        res.json(result);
+        } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 
 
 export {
     addUser,
-    ShowAllUsers,
+    getAllUsers,
 }
