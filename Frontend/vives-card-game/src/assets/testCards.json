@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "Programmeur",
+        "name": "Programmer",
         "rarity": "common",
         "image": "/artwork/test3.png",
         "attack": 10,
@@ -10,7 +10,7 @@
     },
     {
         "id": 2,
-        "name": "Dokter",
+        "name": "Doctor",
         "rarity": "rare",
         "image": "/artwork/test3.png",
         "attack": 6,
@@ -19,7 +19,7 @@
     },
     {
         "id": 3,
-        "name": "Leerkracht",
+        "name": "Teacher",
         "rarity": "legendary",
         "image": "/artwork/test3.png",
         "attack": 50,

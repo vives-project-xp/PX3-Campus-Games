@@ -1,11 +1,11 @@
 <template>
     <div>
       <h2>Log in</h2>
-      <p>Heb je al een account? Log je dan hier in met je gegevens.</p>
+      <p>Already have an account? Log in here</p>
       <p>(login)</p>
-      <h2>Registreer</h2>
-      <p>Heb je nog geen account? Registreer je dan hier.</p>
-      <p>(registratie)</p>
+      <h2>Register</h2>
+      <p>Don't have an account yet? You can register right here</p>
+      <p>(registration)</p>
     </div>
   </template>
   
