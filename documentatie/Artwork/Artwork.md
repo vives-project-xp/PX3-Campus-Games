@@ -49,3 +49,7 @@ Bouwkunde / Architectuur
 ### Diversiteit
 
 Ik merk op als je Anime- style wilt dat je enkel Aziatische vrouwen krijgt. Deels normaal wegens ANIME maar zorg voor wat diversiteit als het mogelijk is. ik (joshua) geef daar niet om maar docenten waarschijnlijk wel
+
+### Addendum
+Een "cutsie" en zachte stijl is gewenst; Iets conform maar dat diverse images kan genereren.
+Image-to-image vanuit concept design is misschien een goed idee.
