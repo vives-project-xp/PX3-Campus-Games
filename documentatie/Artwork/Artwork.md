@@ -1,6 +1,25 @@
 ### Site voor Artwork te laten generaten
 
 [OpenArt.AI](https://openart.ai)
+Een goeie AI voor generatie. Kunnen voorbeeelden aan gegeven worden. Na generatie kan de image nog bewerkt worden. Kan verschillende getrainde models gebruiken. 
+Kan zelf models maken en trainen met images. Heel gebruiksvriendelijk. Moet presctritie voor aangevraagd worden
+
+[Hugging face](https://huggingface.co)
+Heeft verschillende getrainde AI modules. Geen mogelijkheid om na generatie nog te bewerken. Redelijk basic generation. Kan geen voorbeelden geven om op te basseren.
+ook subscriptie nodig.
+
+[DeepAI](https://deepai.org)
+Genereerd meerdere images met veel keuzen uit prompts. Niet mogelijk om te bewerken na generatie. Kan met voorbeelden werken maar neemt veel over van voorbeeld (achtergrond kleur, pictogrammen, emoij's? ...). Hierdoor zijn de gegenereerde images niet goed. (voorbeeld 'hacker'). subscriptie nodig
+
+[canva](https://www.canva.com)
+Heel basic generation, geen prompts, geen voorbeelden, subscrtiptie nodig.
+
+[PXLR]
+Redelijk basic generatie. Geen prompts, geen manier om te bewerken, Zelfs met subsctriptie klein beperkt aantal generaties.
+
+[Adobe Express](https://www.adobe.com/nl/express/?promoid=Y69SGP43&mv=other)
+Redelijk goede generatie, Meerdere images per prompt, Kan gebruik maken van voorbeelden, Kan prompts gebruiken, kan bewerken na generatie, redelijk goedkope subscriptie (12 per maand). 250 generaties per maand.
+
 
 Let Op! iedereen heeft maar 40 tokens dus elk 40 pogingen wees zuinig en slim met uw prompts. Zo niet nieuwe accounts/ 1 acc met betaling
 
