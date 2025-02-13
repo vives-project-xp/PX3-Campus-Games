@@ -34,8 +34,30 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+const getUserBy = async (req, res) => {
+    try {
+        const { param, value } = req.params; // Get column name and value from URL params
+        
+        // Validate the column name to prevent SQL injection
+        const allowedParams = ['id', 'name', 'opleiding']; // Define allowed columns
+        if (!allowedParams.includes(param)) {
+            return res.status(400).json({ error: "Invalid search parameter" });
+        }
+
+        // Query database dynamically
+        const query = `SELECT id, name, opleiding, created_at FROM users WHERE ${param} = ?`;
+        const [result] = await db.execute(query, [value]);
+
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 
 export {
     addUser,
     getAllUsers,
+    getUserBy,
 }
