@@ -44,3 +44,15 @@ CREATE TABLE user_cards (
     quantity INT DEFAULT 1,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+-- table voor alle informatie van alle kaarten (health, attack , defence ,name ,rarity, card_id )
+CREATE TABLE Cards_dex (
+    card_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    health INT DEFAULT 0,
+    attack INT DEFAULT 0,
+    defense INT DEFAULT 0,
+    rarity ENUM('Common', 'Uncommon', 'Rare', 'Epic', 'Legendary') NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
