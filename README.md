@@ -17,6 +17,6 @@ Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten ver
 
 - Degeest Bram: Robotics/Back-end developer
 
-- Pladijs Tom: 
+- Pladijs Tom: front-end/back-end wanneer nodig.
 
 Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 'Documentatie'. Maak voor elk onderwerp een aparte map binnen de 'Documentatie'-map, zodat alles overzichtelijk en gestructureerd blijft.
