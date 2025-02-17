@@ -3,9 +3,6 @@
     <img :src="cardImage" :alt="cardName" class="card-image">
     <div class="card-info">
       <h2 class="card-name">{{ cardName }}</h2>
-      <p>Attack: {{ attack }}</p>
-      <p>Defense: {{ defense }}</p>
-      <p>Health: <span :style="{ color: healthColor }">{{ health }}</span></p>
       <slot></slot>
     </div>
   </div>
@@ -15,33 +12,26 @@
 export default {
   name: 'playing-card',
   props: {
+    cardName: { type: String, required: true },
     cardImage: { type: String, required: true },
     isSelected: { type: Boolean, default: false }
-  },
-  computed: {
-    healthColor() {
-      if (this.health >= 50) {
-        return 'green';
-      } else if (this.health >= 20) {
-        return 'orange';
-      } else {
-        return 'red';
-      }
-    }
   }
 };
 </script>
 
 <style scoped>
 .card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  width: 100%;
+  max-width: 250px;
+  box-shadow: var(--box-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background-color: white;
-  width: 20px;
-  height: 20px;
+  background-color: var(--primary-color);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -50,8 +40,8 @@ export default {
 }
 
 .card.selected {
-  border-color: blue;
-  box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3);
+  border-color: var(--secondary-color);
+  box-shadow: 0 4px 8px rgba(230, 0, 0, 0.3);
 }
 
 .card.damaged {
@@ -59,23 +49,31 @@ export default {
 }
 
 .card-image {
-  max-width: 100%;
-  max-height:150px;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
   display: block;
   margin: 0 auto;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 8px;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  margin-bottom: 10px;
 }
 
 .card-name {
-  font-size: 1.1em;
-  margin-bottom: 6px;
+  font-size: 1.2em;
+  margin-bottom: 8px;
   font-weight: bold;
+  color: var(--secondary-color);
+  text-align: center;
 }
 
 .card-info p {
-  margin: 4px 0;
+  margin: 5px 0;
+  text-align: center;
+}
+.card-info{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
 }
 </style>

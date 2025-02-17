@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>The game</h2>
+      <h2>How to play</h2>
       <p>(tutorial?)</p>
       <h2>Leaderboard</h2>
       <p>(leaderboard)</p>

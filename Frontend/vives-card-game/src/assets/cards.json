@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Programmer",
         "rarity": "common",
-        "image": "/artwork/testcard.png",
+        "image": "/artwork/test1.png",
         "attack": 10,
         "defense": 5,
         "health": 60
@@ -12,7 +12,7 @@
         "id": 2,
         "name": "Doctor",
         "rarity": "rare",
-        "image": "/artwork/testcard.png",
+        "image": "/artwork/test2.png",
         "attack": 6,
         "defense": 8,
         "health": 45
