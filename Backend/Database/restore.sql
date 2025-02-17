@@ -36,15 +36,7 @@ CREATE TABLE scores_study (
     total_score INT DEFAULT 0
 );
 
--- Maak een tabel aan voor de kaarten van de gebruikers
-CREATE TABLE user_cards (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    card_name VARCHAR(100) NOT NULL,
-    quantity INT DEFAULT 1,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
--- table voor alle informatie van alle kaarten (health, attack , defence ,name ,rarity, card_id )
+-- Table voor alle informatie van alle kaarten (health, attack, defense, name, rarity, card_id)
 CREATE TABLE Cards_dex (
     card_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -56,3 +48,12 @@ CREATE TABLE Cards_dex (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tussenliggende tabel voor gebruikerskaarten (JOIN TABLE)
+CREATE TABLE user_cards (
+    user_id INT NOT NULL,
+    card_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    PRIMARY KEY (user_id, card_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES Cards_dex(card_id) ON DELETE CASCADE
+);
