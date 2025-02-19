@@ -7,11 +7,12 @@
         :key="card.id + card.image"
         :cardName="card.name"
         :cardImage="card.image"
+        :attack="card.attack"
+        :defense="card.defense"
+        :health="card.health"
         :isSelected="selectedCards.includes(card.id)"
         @click="toggleCardSelection(card.id)"
-      >
-        <button @click.stop="removeCard(card.id)" class="remove-button">Remove</button>
-      </PlayingCard>
+      />
     </div>
     <div v-else>No cards found.</div>
   </div>
@@ -29,7 +30,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const cards = ref(require('../assets/cards.json'));
+    const cards = ref(require('../assets/cards.json')); // Direct import
     const selectedCards = ref([]);
 
     const isCollectionRoute = computed(() => {
@@ -65,20 +66,5 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust as needed */
   gap: 20px;
   justify-items: center;
-}
-
-.remove-button {
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    font-size: 0.9em;
-}
-
-.remove-button:hover {
-    background-color: darken(var(--secondary-color), 10%);
 }
 </style>

@@ -1,10 +1,9 @@
 <template>
   <div class="card" :class="{ 'selected': isSelected, 'damaged': health < 20 }">
-    <img :src="cardImage" :alt="cardName" class="card-image">
+    <img :src="require(`@/assets/` + cardImage)" :alt="cardName" class="card-image">
     <div class="card-info">
       <h2 class="card-name">{{ cardName }}</h2>
-      <slot></slot>
-    </div>
+      </div>
   </div>
 </template>
 
@@ -14,7 +13,21 @@ export default {
   props: {
     cardName: { type: String, required: true },
     cardImage: { type: String, required: true },
+    attack: { type: Number, required: true },
+    defense: { type: Number, required: true },
+    health: { type: Number, required: true },
     isSelected: { type: Boolean, default: false }
+  },
+  computed: {
+    healthColor() {
+      if (this.health >= 50) {
+        return 'green';
+      } else if (this.health >= 20) {
+        return 'orange';
+      } else {
+        return 'red';
+      }
+    }
   }
 };
 </script>

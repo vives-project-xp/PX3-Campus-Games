@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppHeader />
+    <NavigationBar />
     <main>
       <router-view></router-view>
     </main>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import AppHeader from './components/NavigationBar.vue';
+import NavigationBar from './components/NavigationBar.vue'; // Correct import
 
 export default {
   name: 'App',
   components: {
-    AppHeader,
+    NavigationBar, // Correct component name
   },
 };
 </script>
@@ -21,14 +21,14 @@ export default {
 <style>
 /* Global Styles */
 :root {
-  --primary-color: #fff; /* Changed to white */
-  --secondary-color: #e60000; /* Vives Red (approximate) - Use your school's official hex code */
-  --background-color: #f5f5f5; /* Light gray background */
-  --text-color: #333;        /* Dark gray for text */
+  --primary-color: #fff;
+  --secondary-color: #e60000;
+  --background-color: #f5f5f5;
+  --text-color: #333;
   --border-color: #ddd;
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --border-radius: 8px; /* Consistent rounded corners */
-  --font-family: 'Open Sans', sans-serif; /* Example - choose your font! */
+  --border-radius: 8px;
+  --font-family: 'Open Sans', sans-serif;
   /* Add more variables as needed */
 }
 
@@ -36,18 +36,19 @@ export default {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left; /* Removed center alignment */
+  text-align: left;
   color: var(--text-color);
-  background-color: var(--background-color); /* Use background color */
-  min-height: 100vh; /* Ensure the app takes at least the full viewport height */
+  background-color: var(--background-color);
+  min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Stack header and main content vertically*/
+  flex-direction: column; /* Important for layout */
 }
 
 main {
   padding: 20px;
-  max-width: 1200px;  /* Limit content width for better readability on large screens */
-  margin: 0 auto;      /* Center the content horizontally */
-  flex-grow: 1;        /* Allow main content to fill available space */
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-grow: 1; /*  <--  CRUCIAL: Allow <main> to fill space */
+  width: 100%; /* Add this */
 }
 </style>
