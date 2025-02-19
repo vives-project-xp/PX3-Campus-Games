@@ -10,6 +10,8 @@ router.get('/leaderboard/weekly', UserController.getWeeklyLeaderboard);
 router.get('/leaderboard/total', UserController.getTotalLeaderboard);
 router.get('/leaderboard/study', UserController.getStudyLeaderboard);
 router.get('/leaderboard/user/:userId', UserController.getUserRanking);
-
+router.post('/add', UserController.addCardToUser);   
+router.get('/user/:user_id', UserController.getUserCards);  
+router.post('/trade', UserController.tradeCard);  
 export default router;
 

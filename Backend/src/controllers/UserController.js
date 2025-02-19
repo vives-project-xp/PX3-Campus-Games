@@ -144,6 +144,103 @@ const deleteUser = async (req, res) => {
     }
 };
 
+ const addCardToUser = async (req, res) => {
+    try {
+        const { user_id, card_id, quantity } = req.body;
+
+        // Controleer of de kaart al bestaat in het bezit van de speler
+        const [existingCard] = await db.execute(
+            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
+            [user_id, card_id]
+        );
+
+        if (existingCard.length > 0) {
+            // Update de hoeveelheid als de kaart al bestaat
+            await db.execute(
+                'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
+                [quantity, user_id, card_id]
+            );
+        } else {
+            // Voeg een nieuwe kaart toe aan de speler
+            await db.execute(
+                'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
+                [user_id, card_id, quantity]
+            );
+        }
+
+        // Log de transactie
+        await db.execute(
+            'INSERT INTO card_transactions (user_id, card_id, transaction_type) VALUES (?, ?, ?)',
+            [user_id, card_id, 'purchase']
+        );
+
+        res.json({ message: 'Kaart toegevoegd aan gebruiker' });
+    } catch (error) {
+        console.error('Fout bij toevoegen van kaart:', error);
+        res.status(500).json({ error: 'Kan kaart niet toevoegen' });
+    }
+};
+
+// 🔍 Haal alle kaarten van een speler op
+ const getUserCards = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const [cards] = await db.execute(
+            `SELECT c.card_id, c.name, c.health, c.attack, c.defense, c.rarity, uc.quantity
+            FROM user_cards uc
+            JOIN Cards_dex c ON uc.card_id = c.card_id
+            WHERE uc.user_id = ?`,
+            [user_id]
+        );
+
+        res.json(cards);
+    } catch (error) {
+        console.error('Fout bij ophalen van kaarten:', error);
+        res.status(500).json({ error: 'Kan kaarten niet ophalen' });
+    }
+};
+
+// 🔄 Ruil een kaart met een andere speler
+ const tradeCard = async (req, res) => {
+    try {
+        const { from_user, to_user, card_id, quantity } = req.body;
+
+        // Controleer of from_user de kaart heeft
+        const [userCard] = await db.execute(
+            'SELECT quantity FROM user_cards WHERE user_id = ? AND card_id = ?',
+            [from_user, card_id]
+        );
+
+        if (userCard.length === 0 || userCard[0].quantity < quantity) {
+            return res.status(400).json({ error: 'Niet genoeg kaarten om te ruilen' });
+        }
+
+        // Verwijder kaart bij from_user
+        await db.execute(
+            'UPDATE user_cards SET quantity = quantity - ? WHERE user_id = ? AND card_id = ?',
+            [quantity, from_user, card_id]
+        );
+
+        // Voeg kaart toe bij to_user
+        await db.execute(
+            'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?',
+            [to_user, card_id, quantity, quantity]
+        );
+
+        // Log de transactie
+        await db.execute(
+            'INSERT INTO card_transactions (user_id, card_id, transaction_type) VALUES (?, ?, ?), (?, ?, ?)',
+            [from_user, card_id, 'trade', to_user, card_id, 'trade']
+        );
+
+        res.json({ message: 'Kaart succesvol geruild' });
+    } catch (error) {
+        console.error('Fout bij ruilen van kaarten:', error);
+        res.status(500).json({ error: 'Kan kaarten niet ruilen' });
+    }
+};
+
 
 export {
     addUser,
@@ -154,4 +251,7 @@ export {
     getStudyLeaderboard,
     getTotalLeaderboard,
     getUserRanking,
+    addCardToUser,
+    getUserCards,
+    tradeCard,
 }
