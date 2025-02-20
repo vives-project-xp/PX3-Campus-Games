@@ -11,18 +11,18 @@ class Card:
         self.temp_effects = []
 
     def attack(self, target, ap):
-        if ap <= 0:
-            return 0
+        if ap <= 0 or self.health <= 0:
+            return 0  # Dode kaarten kunnen niet aanvallen
         base_damage = self.damage
         if "damage_multiplier" in self.temp_effects:
             base_damage = int(base_damage * 1.5)
         
         if ap == 2:
-            base_damage = int(base_damage * 0.5)  # Second attack is 50% damage
+            base_damage = int(base_damage * 0.5)  # Tweede aanval doet 50% schade
         
         actual_damage = max(0, base_damage - target.block)
         target.health -= actual_damage
-        target.block = 0  # Block only lasts one turn
+        target.block = 0  # Block verdwijnt na één beurt
         return actual_damage
     
     def use_ability(self, target):
@@ -48,7 +48,7 @@ class Player:
         self.name = name
         self.active_card = cards.pop(0)
         self.benched_cards = cards
-        self.ap = 1  # First turn has 1 AP, subsequent turns have 2 AP
+        self.ap = 1  # Eerste beurt heeft 1 AP, volgende beurten 2 AP
     
     def switch_card(self, new_card):
         if new_card in self.benched_cards:
@@ -58,6 +58,17 @@ class Player:
             return True
         return False
     
+    def check_and_swap_card(self):
+        """Controleert of de actieve kaart is verslagen en wisselt deze indien mogelijk."""
+        if self.active_card.health <= 0:
+            print(f"{self.active_card.name} has fainted!")
+            if self.benched_cards:
+                new_card = self.benched_cards.pop(0)
+                self.active_card = new_card
+                print(f"{self.name} swaps in {new_card.name}!")
+            else:
+                print(f"{self.name} has no more cards left!")
+
     def has_cards_left(self):
         return self.active_card.health > 0 or any(c.health > 0 for c in self.benched_cards)
 
@@ -144,15 +155,18 @@ def play_game():
                     print("No benched cards available.")
             else:
                 print("Invalid action choice.")
+
+        # Controleer of de actieve kaart is verslagen en vervang deze
+        opponent.check_and_swap_card()
         
-        # Check if opponent lost
+        # Controleer of het spel eindigt
         if not opponent.has_cards_left():
             print(f"{current_player.name} wins!")
             break
         
         turn_counter += 1
     
-    # Check if any player has no cards left after the turn
+    # Eindcontrole na de beurt
     if not player1.has_cards_left():
         print(f"{player2.name} wins!")
     elif not player2.has_cards_left():
@@ -160,4 +174,3 @@ def play_game():
     
 if __name__ == "__main__":
     play_game()
-
