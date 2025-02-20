@@ -52,7 +52,7 @@
   .back-to-top-button {
     position: fixed; /* Fixed position - stays on screen */
     bottom: 20px;   /* Distance from the bottom */
-    right: 20px;    /* Distance from the right */
+    right: 70px;    /* Distance from the right */
     /* background-color: var(--secondary-color);  Use the color in props */
     color: white;
     border: none;
