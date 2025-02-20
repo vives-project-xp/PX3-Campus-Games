@@ -1,12 +1,12 @@
 import random
 
 class Card:
-    def __init__(self, name, health, damage, abilities):
+    def __init__(self, name, health, damage, ability):
         self.name = name
         self.max_health = health
         self.health = health
         self.damage = damage
-        self.abilities = abilities
+        self.ability = ability
         self.block = 0
         self.temp_effects = []
 
@@ -25,18 +25,18 @@ class Card:
         target.block = 0  # Block only lasts one turn
         return actual_damage
     
-    def use_ability(self, ability, target):
-        if ability == "heal":
+    def use_ability(self, target):
+        if self.ability == "heal":
             heal_amount = random.randint(50, 75)
             target.health = min(target.max_health, target.health + heal_amount)
             return f"{self.name} heals {target.name} for {heal_amount} HP!"
-        elif ability == "block":
+        elif self.ability == "block":
             self.block = random.randint(80, 100)
             return f"{self.name} blocks {self.block} damage!"
-        elif ability == "damage_multiplier":
+        elif self.ability == "damage_multiplier":
             self.temp_effects.append("damage_multiplier")
             return f"{self.name} gets a damage boost for this and next turn!"
-        elif ability == "free_switch":
+        elif self.ability == "free_switch":
             return "free_switch"
         return "Invalid ability"
     
@@ -64,12 +64,12 @@ class Player:
 # Game Setup
 def setup_game():
     all_cards = [
-        Card("Dragon", random.randint(150, 300), random.randint(50, 150), ["heal", "block"]),
-        Card("Warrior", random.randint(150, 300), random.randint(50, 150), ["damage_multiplier", "block"]),
-        Card("Mage", random.randint(150, 300), random.randint(50, 150), ["heal", "free_switch"]),
-        Card("Knight", random.randint(150, 300), random.randint(50, 150), ["block", "free_switch"]),
-        Card("Archer", random.randint(150, 300), random.randint(50, 150), ["damage_multiplier", "heal"]),
-        Card("Berserker", random.randint(150, 300), random.randint(50, 150), ["block", "damage_multiplier"])
+        Card("Dragon", random.randint(150, 300), random.randint(50, 150), "heal"),
+        Card("Warrior", random.randint(150, 300), random.randint(50, 150), "damage_multiplier"),
+        Card("Mage", random.randint(150, 300), random.randint(50, 150), "heal"),
+        Card("Knight", random.randint(150, 300), random.randint(50, 150), "block"),
+        Card("Archer", random.randint(150, 300), random.randint(50, 150), "damage_multiplier"),
+        Card("Berserker", random.randint(150, 300), random.randint(50, 150), "block")
     ]
     
     random.shuffle(all_cards)
@@ -101,31 +101,63 @@ def play_game():
         
         print(f"\n{current_player.name}'s turn with {current_player.ap} AP!")
         
-        # Example of attack action
-        if current_player.ap > 0:
-            damage = current_player.active_card.attack(opponent.active_card, current_player.ap)
-            print(f"{current_player.active_card.name} attacks {opponent.active_card.name} for {damage} damage!")
-            current_player.ap -= 1
-        
-        # Example of ability usage
-        if current_player.ap > 0 and current_player.active_card.abilities:
-            ability = random.choice(current_player.active_card.abilities)
-            result = current_player.active_card.use_ability(ability, current_player.active_card)
-            if result == "free_switch":
+        while current_player.ap > 0:
+            print(f"\n{current_player.name}'s active card: {current_player.active_card}")
+            print(f"{opponent.name}'s active card: {opponent.active_card}")
+            print("Choose an action:")
+            print("1. Attack")
+            print("2. Use Ability")
+            print("3. Switch Card")
+            action = input("Enter the number of your action: ").strip()
+            
+            if action == "1":
+                damage = current_player.active_card.attack(opponent.active_card, current_player.ap)
+                print(f"{current_player.active_card.name} attacks {opponent.active_card.name} for {damage} damage!")
+                current_player.ap -= 1
+            elif action == "2":
+                if current_player.active_card.ability:
+                    result = current_player.active_card.use_ability(current_player.active_card)
+                    if result == "free_switch":
+                        if current_player.benched_cards:
+                            new_card = random.choice(current_player.benched_cards)
+                            current_player.switch_card(new_card)
+                            print(f"{current_player.name} freely switches to {new_card.name}!")
+                    else:
+                        print(result)
+                    current_player.ap -= 1
+                else:
+                    print("No abilities available.")
+            elif action == "3":
                 if current_player.benched_cards:
-                    new_card = random.choice(current_player.benched_cards)
-                    current_player.switch_card(new_card)
-                    print(f"{current_player.name} freely switches to {new_card.name}!")
+                    print("Choose a card to switch to:")
+                    for i, card in enumerate(current_player.benched_cards):
+                        print(f"{i + 1}. {card}")
+                    card_choice = int(input("Enter the number of the card: ").strip()) - 1
+                    if 0 <= card_choice < len(current_player.benched_cards):
+                        new_card = current_player.benched_cards[card_choice]
+                        current_player.switch_card(new_card)
+                        print(f"{current_player.name} switches to {new_card.name}!")
+                        current_player.ap -= 1
+                    else:
+                        print("Invalid card choice.")
+                else:
+                    print("No benched cards available.")
             else:
-                print(result)
-            current_player.ap -= 1
+                print("Invalid action choice.")
         
         # Check if opponent lost
-        if opponent.active_card.health <= 0 and not opponent.has_cards_left():
+        if not opponent.has_cards_left():
             print(f"{current_player.name} wins!")
             break
         
         turn_counter += 1
     
+    # Check if any player has no cards left after the turn
+    if not player1.has_cards_left():
+        print(f"{player2.name} wins!")
+    elif not player2.has_cards_left():
+        print(f"{player1.name} wins!")
+    
 if __name__ == "__main__":
     play_game()
+
