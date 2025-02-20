@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-menu">
+  <div class="navigation-bar">
     <button @click="toggleMenu" class="menu-button">
       <span class="hamburger-icon"></span>
       <span class="hamburger-icon"></span>
@@ -27,8 +27,9 @@ export default {
     const isMenuOpen = ref(false);
 
     const toggleMenu = () => {
-      isMenuOpen.value = !isMenuOpen.value; // Toggle the menu state
+      isMenuOpen.value = !isMenuOpen.value;
     };
+
     const closeMenu = () => {
       isMenuOpen.value = false;
     }
@@ -39,44 +40,47 @@ export default {
 </script>
 
 <style scoped>
-.navigation-menu {
+.navigation-bar {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000; /* Ensure it's above other content */
+  z-index: 1000; /* Button and menu container */
 }
 
 .menu-button {
   background-color: var(--secondary-color);
   border: none;
   padding: 10px;
-  border-radius: 50%; /* Circular button */
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 40px; /* Adjust as needed */
-  height: 40px; /* Adjust as needed */
+  width: 40px;
+  height: 40px;
   box-shadow: var(--box-shadow);
 }
+
 .menu-button:hover {
-    background-color: var(--primary-color);
+  background-color: var(--primary-color);
 }
+
 .hamburger-icon {
   width: 100%;
   height: 3px;
   background-color: white;
-  margin: 2px 0; /* Space between lines */
+  margin: 2px 0;
   transition: all 0.3s ease;
 }
+
 .menu-button:hover .hamburger-icon {
-    background-color: var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .menu {
   position: fixed;
-  bottom: 80px;  /* Position it above the button.  Adjust as needed. */
-  right: 20px;   /* Same right position as the button */
+  bottom: 70px;       /*  <--  Position above the button */
+  right: 20px;         /*  <--  Align with button */
   background-color: var(--primary-color);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -84,8 +88,19 @@ export default {
   padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Space between links */
-  z-index: 1001;
+  gap: 10px;
+  z-index: 1001;       /*  <--  HIGHER z-index than button and overlay */
+  /* Mobile-first:  Make menu full-width on small screens */
+  width: auto;        /*  <--  Start with automatic width */
+  max-width: calc(100% - 40px); /* <-- Limit width, leave space for button */
+}
+
+/* Larger screens - adjust as needed */
+@media (min-width: 768px) {
+  .menu {
+    width: auto; /* Let it take up necessary space on larger screens */
+        max-width: 300px;
+  }
 }
 
 .menu a {
@@ -94,7 +109,7 @@ export default {
   padding: 8px 12px;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease, color 0.2s ease;
-  display: block; /* Make links block-level for easier clicking */
+  display: block;
 }
 
 .menu a:hover,
@@ -108,7 +123,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.35);
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999; /*  <--  Below the button and menu, above other content */
 }
 </style>

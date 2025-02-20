@@ -7,9 +7,7 @@
         :key="card.id + card.image"
         :cardName="card.name"
         :cardImage="card.image"
-        :attack="card.attack"
-        :defense="card.defense"
-        :health="card.health"
+
         :isSelected="selectedCards.includes(card.id)"
         @click="toggleCardSelection(card.id)"
       />
@@ -30,7 +28,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const cards = ref(require('../assets/cards.json'));
+    const cards = ref(require('../assets/cards.json')); // Direct import
     const selectedCards = ref([]);
 
     const isCollectionRoute = computed(() => {
@@ -46,11 +44,7 @@ export default {
       }
     };
 
-    const removeCard = (cardId) => {
-      cards.value = cards.value.filter((card) => card.id !== cardId);
-    };
-
-    return { isCollectionRoute, cards, selectedCards, toggleCardSelection, removeCard };
+    return { isCollectionRoute, cards, selectedCards, toggleCardSelection };
   },
 };
 </script>
