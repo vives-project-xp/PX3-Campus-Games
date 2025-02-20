@@ -51,7 +51,6 @@ class Card:
         return "Invalid ability"
     
     def remove_block(self):
-        """Removes temporary HP when the turn starts if block was applied."""
         if self.block > 0:
             self.health -= self.block  # Remove block HP
             self.block = 0
@@ -69,15 +68,24 @@ class Player:
         self.ap = 1  # First turn = 1 AP, later turns = 2 AP
 
     def switch_card(self):
-        """Switch to a new card if available."""
         if self.benched_cards:
-            self.active_card = self.benched_cards.pop(0)
-            print(f"{self.name} switches to {self.active_card.name}!")
+            print("Available cards:")
+            for i, card in enumerate(self.benched_cards):
+                print(f"{i + 1}. {card.name} (HP: {card.health})")
+            
+            while True:
+                choice = input("Choose a card to switch to (number): ").strip()
+                if choice.isdigit():
+                    choice = int(choice) - 1
+                    if 0 <= choice < len(self.benched_cards):
+                        self.active_card = self.benched_cards.pop(choice)
+                        print(f"{self.name} switches to {self.active_card.name}!")
+                        return
+                print("Invalid choice. Try again.")
         else:
             print(f"{self.name} has no more cards left!")
 
     def check_and_swap_card(self):
-        """If the active card dies, automatically switch."""
         if self.active_card.health <= 0:
             print(f"{self.active_card.name} has fainted!")
             self.switch_card()
@@ -120,9 +128,8 @@ def play_game():
         
         current_player = players[(turn_counter - 1) % 2]
         opponent = players[turn_counter % 2]
-        current_player.ap = 2 if turn_counter > 1 else 1  # 2 AP from turn 2+
+        current_player.ap = 2 if turn_counter > 1 else 1  
 
-        # Remove block effect at the start of the turn
         current_player.active_card.remove_block()
 
         print(f"\n{current_player.name}'s turn with {current_player.ap} AP!")
@@ -133,7 +140,7 @@ def play_game():
             print("Choose an action:")
             print("1. Attack")
             print("2. Use Ability")
-            print("3. Pass Turn")
+            print("3. Switch Card")
             action = input("Enter action number: ").strip()
             
             if action == "1":
@@ -145,26 +152,13 @@ def play_game():
                 print(ability_result)
                 current_player.ap -= 1
             elif action == "3":
-                print(f"{current_player.name} passes their turn.")
+                current_player.switch_card()
                 break
             else:
                 print("Invalid choice, try again.")
 
-        # Check if opponent’s active card is dead
         opponent.check_and_swap_card()
-
-        # End game check
-        if not opponent.has_cards_left():
-            print(f"\n{current_player.name} wins!")
-            break
-        
         turn_counter += 1
-    
-    # Final check after turn loop
-    if not player1.has_cards_left():
-        print(f"\n{player2.name} wins!")
-    elif not player2.has_cards_left():
-        print(f"\n{player1.name} wins!")
 
 if __name__ == "__main__":
     play_game()
