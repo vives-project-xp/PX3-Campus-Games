@@ -1,27 +1,31 @@
 <template>
   <div id="app">
-    <NavigationBar />
+    <TopBar />
     <main>
       <router-view></router-view>
     </main>
+    <NavigationMenu />
     <BackToTopButton />
   </div>
 </template>
 
 <script>
-import NavigationBar from './components/NavigationBar.vue';
+import NavigationMenu from './components/NavigationMenu.vue'; // Corrected import
 import BackToTopButton from './components/BackToTopButton.vue';
+import TopBar from './components/TopBar.vue';
 
 export default {
   name: 'App',
   components: {
-    NavigationBar,
+    NavigationMenu, // Corrected component name
     BackToTopButton,
+    TopBar,
   },
 };
 </script>
 
 <style>
+/* Global Styles */
 :root {
   --primary-color: #fff;
   --secondary-color: #e60000;
@@ -31,6 +35,12 @@ export default {
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --border-radius: 8px;
   --font-family: 'Open Sans', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 #app {
@@ -47,10 +57,10 @@ export default {
 
 main {
   padding: 20px;
-  padding-top: 60px;
   max-width: 1200px;
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;
+  box-sizing: border-box;
 }
 </style>
