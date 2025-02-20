@@ -30,7 +30,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const cards = ref(require('../assets/cards.json')); // Direct import
+    const cards = ref(require('../assets/cards.json'));
     const selectedCards = ref([]);
 
     const isCollectionRoute = computed(() => {
@@ -62,9 +62,9 @@ export default {
 }
 
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust as needed */
-  gap: 20px;
-  justify-items: center;
+  display: grid;  /* <-- MUST be present */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* <-- Responsive columns */
+  gap: 0px;       /* <-- Spacing between cards */
+  justify-items: center; /* <-- Center cards horizontally */
 }
 </style>

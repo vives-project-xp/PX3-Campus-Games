@@ -4,22 +4,24 @@
     <main>
       <router-view></router-view>
     </main>
+    <BackToTopButton />
   </div>
 </template>
 
 <script>
-import NavigationBar from './components/NavigationBar.vue'; // Correct import
+import NavigationBar from './components/NavigationBar.vue';
+import BackToTopButton from './components/BackToTopButton.vue';
 
 export default {
   name: 'App',
   components: {
-    NavigationBar, // Correct component name
+    NavigationBar,
+    BackToTopButton,
   },
 };
 </script>
 
 <style>
-/* Global Styles */
 :root {
   --primary-color: #fff;
   --secondary-color: #e60000;
@@ -29,7 +31,6 @@ export default {
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --border-radius: 8px;
   --font-family: 'Open Sans', sans-serif;
-  /* Add more variables as needed */
 }
 
 #app {
@@ -41,14 +42,15 @@ export default {
   background-color: var(--background-color);
   min-height: 100vh;
   display: flex;
-  flex-direction: column; /* Important for layout */
+  flex-direction: column;
 }
 
 main {
   padding: 20px;
+  padding-top: 60px;
   max-width: 1200px;
   margin: 0 auto;
-  flex-grow: 1; /*  <--  CRUCIAL: Allow <main> to fill space */
-  width: 100%; /* Add this */
+  flex-grow: 1;
+  width: 100%;
 }
 </style>
