@@ -43,7 +43,7 @@ CREATE TABLE Cards_dex (
     health INT DEFAULT 0,
     attack INT DEFAULT 0,
     defense INT DEFAULT 0,
-    rarity ENUM('Common', 'Uncommon', 'Rare', 'Epic', 'Legendary') NOT NULL,
+    rarity ENUM('Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Legendary') NOT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -57,6 +57,7 @@ CREATE TABLE user_cards (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (card_id) REFERENCES Cards_dex(card_id) ON DELETE CASCADE
 );
+-- Tabel voor alle transacties van kaarten
 CREATE TABLE card_transactions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -66,6 +67,7 @@ CREATE TABLE card_transactions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (card_id) REFERENCES Cards_dex(card_id) ON DELETE CASCADE
 );
+-- Tabel voor alle card trades
 CREATE TABLE card_trades (
     trade_id INT AUTO_INCREMENT PRIMARY KEY,
     sender_id INT NOT NULL,
