@@ -1,11 +1,12 @@
-## General GitHub Guide
+# General GitHub Guide
 
-### **BEFORE COMMIT 1 PUSH? CHECK STATUS:**
+## **Basics**
+clone our repository:
 ```bash
-git status
+git clone git@github.com:vives-project-xp/PX3-Campus-Games.git
 ```
 
-### **COMMIT & PUSH**
+### **Commit & Push**
 Modify files, then add, commit, and push:
 ```bash
 git add .
@@ -18,11 +19,29 @@ git pull
 git push origin *your-branch-name*
 ```
 
-### **USING BRANCHES**
+### **Check your status:**
+```bash
+git status
+```
+
+### **To see what changes have been made since the last commit:**
+```bash
+git diff
+```
+
+## **Branches**
+
+### **Using Branches**
 - To see all branches in your project:
   ```bash
   git branch
   ```
+  - To switch to the main branch:
+  ```bash
+  git checkout main
+  ```
+- (if your branch names is "master", use "git checkout master")
+
 - To create a new branch:
   ```bash
   git branch *your-branch-name*
@@ -36,7 +55,7 @@ git push origin *your-branch-name*
   git switch *your-branch-name*
   ```
 
-### **MERGING BRANCHES**
+### **Merging Branches**
 1. Switch to *your-branch-name*:
    ```bash
    git checkout *your-branch-name*
@@ -54,17 +73,17 @@ git push origin *your-branch-name*
    git push origin *your-branch-name*
    ```
 
-### **DELETE A BRANCH**
-- Locally:
-  ```bash
-  git branch -d *your-branch-name*
-  ```
+### **Delete a Branch**
 - On GitHub:
   ```bash
   git push origin --delete *your-branch-name*
   ```
+- Locally:
+  ```bash
+  git branch -d *your-branch-name*
+  ```
 
-### **HANDLING MERGE CONFLICTS**
+### **Merge Conflicts**
 If you get a merge conflict (e.g., `CONFLICT (content): Merge conflict in *folder/file*`):
 
 #### **1. Overwrite local changes with remote version (All local changes lost):**
@@ -89,18 +108,27 @@ git reset --hard origin/*your-branch-name*
 
 ### **Additional (Important) Things**
 
-#### **1. VIEW COMMIT HISTORY:**
+#### **1. View your commit history:**
 ```bash
 git log
 ```
 
-#### **2.REVERT CHANGES/COMMIT:**
+#### **2.Revert Changes/Commit:**
 ```bash
 git revert *commit-id*
 ```
 
+### **To stage specific files instead of all changes:**
+```bash
+git add filename.txt
+```
+### **To unstage a file that you added by mistake:**
+```bash
+git reset filename.txt
+```
 
-### **Additional Tips**
+
+### **Important Tips**
 ✅ **Use clear branch names** (e.g., `feature-login`, `bugfix-scoreboard`).
 
 ✅ **Commit often** – Small commits help track changes.
