@@ -1,110 +1,131 @@
 import random
-import time
 
 class Card:
-    def __init__(self, name, health, attack_damage):
+    def __init__(self, name, health, damage, abilities):
         self.name = name
         self.max_health = health
         self.health = health
-        self.attack_damage = attack_damage
+        self.damage = damage
+        self.abilities = abilities
+        self.block = 0
+        self.temp_effects = []
 
-    def attack(self, opponent):
-        damage = random.randint(self.attack_damage - 10, self.attack_damage + 10)
-        opponent.health -= damage
-        if opponent.health < 0:
-            opponent.health = 0
-        return damage
-
-    def is_defeated(self):
-        return self.health <= 0
-
-    def display(self):
-        return f"{self.name} [❤️ {self.health}/{self.max_health}]"
+    def attack(self, target, ap):
+        if ap <= 0:
+            return 0
+        base_damage = self.damage
+        if "damage_multiplier" in self.temp_effects:
+            base_damage = int(base_damage * 1.5)
+        
+        if ap == 2:
+            base_damage = int(base_damage * 0.5)  # Second attack is 50% damage
+        
+        actual_damage = max(0, base_damage - target.block)
+        target.health -= actual_damage
+        target.block = 0  # Block only lasts one turn
+        return actual_damage
+    
+    def use_ability(self, ability, target):
+        if ability == "heal":
+            heal_amount = random.randint(50, 75)
+            target.health = min(target.max_health, target.health + heal_amount)
+            return f"{self.name} heals {target.name} for {heal_amount} HP!"
+        elif ability == "block":
+            self.block = random.randint(80, 100)
+            return f"{self.name} blocks {self.block} damage!"
+        elif ability == "damage_multiplier":
+            self.temp_effects.append("damage_multiplier")
+            return f"{self.name} gets a damage boost for this and next turn!"
+        elif ability == "free_switch":
+            return "free_switch"
+        return "Invalid ability"
+    
+    def __repr__(self):
+        return f"{self.name} (HP: {self.health}/{self.max_health}, DMG: {self.damage})"
 
 class Player:
     def __init__(self, name, cards):
         self.name = name
-        self.cards = cards  # Lijst van 3 kaarten
-        self.active_card = self.get_first_alive_card()  # Eerste levende kaart
-
-    def get_first_alive_card(self):
-        """Zoekt de eerste levende kaart en stelt deze in als actief."""
-        for card in self.cards:
-            if not card.is_defeated():
-                return card
-        return None  # Alle kaarten zijn verslagen
-
-    def switch_card(self):
-        """Wisselt naar een andere kaart, maar forceert de laatste kaart als nodig."""
-        available_cards = [card for card in self.cards if not card.is_defeated()]
-        if len(available_cards) == 1:
-            self.active_card = available_cards[0]  # Forceer de enige levende kaart
-            print(f"⚠ {self.name} heeft nog maar 1 kaart en gebruikt {self.active_card.name}!")
-        elif len(available_cards) > 1:
-            for idx, card in enumerate(available_cards):
-                print(f"{idx + 1}. {card.display()}")
-            choice = int(input("Kies een andere kaart: ")) - 1
-            self.active_card = available_cards[choice]
-            print(f"🔄 {self.name} wisselt naar {self.active_card.name}!")
-        else:
-            print(f"💀 {self.name} heeft geen levende kaarten meer!")
-
-    def is_defeated(self):
-        return all(card.is_defeated() for card in self.cards)
-
-def battle(player1, player2):
-    print("🔥 BATTLE START! 🔥")
-    print(f"{player1.name} VS {player2.name}\n")
+        self.active_card = cards.pop(0)
+        self.benched_cards = cards
+        self.ap = 1  # First turn has 1 AP, subsequent turns have 2 AP
     
-    time.sleep(1)  # Korte pauze voor effect
+    def switch_card(self, new_card):
+        if new_card in self.benched_cards:
+            self.benched_cards.append(self.active_card)
+            self.benched_cards.remove(new_card)
+            self.active_card = new_card
+            return True
+        return False
+    
+    def has_cards_left(self):
+        return self.active_card.health > 0 or any(c.health > 0 for c in self.benched_cards)
 
-    turn = 0
-    while not player1.is_defeated() and not player2.is_defeated():
-        attacker = player1 if turn % 2 == 0 else player2
-        defender = player2 if turn % 2 == 0 else player1
+# Game Setup
+def setup_game():
+    all_cards = [
+        Card("Dragon", random.randint(150, 300), random.randint(50, 150), ["heal", "block"]),
+        Card("Warrior", random.randint(150, 300), random.randint(50, 150), ["damage_multiplier", "block"]),
+        Card("Mage", random.randint(150, 300), random.randint(50, 150), ["heal", "free_switch"]),
+        Card("Knight", random.randint(150, 300), random.randint(50, 150), ["block", "free_switch"]),
+        Card("Archer", random.randint(150, 300), random.randint(50, 150), ["damage_multiplier", "heal"]),
+        Card("Berserker", random.randint(150, 300), random.randint(50, 150), ["block", "damage_multiplier"])
+    ]
+    
+    random.shuffle(all_cards)
+    player1 = Player("Player 1", all_cards[:3])
+    player2 = Player("Player 2", all_cards[3:6])
+    
+    return player1, player2
 
-        if attacker.is_defeated():
-            print(f"💀 {attacker.name} heeft geen kaarten meer!")
+# Game Loop
+def play_game():
+    player1, player2 = setup_game()
+    players = [player1, player2]
+    
+    first_turn = random.choice(players)
+    second_turn = player1 if first_turn == player2 else player2
+    print(f"{first_turn.name} goes first!")
+    
+    turn_counter = 1
+    
+    while player1.has_cards_left() and player2.has_cards_left():
+        user_input = input("Type 'exit' or 'stop' to end the game, or press Enter to continue: ").strip().lower()
+        if user_input in ["exit", "stop"]:
+            print("Game has been stopped by the user.")
             break
-
-        print(f"\n🎮 {attacker.name}'s beurt!")
-        print(f"🃏 Actieve kaart: {attacker.active_card.display()}")
-
-        action = input("Kies een actie (attack / switch / exit): ").lower()
-
-        if action == "exit":
-            print("🛑 Spel gestopt!")
-            return
-
-        if action == "attack":
-            damage = attacker.active_card.attack(defender.active_card)
-            print(f"💥 {attacker.active_card.name} valt aan en doet {damage} schade!")
-            print(f"🛡 {defender.active_card.display()}")
-
-            if defender.active_card.is_defeated():
-                print(f"💀 {defender.active_card.name} is verslagen!")
-                defender.switch_card()
-
-        elif action == "switch":
-            attacker.switch_card()
-
-        time.sleep(1)
-        turn += 1
-
-    winner = player1 if not player1.is_defeated() else player2
-    print(f"\n🏆 {winner.name} wint de battle!")
-
-# 🔹 TEST GEGEVENS
-player1 = Player("Speler 1", [
-    Card("Dragon", 250, 70),
-    Card("Phoenix", 200, 80),
-    Card("Wolf", 180, 60)
-])
-
-player2 = Player("Speler 2", [
-    Card("Kraken", 260, 75),
-    Card("Golem", 220, 85),
-    Card("Griffin", 190, 65)
-])
-
-battle(player1, player2)
+        
+        current_player = players[(turn_counter - 1) % 2]
+        opponent = players[turn_counter % 2]
+        current_player.ap = 2 if turn_counter > 1 else 1
+        
+        print(f"\n{current_player.name}'s turn with {current_player.ap} AP!")
+        
+        # Example of attack action
+        if current_player.ap > 0:
+            damage = current_player.active_card.attack(opponent.active_card, current_player.ap)
+            print(f"{current_player.active_card.name} attacks {opponent.active_card.name} for {damage} damage!")
+            current_player.ap -= 1
+        
+        # Example of ability usage
+        if current_player.ap > 0 and current_player.active_card.abilities:
+            ability = random.choice(current_player.active_card.abilities)
+            result = current_player.active_card.use_ability(ability, current_player.active_card)
+            if result == "free_switch":
+                if current_player.benched_cards:
+                    new_card = random.choice(current_player.benched_cards)
+                    current_player.switch_card(new_card)
+                    print(f"{current_player.name} freely switches to {new_card.name}!")
+            else:
+                print(result)
+            current_player.ap -= 1
+        
+        # Check if opponent lost
+        if opponent.active_card.health <= 0 and not opponent.has_cards_left():
+            print(f"{current_player.name} wins!")
+            break
+        
+        turn_counter += 1
+    
+if __name__ == "__main__":
+    play_game()

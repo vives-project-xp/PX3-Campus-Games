@@ -202,45 +202,97 @@ const deleteUser = async (req, res) => {
 };
 
 // 🔄 Ruil een kaart met een andere speler
- const tradeCard = async (req, res) => {
+const tradeCards = async (req, res) => {
     try {
-        const { from_user, to_user, card_id, quantity } = req.body;
+        const { senderId, receiverId, senderCardId, receiverCardId } = req.body;
 
-        // Controleer of from_user de kaart heeft
-        const [userCard] = await db.execute(
-            'SELECT quantity FROM user_cards WHERE user_id = ? AND card_id = ?',
-            [from_user, card_id]
-        );
+        // Check of beide spelers de kaarten bezitten
+        const [senderHasCard] = await db.execute(`
+            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
+        `, [senderId, senderCardId]);
 
-        if (userCard.length === 0 || userCard[0].quantity < quantity) {
-            return res.status(400).json({ error: 'Niet genoeg kaarten om te ruilen' });
+        const [receiverHasCard] = await db.execute(`
+            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
+        `, [receiverId, receiverCardId]);
+
+        if (senderHasCard.length === 0 || receiverHasCard.length === 0) {
+            return res.status(400).json({ error: 'Beide spelers moeten de kaart bezitten' });
         }
 
-        // Verwijder kaart bij from_user
-        await db.execute(
-            'UPDATE user_cards SET quantity = quantity - ? WHERE user_id = ? AND card_id = ?',
-            [quantity, from_user, card_id]
-        );
+        // Voer de ruil uit
+        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
+            [receiverId, senderId, senderCardId]);
+        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
+            [senderId, receiverId, receiverCardId]);
 
-        // Voeg kaart toe bij to_user
-        await db.execute(
-            'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?',
-            [to_user, card_id, quantity, quantity]
-        );
-
-        // Log de transactie
-        await db.execute(
-            'INSERT INTO card_transactions (user_id, card_id, transaction_type) VALUES (?, ?, ?), (?, ?, ?)',
-            [from_user, card_id, 'trade', to_user, card_id, 'trade']
-        );
-
-        res.json({ message: 'Kaart succesvol geruild' });
+        res.json({ message: 'Trade succesvol' });
     } catch (error) {
-        console.error('Fout bij ruilen van kaarten:', error);
-        res.status(500).json({ error: 'Kan kaarten niet ruilen' });
+        res.status(500).json({ error: error.message });
     }
 };
 
+const giveStarterPack = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        // Selecteer 3 random kaarten uit de database
+        const [cards] = await db.execute('SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3');
+
+        // Voeg de kaarten toe aan de gebruiker
+        for (const card of cards) {
+            await db.execute('INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)', 
+                [userId, card.card_id]);
+        }
+
+        res.json({ message: 'Starter pack ontvangen!' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const registerUser = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        // Check of de user al bestaat
+        const [existingUser] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
+        if (existingUser.length > 0) return res.status(400).json({ error: 'Gebruiker bestaat al' });
+
+        // Hash het wachtwoord
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Voeg gebruiker toe aan database
+        const [result] = await db.execute(
+            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
+            [username, email, hashedPassword]
+        );
+
+        res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const loginUser = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Zoek de gebruiker
+        const [user] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
+        if (user.length === 0) return res.status(401).json({ error: 'Ongeldige login' });
+
+        // Check wachtwoord
+        const validPassword = await bcrypt.compare(password, user[0].password);
+        if (!validPassword) return res.status(401).json({ error: 'Ongeldige login' });
+
+        // Genereer een token
+        const token = jwt.sign({ id: user[0].id }, 'SECRET_KEY', { expiresIn: '24h' });
+
+        res.json({ message: 'Login succesvol', token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 export {
     addUser,
@@ -253,5 +305,8 @@ export {
     getUserRanking,
     addCardToUser,
     getUserCards,
-    tradeCard,
+    tradeCards,
+    registerUser,
+    loginUser,
+    giveStarterPack,
 }
