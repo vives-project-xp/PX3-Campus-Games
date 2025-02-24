@@ -96,12 +96,12 @@ class Player:
 # Game Setup
 def setup_game():
     all_cards = [
-        Card("Dragon Healer", random.randint(200, 251), random.randint(50, 151), "heal"),
-        Card("Warrior", random.randint(200, 251), random.randint(50, 151), "damage_multiplier"),
-        Card("Priest", random.randint(200, 251), random.randint(50, 151), "heal"),
-        Card("Knight", random.randint(200, 251), random.randint(50, 151), "block"),
-        Card("Berserker", random.randint(200, 251), random.randint(50, 151), "damage_multiplier"),
-        Card("Paladin", random.randint(200, 251), random.randint(50, 151), "block")
+        Card("Dragon Healer", random.randint(200, 201), random.randint(75, 76), "heal"),
+        Card("Warrior", random.randint(250, 251), random.randint(50, 151), "damage_multiplier"),
+        Card("Priest", random.randint(200, 201), random.randint(75, 76), "heal"),
+        Card("Knight", random.randint(250, 251), random.randint(150, 151), "block"),
+        Card("Berserker", random.randint(220, 221), random.randint(50, 151), "damage_multiplier"),
+        Card("Paladin", random.randint(220, 221), random.randint(150, 151), "block")
     ]
     
     random.shuffle(all_cards)
