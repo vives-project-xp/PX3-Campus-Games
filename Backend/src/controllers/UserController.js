@@ -8,7 +8,7 @@ const addUser = async (req, res) => {
         const { error } = registerSchema.validate(req.body);
         if (error) return res.status(400).json({ error: error.details[0].message });
 
-        const { username, email, password } = req.body;
+        const { username, opleiding, password } = req.body;
 
         // ✅ Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -16,7 +16,7 @@ const addUser = async (req, res) => {
         // ✅ Insert user into DB
         const [result] = await pool.query(
             'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
+            [username, opleiding, hashedPassword]
         );
 
         res.status(201).json({ message: 'User created', userId: result.insertId });
