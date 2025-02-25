@@ -1,127 +1,131 @@
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { registerSchema } from '../middleware/validation.js';
+import jwt from 'jsonwebtoken';
 
-const addUser = async (req, res) => {
+
+
+const getAllUsers = async (req, res) => {
     try {
-        // ✅ Validate input
-        const { error } = registerSchema.validate(req.body);
-        if (error) return res.status(400).json({ error: error.details[0].message });
-
-        const { username, email, password } = req.body;
-
-        // ✅ Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // ✅ Insert user into DB
-        const [result] = await db.execute(
-            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
-        );
-
-        res.status(201).json({ message: 'User created', userId: result.insertId });
-    } catch (error) {
+        const [result] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
+        res.json(result);
+        } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const tradeCards = async (req, res) => {
+const getUserBy = async (req, res) => {
     try {
-        const { senderId, receiverId, senderCardId, receiverCardId } = req.body;
-
-        // Check of beide spelers de kaarten bezitten
-        const [senderHasCard] = await db.execute(
-            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?'
-        , [senderId, senderCardId]);
-
-        const [receiverHasCard] = await db.execute(
-            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?'
-        , [receiverId, receiverCardId]);
-
-        if (senderHasCard.length === 0 || receiverHasCard.length === 0) {
-            return res.status(400).json({ error: 'Beide spelers moeten de kaart bezitten' });
+        const { param, value } = req.params; // Get column name and value from URL params
+        
+        // Validate the column name to prevent SQL injection
+        const allowedParams = ['id', 'name', 'opleiding']; // Define allowed columns
+        if (!allowedParams.includes(param)) {
+            return res.status(400).json({ error: "Invalid search parameter" });
         }
 
-        // Voer de ruil uit
-        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
-            [receiverId, senderId, senderCardId]);
-        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
-            [senderId, receiverId, receiverCardId]);
+        // Query database dynamically
+        const query = `SELECT id, name, opleiding, created_at FROM users WHERE ${param} = ?`;
+        const [result] = await db.execute(query, [value]);
 
-        res.json({ message: 'Trade succesvol' });
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const giveStarterPack = async (req, res) => {
+
+const deleteUser = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { id } = req.params;
 
-        // Selecteer 3 random kaarten uit de database
-        const [cards] = await db.execute('SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3');
-
-        // Voeg de kaarten toe aan de gebruiker
-        for (const card of cards) {
-            await db.execute('INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)', 
-                [userId, card.card_id]);
+        // Haal de oude gebruikersgegevens op (zonder SELECT *)
+        const [oldUser] = await db.execute('SELECT id, name, opleiding FROM users WHERE id = ?', [id]);
+        
+        // Controleer of de gebruiker bestaat
+        if (oldUser.length === 0) {
+            return res.status(404).json({ error: 'Gebruiker niet gevonden' });
         }
 
-        res.json({ message: 'Starter pack ontvangen!' });
+        // Verwijder de gebruiker
+        const [result] = await db.execute('DELETE FROM users WHERE id = ?', [id]);
+
+        // Stuur de verwijderde gebruikersinformatie terug
+        res.json({ message: 'User deleted', oldUser: oldUser[0] });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 const registerUser = async (req, res) => {
     try {
-            const { username, email, password } = req.body;
-    
-            // Check of de user al bestaat
-            const [existingUser] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
-            if (existingUser.length > 0) return res.status(400).json({ error: 'Gebruiker bestaat al' });
-    
-            // Hash het wachtwoord
-            const hashedPassword = await bcrypt.hash(password, 10);
-    
-            // Voeg gebruiker toe aan database
-            const [result] = await db.execute(
-                'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
-                [username, email, hashedPassword]
-            );
-    
-            res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }; 
+        const { error } = registerSchema.validate(req.body);
+        if (error) return res.status(400).json({ error: error.details[0].message });
 
+        const { username,opleiding, password } = req.body;
 
-    const loginUser = async (req, res) => {
-        try {
-            const { username, password } = req.body;
-    
-            // Zoek de gebruiker
-            const [user] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
-            if (user.length === 0) return res.status(401).json({ error: 'Ongeldige login' });
-    
-            // Check wachtwoord
-            const validPassword = await bcrypt.compare(password, user[0].password);
-            if (!validPassword) return res.status(401).json({ error: 'Ongeldige login' });
-    
-            // Genereer een token
-            const token = jwt.sign({ id: user[0].id }, 'SECRET_KEY', { expiresIn: '24h' });
-    
-            res.json({ message: 'Login succesvol', token });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
+        // Check of de user al bestaat
+        const [existingUser] = await db.execute('SELECT id FROM users WHERE name = ?', [username]);
+        if (!existingUser || existingUser.length === 0) { // Als de gebruiker niet bestaat
+            return res.status(400).json({ error: 'Gebruiker bestaat al' });
         }
-    };    
+
+        // Hash het wachtwoord
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Voeg gebruiker toe aan database
+        const [result] = await db.execute(
+            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
+            [username, opleiding, hashedPassword]
+        );
+
+        res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const loginUser = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Zoek de gebruiker
+        const [user] = await db.execute('SELECT id, password FROM users WHERE name = ?', [username]);
+        if (user.length === 0) {
+            return res.status(401).json({ error: 'Ongeldige username' });
+        }
+
+        // Check wachtwoord
+        const validPassword = await bcrypt.compare(password, user[0].password);
+        if (!validPassword) return res.status(401).json({ error: 'Ongeldig wachtwoord' });
+
+        // Genereer een token
+        const token = jwt.sign(
+            { userId: user[0].id, username }, 
+            process.env.JWT_SECRET, // Zorg ervoor dat je een geheime sleutel hebt in je .env bestand (your_secret_key)
+            { expiresIn: '24h' } // Token verloopt in 24 uur
+        );
+        res.json({ message: 'Login succesvol', token, userId: user[0].id });
+
+        /* 
+        What should the frontend do?
+        Once the frontend receives { token, userId }, it should:
+
+        Store the token (e.g., in localStorage or HttpOnly cookies).
+        Use the token for authentication in protected routes.
+        */
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 export {
-    addUser,
-    tradeCards,
+    getAllUsers,
+    getUserBy,
+    deleteUser,
     registerUser,
     loginUser,
-    giveStarterPack,
 }
