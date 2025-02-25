@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import db from '../db.js';
 import { registerSchema } from '../middleware/validation.js';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -74,9 +75,6 @@ const registerUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
-const jwt = require('jsonwebtoken');
 
 const loginUser = async (req, res) => {
     try {
