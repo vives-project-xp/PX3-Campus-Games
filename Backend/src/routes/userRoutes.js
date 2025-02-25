@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import * as UserController from '../controllers/UserController.js';
-import * as CardController from '../controllers/CardController.js';
+import * as CardController from '../controllers/CardsController.js';
 import * as LeaderboardController from '../controllers/LeaderboardController.js';
 
 // users
