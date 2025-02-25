@@ -5,7 +5,6 @@ import * as CardController from '../controllers/CardController.js';
 import * as LeaderboardController from '../controllers/LeaderboardController.js';
 
 // users
-router.post('/addUser', UserController.addUser);
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);
 router.get('/getAllUsers', UserController.getAllUsers);
@@ -19,9 +18,9 @@ router.get('/leaderboard/study', LeaderboardController.getStudyLeaderboard);
 router.get('/leaderboard/user/:userId', LeaderboardController.getUserRanking);
 
 // cards
-router.post('/add', UserController.addCardToUser);   
-router.get('/user/:user_id', UserController.getUserCards);  
-router.post('/trade', UserController.tradeCards);  
+router.post('/addCard', UserController.addCardToUser);   
+router.get('/userCards/:user_id', UserController.getUserCards);  
+router.post('/tradeCards', UserController.tradeCards);  
 router.post('/starter-pack', UserController.giveStarterPack);
 
 export default router;
