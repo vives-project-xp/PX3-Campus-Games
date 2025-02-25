@@ -37,15 +37,26 @@ const getUserBy = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        let oldUser = await db.execute('SELECT * FROM users WHERE id = ?', [req.params.id]);
         const { id } = req.params;
+
+        // Haal de oude gebruikersgegevens op (zonder SELECT *)
+        const [oldUser] = await db.execute('SELECT id, name, opleiding FROM users WHERE id = ?', [id]);
+        
+        // Controleer of de gebruiker bestaat
+        if (oldUser.length === 0) {
+            return res.status(404).json({ error: 'Gebruiker niet gevonden' });
+        }
+
+        // Verwijder de gebruiker
         const [result] = await db.execute('DELETE FROM users WHERE id = ?', [id]);
-        // show the deleted oldUser info thats deleted
+
+        // Stuur de verwijderde gebruikersinformatie terug
         res.json({ message: 'User deleted', oldUser: oldUser[0] });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-            }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
+
 
 
 const registerUser = async (req, res) => {
