@@ -8,7 +8,7 @@ import * as LeaderboardController from '../controllers/LeaderboardController.js'
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);
 router.get('/getAllUsers', UserController.getAllUsers);
-router.get('/getUserBy/:param/:value', UserController.getUserBy);
+router.get('/getUserBy/:param/:value', UserController.getUserBy); // param = column name, value = value to search for
 router.delete('/deleteUser/:id', UserController.deleteUser);
 
 // leaderboards
