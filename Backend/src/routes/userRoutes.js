@@ -18,10 +18,10 @@ router.get('/leaderboard/study', LeaderboardController.getStudyLeaderboard);
 router.get('/leaderboard/user/:userId', LeaderboardController.getUserRanking);
 
 // cards
-router.post('/addCard', UserController.addCardToUser);   
-router.get('/userCards/:user_id', UserController.getUserCards);  
-router.post('/tradeCards', UserController.tradeCards);  
-router.post('/starter-pack', UserController.giveStarterPack);
+router.post('/addCard', CardController.addCardToUser);   
+router.get('/userCards/:user_id', CardController.getUserCards);  
+router.post('/tradeCards', CardController.tradeCards);  
+router.post('/starter-pack', CardController.giveStarterPack);
 
 export default router;
 
