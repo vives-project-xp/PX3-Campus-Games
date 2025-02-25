@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import * as UserController from '../controllers/UserController.js';
+import * as CardController from '../controllers/CardController.js';
+import * as LeaderboardController from '../controllers/LeaderboardController.js';
 
 // users
 router.post('/addUser', UserController.addUser);
@@ -11,10 +13,10 @@ router.get('/getUserBy/:param/:value', UserController.getUserBy);
 router.delete('/deleteUser/:id', UserController.deleteUser);
 
 // leaderboards
-router.get('/leaderboard/weekly', UserController.getWeeklyLeaderboard);
-router.get('/leaderboard/total', UserController.getTotalLeaderboard);
-router.get('/leaderboard/study', UserController.getStudyLeaderboard);
-router.get('/leaderboard/user/:userId', UserController.getUserRanking);
+router.get('/leaderboard/weekly', LeaderboardController.getWeeklyLeaderboard);
+router.get('/leaderboard/total', LeaderboardController.getTotalLeaderboard);
+router.get('/leaderboard/study', LeaderboardController.getStudyLeaderboard);
+router.get('/leaderboard/user/:userId', LeaderboardController.getUserRanking);
 
 // cards
 router.post('/add', UserController.addCardToUser);   
