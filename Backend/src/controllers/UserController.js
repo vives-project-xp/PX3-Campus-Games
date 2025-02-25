@@ -55,8 +55,10 @@ const registerUser = async (req, res) => {
         const { username,opleiding, password } = req.body;
 
         // Check of de user al bestaat
-        const [existingUser] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
-        if (existingUser.length > 0) return res.status(400).json({ error: 'Gebruiker bestaat al' });
+        const [existingUser] = await db.execute('SELECT id FROM users WHERE name = ?', [username]);
+        if (!existingUser || existingUser.length === 0) { // Als de gebruiker niet bestaat
+            return res.status(400).json({ error: 'Gebruiker bestaat al' });
+        }
 
         // Hash het wachtwoord
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -78,17 +80,15 @@ const loginUser = async (req, res) => {
         const { username, password } = req.body;
 
         // Zoek de gebruiker
-        const [user] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
-        if (user.length === 0) return res.status(401).json({ error: 'Ongeldige login' });
+        const [user] = await db.execute('SELECT id, password FROM users WHERE name = ?', [username]);
+        if (user.length === 0) {
+            return res.status(401).json({ error: 'Ongeldige username' });
+        }
 
         // Check wachtwoord
         const validPassword = await bcrypt.compare(password, user[0].password);
-        if (!validPassword) return res.status(401).json({ error: 'Ongeldige login' });
+        if (!validPassword) return res.status(401).json({ error: 'Ongeldig wachtwoord' });
 
-        // Genereer een token
-        const token = jwt.sign({ id: user[0].id }, 'SECRET_KEY', { expiresIn: '24h' });
-
-        res.json({ message: 'Login succesvol', token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
