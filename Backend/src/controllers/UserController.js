@@ -70,7 +70,7 @@ const deleteUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username,opleiding, password } = req.body;
 
         // Check of de user al bestaat
         const [existingUser] = await db.execute('SELECT * FROM users WHERE name = ?', [username]);
@@ -82,7 +82,7 @@ const registerUser = async (req, res) => {
         // Voeg gebruiker toe aan database
         const [result] = await db.execute(
             'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
+            [username, opleiding, hashedPassword]
         );
 
         res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
