@@ -75,6 +75,9 @@ const registerUser = async (req, res) => {
     }
 };
 
+
+const jwt = require('jsonwebtoken');
+
 const loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -88,6 +91,22 @@ const loginUser = async (req, res) => {
         // Check wachtwoord
         const validPassword = await bcrypt.compare(password, user[0].password);
         if (!validPassword) return res.status(401).json({ error: 'Ongeldig wachtwoord' });
+
+        // Genereer een token
+        const token = jwt.sign(
+            { userId: user[0].id, username }, 
+            process.env.JWT_SECRET, // Zorg ervoor dat je een geheime sleutel hebt in je .env bestand (your_secret_key)
+            { expiresIn: '24h' } // Token verloopt in 24 uur
+        );
+        res.json({ message: 'Login succesvol', token, userId: user[0].id });
+
+        /* 
+        What should the frontend do?
+        Once the frontend receives { token, userId }, it should:
+
+        Store the token (e.g., in localStorage or HttpOnly cookies).
+        Use the token for authentication in protected routes.
+        */
 
     } catch (error) {
         res.status(500).json({ error: error.message });
