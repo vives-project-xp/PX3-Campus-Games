@@ -6,6 +6,7 @@
 npm install
 npm install -g @vue/cli
 npm install --save-dev @vue/cli-service
+npm install axios
 
 ```
 go to the "Frontend\vives-card-game" folder locally, it should look like:
@@ -16,6 +17,19 @@ then run the following command and surf to the port it hosts on:
 ```bash
 npm run serve
 ```
+
+## make sure you are running vue 3.5.13
+
+
+### Fix vulnerabilities
+```
+npm audit fix
+```
+or to force it:
+```
+npm audit fix --force
+```
+
 
 ### Compiles and minifies for production
 ```
