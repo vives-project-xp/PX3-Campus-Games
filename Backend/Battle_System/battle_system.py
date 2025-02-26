@@ -1,5 +1,10 @@
 import random
 
+##########################################
+# classen in verschillende files plaatsen
+# kijken voor python fastAPI Flask of websockets ipv overzetten naar JS?
+##########################################
+
 class Card:
     def __init__(self, name, health, damage, ability):
         self.name = name
@@ -13,8 +18,8 @@ class Card:
 
     def attack(self, target, ap):
         if self.health <= 0:
-            print(f"{self.name} is defeated and cannot attack!")
-            return 0
+            print(f"{self.name} is defeated and cannot attack!") 
+            return 0  # Dead cards can't attack
 
         if ap <= 0:
             return 0
@@ -34,7 +39,13 @@ class Card:
         
         return actual_damage
     
-    def use_ability(self, player):
+    def use_ability(self):
+        #######################
+        # change to switch case
+        # functies maken buiten de switch cases
+        # functies aanroepen in de switch cases
+        #######################
+
         if self.ability == "heal":
             heal_amount = 75
             self.health = min(self.max_health, self.health + heal_amount)

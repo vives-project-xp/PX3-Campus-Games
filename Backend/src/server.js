@@ -1,7 +1,7 @@
 import express from 'express'; 
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './routes/userRoutes.js';
+import apiRoutes from './routes/apiRoutes.js';
 import pool from './db.js';  // Importeer database connectie
 
 dotenv.config(); // Load environment variables from .env file
@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT; // Gebruik PORT in plaats van DB_PORT
 
 app.use(express.json());
-app.use('/api', userRoutes);
+app.use('/api', apiRoutes);
 
 // Hello World route
 app.get('/', (req, res) => {
