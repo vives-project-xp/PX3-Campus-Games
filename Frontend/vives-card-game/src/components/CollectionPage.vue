@@ -2,18 +2,22 @@
     <div class="card-collection">
         <h2 v-if="isCollectionRoute">Your Cards:</h2>
 
-        <!-- Container Box -->
-        <div class="container-box">
-            <!-- Upper Part: Filter Buttons -->
+        <!-- Fixed Top Section -->
+        <div class="fixed-container">
+            <!-- Filter Buttons -->
             <div class="filter-box">
-                <button :class="{ active: selectedRarity === 'rare' }" @click="filterCards('rare')">Rare</button>
-                <button :class="{ active: selectedRarity === 'ultraRare' }" @click="filterCards('ultraRare')">Ultra Rare</button>
-                <button :class="{ active: selectedRarity === 'legendary' }" @click="filterCards('legendary')">Legendary</button>
-                <button :class="{ active: selectedRarity === 'uncommon' }" @click="filterCards('uncommon')">Uncommon</button>
-                <button :class="{ active: selectedRarity === 'common' }" @click="filterCards('common')">Common</button>
+                <div class="filter-row">
+                    <button :class="{ active: selectedRarities.includes('rare') }" @click="toggleFilter('rare')">Rare</button>
+                    <button :class="{ active: selectedRarities.includes('uncommon') }" @click="toggleFilter('uncommon')">Uncommon</button>
+                    <button :class="{ active: selectedRarities.includes('common') }" @click="toggleFilter('common')">Common</button>
+                </div>
+                <div class="filter-row">
+                    <button :class="{ active: selectedRarities.includes('ultraRare') }" @click="toggleFilter('ultraRare')">Ultra Rare</button>
+                    <button :class="{ active: selectedRarities.includes('legendary') }" @click="toggleFilter('legendary')">Legendary</button>
+                </div>
             </div>
 
-            <!-- Lower Part: Total Cards and Search Input -->
+            <!-- Search and Total Cards -->
             <div class="search-box">
                 <div class="total-cards">
                     <img src="path/to/icon.png" alt="Total Cards Icon" class="icon" />
@@ -24,8 +28,10 @@
                     <button @click="clearSearch">x</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Card Grid -->
+        <!-- Scrollable Card Grid -->
+        <div class="card-container">
             <div class="card-grid" v-if="filteredCards.length > 0">
                 <PlayingCard v-for="card in filteredCards"
                              :key="card.id + card.image"
@@ -51,40 +57,33 @@
         },
         setup() {
             const route = useRoute();
-            const cards = ref(require('../assets/cards.json')); // Direct import
+            const cards = ref(require('../assets/cards.json'));
             const selectedCards = ref([]);
-            const selectedRarity = ref(null); // To store the selected rarity
-            const searchQuery = ref(''); // To store the search input
+            const selectedRarities = ref([]);
+            const searchQuery = ref('');
 
-            const isCollectionRoute = computed(() => {
-                return route.path === '/collection';
-            });
+            const isCollectionRoute = computed(() => route.path === '/collection');
 
-            const filterCards = (rarity) => {
-                if (selectedRarity.value === rarity) {
-                    selectedRarity.value = null; // Remove filter if the same button is clicked
+            const toggleFilter = (rarity) => {
+                if (selectedRarities.value.includes(rarity)) {
+                    selectedRarities.value = selectedRarities.value.filter(r => r !== rarity);
                 } else {
-                    selectedRarity.value = rarity; // Set the selected rarity
+                    selectedRarities.value.push(rarity);
                 }
             };
 
             const clearSearch = () => {
-                searchQuery.value = ''; // Clear the search input
+                searchQuery.value = '';
             };
 
             const filteredCards = computed(() => {
                 let filtered = cards.value;
-
-                // Filter by rarity if selected
-                if (selectedRarity.value) {
-                    filtered = filtered.filter(card => card.rarity === selectedRarity.value);
+                if (selectedRarities.value.length > 0) {
+                    filtered = filtered.filter(card => selectedRarities.value.includes(card.rarity));
                 }
-
-                // Filter by search query
                 if (searchQuery.value) {
                     filtered = filtered.filter(card => card.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
                 }
-
                 return filtered;
             });
 
@@ -97,7 +96,7 @@
                 }
             };
 
-            return { isCollectionRoute, filteredCards, selectedCards, filterCards, searchQuery, clearSearch, toggleCardSelection };
+            return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection };
         },
     };
 </script>
@@ -105,39 +104,76 @@
 <style scoped>
     .card-collection {
         padding: 1rem;
-        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .container-box {
-        max-width: 1200px; /* Maximum width for larger screens */
-        width: 80%; /* 80% width on mobile devices */
-        margin: 0 auto; /* Center the box */
+        max-width: 1200px;
+        width: 80%;
+        margin: 0 auto;
         padding: 1rem;
-        border: 1px solid #ccc; /* Optional: Add a border */
-        border-radius: 8px; /* Optional: Rounded corners */
-        background-color: #f9f9f9; /* Optional: Light background color */
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
     }
 
+    /* Filter Buttons */
     .filter-box {
         display: flex;
-        justify-content: space-around;
+        flex-wrap: wrap;
+        justify-content: flex-start; /* Align buttons to the left */
+        gap: 0.5rem;
         margin-bottom: 1rem;
+        max-width: 300px; /* Prevents buttons from spreading too far */
     }
 
-        .filter-box button {
-            padding: 0.5rem 1rem;
+    .filter-row {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+        .filter-row button {
+            padding: 0.5rem 0.5rem;
+            margin: 0.5rem;
             cursor: pointer;
-            border: none; /* Remove default border */
-            border-radius: 5px; /* Rounded corners for buttons */
-            background-color: #007bff; /* Default button color */
-            color: white; /* Text color */
-            transition: background-color 0.3s; /* Smooth transition */
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: rgb(32, 32, 32);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1rem;
         }
 
-            .filter-box button.active {
-                background-color: red; /* Active button color */
+            .filter-row button.active {
+                background-color: red;
+                color: white;
             }
 
+    /* Mobile Layout: 3 buttons on top, 2 below */
+    @media (max-width: 600px) {
+        .filter-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 buttons in first row */
+            max-width: 250px;
+        }
+
+        .filter-row:nth-child(2) {
+            grid-column: span 3; /* Ultra Rare & Legendary below */
+            justify-content: center;
+        }
+    }
+
+    /* Larger screens: All buttons next to each other on the left */
+    @media (min-width: 600px) {
+        .filter-box {
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+    }
+
+    /* Search Box */
     .search-box {
         display: flex;
         justify-content: space-between;
@@ -151,8 +187,8 @@
     }
 
     .icon {
-        width: 20px; /* Adjust icon size */
-        height: 20px; /* Adjust icon size */
+        width: 20px;
+        height: 20px;
         margin-right: 0.5rem;
     }
 
@@ -163,42 +199,58 @@
 
         .search-input input {
             padding: 0.5rem;
-            border: 1px solid #ccc; /* Border for the input */
-            border-radius: 5px; /* Rounded corners for input */
-            margin-right: 0.5rem; /* Space between input and button */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 0.5rem;
         }
 
         .search-input button {
             padding: 0.5rem 0.75rem;
             cursor: pointer;
-            border: none; /* Remove default border */
-            border-radius: 5px; /* Rounded corners for button */
-            background-color: #dc3545; /* Clear button color */
-            color: white; /* Text color */
+            border: none;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: white;
         }
 
+    /* Card Container */
+    .card-container {
+        overflow-y: auto;
+        max-height: 70vh;
+        width: 100%;
+    }
+
+    /* Smaller Cards */
     .card-grid {
-        display: grid; /* Grid layout for cards */
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
-        gap: 1rem; /* Spacing between cards */
-        justify-items: center; /* Center cards horizontally */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.4rem;
+        justify-items: center;
     }
 
+    .playing-card {
+        width: 90px;
+        height: 130px;
+        padding: 0.5rem;
+        border-radius: 5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .playing-card img {
+            width: 100%;
+            height: auto;
+        }
+
+    /* Even Smaller Cards on Mobile */
     @media (max-width: 600px) {
-        .filter-box {
-            flex-direction: column; /* Stack buttons vertically on small screens */
-            align-items: center; /* Center buttons */
+        .card-grid {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         }
 
-        .search-box {
-            flex-direction: column; /* Stack search box elements vertically */
-            align-items: flex-start; /* Align items to the start */
-        }
-
-        .search-input {
-            width: 100%; /* Full width for search input */
+        .playing-card {
+            width: 75px;
+            height: 110px;
         }
     }
+
 </style>
-
-
