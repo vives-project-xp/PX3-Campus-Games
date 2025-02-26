@@ -111,7 +111,7 @@
 
     .container-box {
         max-width: 1200px;
-        width: 80%;
+        width: 95%;
         margin: 0 auto;
         padding: 1rem;
         border: 1px solid #ccc;
