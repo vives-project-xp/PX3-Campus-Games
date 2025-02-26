@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import NavigationMenu from './components/NavigationMenu.vue'; // Corrected import
+import NavigationMenu from './components/NavigationMenu.vue';
 import BackToTopButton from './components/BackToTopButton.vue';
 import TopBar from './components/TopBar.vue';
 
 export default {
   name: 'App',
   components: {
-    NavigationMenu, // Corrected component name
+    NavigationMenu,
     BackToTopButton,
     TopBar,
   },

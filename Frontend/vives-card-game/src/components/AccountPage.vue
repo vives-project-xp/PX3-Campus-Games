@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import axios from 'axios'; // Import axios for making HTTP requests
+import axios from 'axios';
 
 export default {
   data() {
@@ -25,16 +25,15 @@ export default {
   },
   methods: {
     async register() {
-      this.errorMessage = ''; // Clear previous error messages
-      this.successMessage = ''; // Clear previous success messages
+      this.errorMessage = '';
+      this.successMessage = '';
       try {
-        const response = await axios.post('/api/users/register', { // Replace with your backend API endpoint
+        const response = await axios.post('http://localhost:3001/api/users/register', { // test met postman en volledige url
           username: this.username,
           opleiding: this.opleiding,
           password: this.password,
         });
-        this.successMessage = response.data.message; // Display success message
-        // Optionally, redirect to login or another page after successful registration
+        this.successMessage = response.data.message;
       } catch (error) {
         if (error.response && error.response.data && error.response.data.error) {
           this.errorMessage = error.response.data.error; // Display error message from backend

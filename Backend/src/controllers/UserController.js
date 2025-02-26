@@ -60,6 +60,8 @@ const deleteUser = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
+    console.log("Request body:", req.body);
+    console.log("registerUser function reached"); // output naar console als de api wordt gecalled
     try {
         const { error } = registerSchema.validate(req.body);
         if (error) return res.status(400).json({ error: error.details[0].message });
@@ -68,7 +70,9 @@ const registerUser = async (req, res) => {
 
         // Check of de user al bestaat
         const [existingUser] = await db.execute('SELECT id FROM users WHERE name = ?', [username]);
-        if (!existingUser || existingUser.length === 0) { // Als de gebruiker niet bestaat
+        console.log("Existing user query result:", existingUser); // output naar console als user al bestaat
+
+        if (existingUser && existingUser.length > 0) {
             return res.status(400).json({ error: 'Gebruiker bestaat al' });
         }
 

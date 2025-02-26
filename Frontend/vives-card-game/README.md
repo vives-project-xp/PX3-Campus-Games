@@ -7,6 +7,7 @@ npm install
 npm install -g @vue/cli
 npm install --save-dev @vue/cli-service
 npm install axios
+npm install cors
 
 ```
 go to the "Frontend\vives-card-game" folder locally, it should look like:
