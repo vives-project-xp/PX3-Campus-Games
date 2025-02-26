@@ -4,17 +4,17 @@ class Card:
     def __init__(self, name, health, damage, ability):
         self.name = name
         self.max_health = health
-        self.base_health = health  # Keeps track of real health before block is applied
+        self.base_health = health
         self.health = health
         self.damage = damage
         self.ability = ability
-        self.block = 0  # Temporary HP
+        self.block = 0
         self.temp_effects = []
 
     def attack(self, target, ap):
         if self.health <= 0:
             print(f"{self.name} is defeated and cannot attack!")
-            return 0  # Dead cards can't attack
+            return 0
 
         if ap <= 0:
             return 0
@@ -24,38 +24,39 @@ class Card:
             base_damage = int(base_damage * 1.5)
         
         if ap == 2:
-            base_damage = int(base_damage * 0.5)  # Second attack does 50% damage
+            base_damage = int(base_damage * 0.5)
         
-        actual_damage = min(target.health, base_damage)  # Ensure HP doesn't go negative
+        actual_damage = min(target.health, base_damage)
         target.health -= actual_damage
 
         if target.health <= 0:
-            target.health = 0  # Prevents negative HP
+            target.health = 0
         
         return actual_damage
     
-    def use_ability(self):
+    def use_ability(self, player):
         if self.ability == "heal":
-            heal_amount = random.randint(50, 75)
+            heal_amount = 75
             self.health = min(self.max_health, self.health + heal_amount)
             return f"{self.name} heals for {heal_amount} HP!"
         elif self.ability == "block":
-            self.block = random.randint(80, 100)
-            self.health += self.block  # Temporarily increases HP
+            self.block = 80
+            self.health += self.block
             return f"{self.name} gains {self.block} temporary HP!"
         elif self.ability == "damage_multiplier":
             self.temp_effects.append("damage_multiplier")
             return f"{self.name} gets a damage boost!"
         elif self.ability == "free_switch":
-            return "free_switch"
+            player.switch_card(free=True)
+            return f"{player.name} switches cards for free!"
         return "Invalid ability"
     
     def remove_block(self):
         if self.block > 0:
-            self.health -= self.block  # Remove block HP
+            self.health -= self.block
             self.block = 0
             if self.health < self.base_health:
-                self.health = self.base_health  # Ensure it doesn't drop below base HP
+                self.health = self.base_health
 
     def __repr__(self):
         return f"{self.name} (HP: {self.health}/{self.max_health}, DMG: {self.damage})"
@@ -65,9 +66,9 @@ class Player:
         self.name = name
         self.active_card = cards.pop(0)
         self.benched_cards = cards
-        self.ap = 1  # First turn = 1 AP, later turns = 2 AP
+        self.ap = 1
 
-    def switch_card(self):
+    def switch_card(self, free=False):
         if self.benched_cards:
             print("Available cards:")
             for i, card in enumerate(self.benched_cards):
@@ -80,6 +81,8 @@ class Player:
                     if 0 <= choice < len(self.benched_cards):
                         self.active_card = self.benched_cards.pop(choice)
                         print(f"{self.name} switches to {self.active_card.name}!")
+                        if not free:
+                            self.ap -= 1
                         return
                 print("Invalid choice. Try again.")
         else:
@@ -96,12 +99,19 @@ class Player:
 # Game Setup
 def setup_game():
     all_cards = [
-        Card("Dragon Healer", random.randint(200, 201), random.randint(75, 76), "heal"),
-        Card("Warrior", random.randint(250, 251), random.randint(50, 151), "damage_multiplier"),
-        Card("Priest", random.randint(200, 201), random.randint(75, 76), "heal"),
-        Card("Knight", random.randint(250, 251), random.randint(150, 151), "block"),
-        Card("Berserker", random.randint(220, 221), random.randint(50, 151), "damage_multiplier"),
-        Card("Paladin", random.randint(220, 221), random.randint(150, 151), "block")
+        Card("Warrior", 160, 140, "free_switch"),
+        Card("Warrior", 220, 100, "damage_multiplier"),
+        Card("Knight", 260, 80, "block"),
+        Card("Priest", 180, 120, "free_switch"),
+        Card("Berserker", 270, 80, "damage_multiplier"),
+        Card("Paladin", 300, 60, "block"),
+        
+        Card("Priest", 220, 100, "heal"),
+        Card("Healer", 300, 80, "heal"),
+        Card("Healer", 250, 80, "heal"),
+        Card("Knight", 220, 100, "block"),
+        Card("Berserker", 200, 120, "damage_multiplier"),
+        Card("Paladin", 200, 100, "free_switch"),
     ]
     
     random.shuffle(all_cards)
@@ -148,15 +158,16 @@ def play_game():
                 print(f"{current_player.active_card.name} attacks {opponent.active_card.name} for {damage} damage!")
                 current_player.ap -= 1
             elif action == "2":
-                ability_result = current_player.active_card.use_ability()
+                ability_result = current_player.active_card.use_ability(current_player)
                 print(ability_result)
-                current_player.ap -= 1
+                if "free" not in ability_result:
+                    current_player.ap -= 1
             elif action == "3":
                 current_player.switch_card()
                 break
             else:
                 print("Invalid choice, try again.")
-
+        
         opponent.check_and_swap_card()
         turn_counter += 1
 
