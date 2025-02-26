@@ -1,35 +1,6 @@
-
 ## Eindpunten
 
-### 1. **Voeg een gebruiker toe**
-- **Endpoint:** `/users`
-- **Methode:** `POST`
-- **Parameters:**
-  - `username` (string, verplicht): De naam van de gebruiker.
-  - `email` (string, verplicht): Het e-mailadres van de gebruiker.
-  - `password` (string, verplicht): Het wachtwoord van de gebruiker.
-- **Response:**
-  - **201 Created**
-    ```json
-    {
-      "message": "User created",
-      "userId": <userId>
-    }
-    ```
-  - **400 Bad Request**
-    ```json
-    {
-      "error": "<error message>"
-    }
-    ```
-  - **500 Internal Server Error**
-    ```json
-    {
-      "error": "<error message>"
-    }
-    ```
-
-### 2. **Haal alle gebruikers op**
+### 1. **Haal alle gebruikers op**
 - **Endpoint:** `/users`
 - **Methode:** `GET`
 - **Response:**
@@ -52,7 +23,7 @@
     }
     ```
 
-### 3. **Haal een gebruiker op**
+### 2. **Haal een gebruiker op**
 - **Endpoint:** `/users/:param/:value`
 - **Methode:** `GET`
 - **Parameters:**
@@ -83,7 +54,7 @@
     }
     ```
 
-### 4. **Verwijder een gebruiker**
+### 3. **Verwijder een gebruiker**
 - **Endpoint:** `/users/:id`
 - **Methode:** `DELETE`
 - **Parameters:**
@@ -108,7 +79,7 @@
     }
     ```
 
-### 5. **Haal de wekelijkse leaderboard op**
+### 4. **Haal de wekelijkse leaderboard op**
 - **Endpoint:** `/leaderboard/weekly`
 - **Methode:** `GET`
 - **Response:**
@@ -132,7 +103,7 @@
     }
     ```
 
-### 6. **Haal de totale leaderboard op**
+### 5. **Haal de totale leaderboard op**
 - **Endpoint:** `/leaderboard/total`
 - **Methode:** `GET`
 - **Response:**
@@ -154,7 +125,7 @@
     }
     ```
 
-### 7. **Haal de studie leaderboard op**
+### 6. **Haal de studie leaderboard op**
 - **Endpoint:** `/leaderboard/study`
 - **Methode:** `GET`
 - **Response:**
@@ -175,7 +146,7 @@
     }
     ```
 
-### 8. **Haal de persoonlijke ranking van een speler op**
+### 7. **Haal de persoonlijke ranking van een speler op**
 - **Endpoint:** `/ranking/:userId`
 - **Methode:** `GET`
 - **Parameters:**
@@ -203,7 +174,7 @@
     }
     ```
 
-### 9. **Voeg een kaart toe aan een gebruiker**
+### 8. **Voeg een kaart toe aan een gebruiker**
 - **Endpoint:** `/users/cards`
 - **Methode:** `POST`
 - **Parameters:**
@@ -224,7 +195,7 @@
     }
     ```
 
-### 10. **Haal alle kaarten van een speler op**
+### 9. **Haal alle kaarten van een speler op**
 - **Endpoint:** `/users/:user_id/cards`
 - **Methode:** `GET`
 - **Parameters:**
@@ -252,7 +223,7 @@
     }
     ```
 
-### 11. **Ruil een kaart met een andere speler**
+### 10. **Ruil een kaart met een andere speler**
 - **Endpoint:** `/trade`
 - **Methode:** `POST`
 - **Parameters:**
@@ -280,7 +251,7 @@
     }
     ```
 
-### 12. **Geef een starter pack aan een gebruiker**
+### 11. **Geef een starter pack aan een gebruiker**
 - **Endpoint:** `/users/starter-pack`
 - **Methode:** `POST`
 - **Parameters:**
@@ -299,7 +270,7 @@
     }
     ```
 
-### 13. **Registreer een gebruiker**
+### 12. **Registreer een gebruiker**
 - **Endpoint:** `/register`
 - **Methode:** `POST`
 - **Parameters:**
@@ -327,7 +298,7 @@
     }
     ```
 
-### 14. **Login een gebruiker**
+### 13. **Login een gebruiker**
 - **Endpoint:** `/login`
 - **Methode:** `POST`
 - **Parameters:**
@@ -360,5 +331,3 @@ Alle API-eindpunten kunnen een foutmelding teruggeven in het geval van een inter
 {
   "error": "<error message>"
 }
-
-
