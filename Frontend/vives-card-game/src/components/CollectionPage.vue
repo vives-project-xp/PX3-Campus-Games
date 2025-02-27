@@ -20,7 +20,7 @@
             <!-- Search and Total Cards -->
             <div class="search-box">
                 <div class="total-cards">
-                    <img src="path/to/icon.png" alt="Total Cards Icon" class="icon" />
+                    <img src="../assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
                     <span>{{ filteredCards.length }}</span>
                 </div>
                 <div class="search-input">
@@ -40,7 +40,7 @@
                              :isSelected="selectedCards.includes(card.id)"
                              @click="toggleCardSelection(card.id)" />
             </div>
-            <div v-else>No cards found.</div>
+            <div v-else class="no-cards">Geen kaarten gevonden.</div>
         </div>
     </div>
 </template>
@@ -210,6 +210,13 @@
         gap: 0.4rem;
         justify-items: center;
         padding-bottom: 2rem;
+    }
+
+    .no-cards {
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
 
     @media (max-width: 600px) {
