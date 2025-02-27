@@ -33,6 +33,7 @@
 
 <script>
     import axios from 'axios';
+    import dotenv from 'dotenv';
 
     export default {
         data() {
@@ -52,7 +53,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.post('http://localhost:3001/api/users/register', {
+                    const response = await axios.post('http://localhost:3000/api/users/register', {
                         username: this.username,
                         educationType: this.educationType,
                         password: this.password,

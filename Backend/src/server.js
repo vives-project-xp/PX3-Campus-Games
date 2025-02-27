@@ -35,6 +35,6 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-app.listen(3001, () => { // poort 3001 gebruikt als test
-  console.log(`🚀 vives-card-game-backend draait op http://localhost:${3001}`);
+app.listen(port, () => {
+  console.log(`🚀 vives-card-game-backend draait op http://localhost:${port}`);
 });
