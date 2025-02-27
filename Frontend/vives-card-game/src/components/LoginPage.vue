@@ -3,18 +3,18 @@
         <div class="spacer"></div>
         <div class="logo-placeholder">Logo Here</div>
 
-        <label class="input-label">Username</label>
-        <input v-model="username" placeholder="Username" class="input-field" />
+        <label class="input-label">Gebruikersnaam</label>
+        <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
 
-        <label class="input-label">Password</label>
-        <input v-model="password" type="password" placeholder="Password" class="input-field" />
+        <label class="input-label">Wachtwoord</label>
+        <input v-model="password" type="password" placeholder="Wachtwoord" class="input-field" />
 
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
 
-        <button @click="login" class="signup-button">Login</button>
+        <button @click="login" class="signup-button">Inloggen</button>
 
         <p class="signup-text">
-            Don't have an account? <span class="signup-link" @click="goToSignUp">Sign up</span>
+            Heb je nog geen account? <span class="signup-link" @click="goToSignUp">Registreren</span>
         </p>
     </div>
 </template>
@@ -99,7 +99,7 @@
         background-color: red;
         color: white;
         border: none;
-        border-radius: 0.1rem;
+        border-radius: 1rem;
         cursor: pointer;
         margin-top: 1rem;
         margin-bottom: 2rem;
