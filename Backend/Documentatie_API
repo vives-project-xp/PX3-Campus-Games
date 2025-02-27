@@ -275,7 +275,7 @@
 - **Methode:** `POST`
 - **Parameters:**
   - `username` (string, verplicht): De naam van de gebruiker.
-  - `email` (string, verplicht): Het e-mailadres van de gebruiker.
+  - `opleiding` (string, verplicht): Het opleiding van de gebruiker.
   - `password` (string, verplicht): Het wachtwoord van de gebruiker.
 - **Response:**
   - **201 Created**
