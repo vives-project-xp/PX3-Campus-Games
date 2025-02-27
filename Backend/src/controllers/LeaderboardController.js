@@ -18,7 +18,25 @@ const getUserScoreById = async (req, res) => {
     }
 };
 
+const getUsersScores = async (req, res) => {
+    try {
+        const query = `SELECT id, user_score FROM users ORDER BY user_score DESC limit 10`;
+        const [rows] = await db.execute(query);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Geen gebruikers gevonden" });
+        }
+
+        res.json(rows);
+    } 
+    catch (error) {
+        console.error("Fout bij ophalen van user scores:", error);
+        res.status(500).json({ error: "Kan scores niet ophalen" });
+    }
+};
+
 
 export { 
-    getUserScoreById
+    getUserScoreById,
+    getUsersScores
 };
