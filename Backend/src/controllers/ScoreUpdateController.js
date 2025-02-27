@@ -6,7 +6,7 @@ const addPoints = async (req, res) => {
         const addScore = 100; // Altijd 100 punten toevoegen
 
         // Controleer of de gebruiker bestaat en haal de huidige score op
-        const [user] = await db.execute('SELECT user_score FROM USERS WHERE id = ?', [userId]);
+        const [user] = await db.execute('SELECT user_score FROM users WHERE id = ?', [userId]);
         if (user.length === 0) {
             return res.status(404).json({ error: 'Gebruiker niet gevonden' });
         }
@@ -16,7 +16,7 @@ const addPoints = async (req, res) => {
         const newTotalScore = oldScore + addScore;
 
         // Update de score van de gebruiker
-        await db.execute('UPDATE USERS SET user_score = ? WHERE id = ?', [newTotalScore, userId]);
+        await db.execute('UPDATE users SET user_score = ? WHERE id = ?', [newTotalScore, userId]);
 
         res.json({ message: '100 punten toegevoegd!', userId, newTotalScore });
     } catch (error) {
