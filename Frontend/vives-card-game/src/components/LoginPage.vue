@@ -68,7 +68,7 @@
         max-height: 50vh;
         background-color: lightgray;
         text-align: center;
-        padding: 10rem 1rem 10rem 1rem;
+        padding: 11.1rem 1rem 10rem 1rem;
         margin-bottom: 2rem;
     }
 
