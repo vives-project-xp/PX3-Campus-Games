@@ -63,8 +63,8 @@ const registerUser = async (req, res) => {
     console.log("Request body:", req.body);
     console.log("registerUser function reached"); // output naar console als de api wordt gecalled
     try {
-        //const { error } = registerSchema.validate(req.body);
-        //if (error) return res.status(400).json({ error: error.details[0].message });
+        const { error } = registerSchema.validate(req.body);
+        if (error) return res.status(400).json({ error: error.details[0].message });
 
         const { username, opleiding, password } = req.body;
 
