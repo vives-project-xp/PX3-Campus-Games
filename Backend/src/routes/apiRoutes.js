@@ -16,7 +16,8 @@ router.delete('/deleteUser/:id', UserController.deleteUser);
 router.get('/leaderboard/weekly', LeaderboardController.getWeeklyLeaderboard);
 router.get('/leaderboard/total', LeaderboardController.getTotalLeaderboard);
 router.get('/leaderboard/study', LeaderboardController.getStudyLeaderboard);
-router.get('/leaderboard/user/:userId', LeaderboardController.getUserRanking);
+router.get('/leaderboard/user/:id', LeaderboardController.getUserRanking);
+router.get('/getUserScoreById/:id', LeaderboardController.getUserScoreById);
 
 // cards
 router.post('/addCard', CardController.addCardToUser);   
@@ -25,7 +26,7 @@ router.post('/tradeCards', CardController.tradeCards);
 router.post('/starter-pack', CardController.giveStarterPack);
 
 // score
-router.patch('/addPoints/:userId', ScoreUpdateController.addPoints);
+router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
 export default router;
 
 

@@ -46,7 +46,7 @@ CREATE TABLE Cards_dex (
     ability ENUM('heal', 'block', 'damage_multiplier', 'free_switch') NOT NULL,
     rarity ENUM('Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Legendary') NOT NULL,
     description TEXT,
-    artwork_path VARCHAR(255) NOT NULL,
+    artwork_path VARCHAR(255) NOT NULL
 );
 
 -- Tussenliggende tabel voor gebruikerskaarten (JOIN TABLE)
