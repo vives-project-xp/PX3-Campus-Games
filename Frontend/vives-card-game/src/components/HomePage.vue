@@ -67,7 +67,7 @@
         <li>Healthcare ❤</li>
         <li>Marketing and Business 🤝</li>
         <li>Education and Social 🎓</li>
-        <li>Technology ⚙</li>
+        <li>Technology and Bio ⚙</li>
       </ul>
 
 
