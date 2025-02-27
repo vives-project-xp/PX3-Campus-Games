@@ -8,6 +8,7 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL UNIQUE,
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
     password VARCHAR(255) NOT NULL,
+    user_score INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

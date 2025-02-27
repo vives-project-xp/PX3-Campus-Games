@@ -3,6 +3,7 @@ const router = express.Router();
 import * as UserController from '../controllers/UserController.js';
 import * as CardController from '../controllers/CardsController.js';
 import * as LeaderboardController from '../controllers/LeaderboardController.js';
+import * as ScoreUpdateController from '../controllers/ScoreUpdateController.js';
 
 // users
 router.post('/users/register', UserController.registerUser); // origineel = router.post('/register', UserController.registerUser);
@@ -23,5 +24,8 @@ router.get('/userCards/:user_id', CardController.getUserCards);
 router.post('/tradeCards', CardController.tradeCards);  
 router.post('/starter-pack', CardController.giveStarterPack);
 
+// score
+router.patch('/addPoints/:userId', ScoreUpdateController.addPoints);
 export default router;
+
 
