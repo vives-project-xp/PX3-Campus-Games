@@ -13,10 +13,6 @@ router.get('/getUserBy/:param/:value', UserController.getUserBy); // param = col
 router.delete('/deleteUser/:id', UserController.deleteUser);
 
 // leaderboards
-router.get('/leaderboard/weekly', LeaderboardController.getWeeklyLeaderboard);
-router.get('/leaderboard/total', LeaderboardController.getTotalLeaderboard);
-router.get('/leaderboard/study', LeaderboardController.getStudyLeaderboard);
-router.get('/leaderboard/user/:id', LeaderboardController.getUserRanking);
 router.get('/getUserScoreById/:id', LeaderboardController.getUserScoreById);
 
 // cards

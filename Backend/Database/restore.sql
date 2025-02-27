@@ -12,31 +12,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Maak de scores tabel aan per week
-CREATE TABLE scores_weekly (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    score INT DEFAULT 0,
-    week_number INT NOT NULL,
-    year INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE 
-);
-
--- Maak de totale scores tabel aan
-CREATE TABLE scores_total (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    total_score INT DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Maak de scores per opleiding aan
-CREATE TABLE scores_study (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
-    total_score INT DEFAULT 0
-);
-
 -- Table voor alle informatie van alle kaarten
 CREATE TABLE Cards_dex (
     card_id INT AUTO_INCREMENT PRIMARY KEY,
