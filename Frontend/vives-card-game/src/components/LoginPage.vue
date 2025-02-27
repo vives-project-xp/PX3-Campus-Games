@@ -99,7 +99,7 @@
         background-color: red;
         color: white;
         border: none;
-        border-radius: 0.1rem;
+        border-radius: 1rem;
         cursor: pointer;
         margin-top: 1rem;
         margin-bottom: 2rem;
