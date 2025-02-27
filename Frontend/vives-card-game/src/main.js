@@ -7,6 +7,7 @@ import ShopPage from './components/ShopPage.vue';
 import HomePage from './components/HomePage.vue';
 import TradingPage from './components/TradingPage.vue';
 import AccountPage from './components/AccountPage.vue';
+import LoginPage from './components/LoginPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/shop', component: ShopPage },
   { path: '/trading', component: TradingPage },
   { path: '/account', component: AccountPage },
+  { path: '/login', component: LoginPage },
 ];
 
 const router = createRouter({
