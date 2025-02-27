@@ -1,0 +1,110 @@
+[
+    {
+        "id": 1,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "artwork/testcard.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 2,
+        "name": "Doctor",
+        "rarity": "rare",
+        "image": "artwork/testcard.png",
+        "attack": 6,
+        "defense": 8,
+        "health": 45
+    },
+    {
+        "id": 3,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 4,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 5,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 6,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 4,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 5,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 6,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 4,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 5,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    },
+    {
+        "id": 6,
+        "name": "Teacher",
+        "rarity": "legendary",
+        "image": "artwork/testcard.png",
+        "attack": 50,
+        "defense": 50,
+        "health": 300
+    }
+  ]
