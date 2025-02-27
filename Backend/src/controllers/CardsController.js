@@ -2,7 +2,7 @@ import db from '../db.js';
 
 const addCardToUser = async (req, res) => {
     try {
-        const { user_id, card_id, quantity } = req.body;
+        const { user_id, card_id} = req.body;
 
         // Controleer of de kaart al bestaat in het bezit van de speler
         const [existingCard] = await db.execute(
@@ -13,22 +13,16 @@ const addCardToUser = async (req, res) => {
         if (existingCard.length > 0) {
             // Update de hoeveelheid als de kaart al bestaat
             await db.execute(
-                'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                [quantity, user_id, card_id]
+                'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
+                [user_id, card_id]
             );
         } else {
             // Voeg een nieuwe kaart toe aan de speler
             await db.execute(
                 'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
-                [user_id, card_id, quantity]
+                [user_id, card_id, 1]
             );
         }
-
-        // Log de transactie
-        await db.execute(
-            'INSERT INTO card_transactions (user_id, card_id, transaction_type) VALUES (?, ?, ?)',
-            [user_id, card_id, 'purchase']
-        );
 
         res.json({ message: 'Kaart toegevoegd aan gebruiker' });
     } catch (error) {
