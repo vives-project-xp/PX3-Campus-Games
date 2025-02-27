@@ -3,30 +3,30 @@
         <div class="spacer"></div>
         <div class="logo-placeholder">Logo Here</div>
 
-        <label class="input-label">Username</label>
+        <label class="input-label">Gebruikersnaam</label>
         <input v-model="username" placeholder="Username" class="input-field" />
 
-        <label class="input-label">Education Type</label>
+        <label class="input-label">Studiegebied</label>
         <select v-model="educationType" class="input-field">
             <option value="non-student">Non-student</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-            <option value="option4">Option 4</option>
+            <option value="option1">Technology & Bio</option>
+            <option value="option2">Gezondheidszorg</option>
+            <option value="option3">Marketing & Business</option>
+            <option value="option4">Onderwijs & Sociaal</option>
         </select>
 
-        <label class="input-label">Password</label>
+        <label class="input-label">Wachtwoord</label>
         <input v-model="password" type="password" placeholder="Password" class="input-field" />
 
-        <label class="input-label">Repeat Password</label>
+        <label class="input-label">Wachtwoord herhalen</label>
         <input v-model="confirmPassword" type="password" placeholder="Repeat Password" class="input-field" />
 
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
 
-        <button @click="register" class="signup-button">Sign Up</button>
+        <button @click="register" class="signup-button">Registreren</button>
 
         <p class="login-text">
-            Already have an account? <span class="login-link" @click="goToLogin">Log in</span>
+            Heb je al een account? <span class="login-link" @click="goToLogin">Log in</span>
         </p>
     </div>
 </template>
