@@ -4,7 +4,7 @@
         <div class="logo-placeholder">Logo Here</div>
 
         <label class="input-label">Gebruikersnaam</label>
-        <input v-model="username" placeholder="Username" class="input-field" />
+        <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
 
         <label class="input-label">Studiegebied</label>
         <select v-model="educationType" class="input-field">
@@ -16,10 +16,10 @@
         </select>
 
         <label class="input-label">Wachtwoord</label>
-        <input v-model="password" type="password" placeholder="Password" class="input-field" />
+        <input v-model="password" type="password" placeholder="Wachtwoord" class="input-field" />
 
         <label class="input-label">Wachtwoord herhalen</label>
-        <input v-model="confirmPassword" type="password" placeholder="Repeat Password" class="input-field" />
+        <input v-model="confirmPassword" type="password" placeholder="Wachtwoord herhalen" class="input-field" />
 
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
 
@@ -49,7 +49,7 @@
             async register() {
                 this.errorMessage = '';
                 if (this.password !== this.confirmPassword) {
-                    this.errorMessage = 'Passwords do not match!';
+                    this.errorMessage = 'Wachtwoorden komen niet overeen!';
                     return;
                 }
                 try {
