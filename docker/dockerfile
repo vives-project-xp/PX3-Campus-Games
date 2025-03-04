@@ -1,0 +1,34 @@
+# Use Ubuntu as the base image
+FROM ubuntu:24.04
+
+# Set environment variables
+ENV NODE_VERSION=18
+ENV NPM_VERSION=9
+ENV REPO_URL="https://github.com/vives-project-xp/PX3-Campus-Games.git"
+ENV BRANCH="main"
+
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js and npm 9
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@$NPM_VERSION
+
+# Set working directory
+WORKDIR /app
+
+# Clone the repo (if not already cloned)
+RUN git clone --branch $BRANCH $REPO_URL /app || true
+
+# Install dependencies
+RUN sh -c "cd /app/Frontend/vives-card-game && npm install --legacy-peer-deps && \cd /app/Backend && npm install"
+
+# Expose necessary ports
+EXPOSE 5173 3000
+
+# Pull the latest changes and start both frontend and backend
+CMD ["sh", "-c", "cd /app && git pull origin $BRANCH && cd backend && npm run dev & cd ../frontend && npm run serve"]
