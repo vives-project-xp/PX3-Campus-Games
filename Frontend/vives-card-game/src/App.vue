@@ -39,8 +39,9 @@ export default {
 
 html, body {
   margin: 0;
-  padding: 0;
+  padding: 5px;
   height: 100%;
+  margin-top: 10px;
 }
 
 #app {
