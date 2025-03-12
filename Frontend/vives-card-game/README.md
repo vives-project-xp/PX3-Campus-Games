@@ -44,3 +44,27 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Login with JWT_Token
+To be able to login, you have to generate a secret JWT key and put it into your .env file.
+
+To do this, just put the following code snippet in a temporary JavaScript file.
+
+```
+const crypto = require('crypto');
+const secret = crypto.randomBytes(64).toString('hex');
+console.log(secret);
+```
+
+
+To run the code snippet, open a new terminal window and navigate to the folder you placed the JavaScript file in. Now run the following command to execute the code (replace 'fileName' with your actual file name):
+
+```
+node fileName.js
+```
+
+Now you will get a long hexadecimal string, this is the JWT token. Copy this code and paste in your .env file like this (once again, replace 'yourToken' with the token you just copied):
+
+```
+JWT_SECRET=yourToken
+```

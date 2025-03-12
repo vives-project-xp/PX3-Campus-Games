@@ -98,12 +98,12 @@ const loginUser = async (req, res) => {
         // Zoek de gebruiker
         const [user] = await db.execute('SELECT id, password FROM users WHERE name = ?', [username]);
         if (user.length === 0) {
-            return res.status(401).json({ error: 'Ongeldige username' });
+            return res.status(401).json({ error: 'Gebruiker niet gevonden' });
         }
 
         // Check wachtwoord
         const validPassword = await bcrypt.compare(password, user[0].password);
-        if (!validPassword) return res.status(401).json({ error: 'Ongeldig wachtwoord' });
+        if (!validPassword) return res.status(401).json({ error: 'Wachtwoord incorrect' });
 
         // Genereer een token
         const token = jwt.sign(

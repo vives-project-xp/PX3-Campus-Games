@@ -8,7 +8,7 @@
 
         <label class="input-label">Studiegebied</label>
         <select v-model="educationType" class="input-field">
-            <option value="non-student">Geen student</option>
+            <option value="non-student">Geen student van Hogeschool Vives</option>
             <option value="technology">Technology & Bio</option>
             <option value="healthcare">Gezondheidszorg</option>
             <option value="marketing">Marketing & Business</option>
@@ -39,7 +39,7 @@
         data() {
             return {
                 username: '',
-                educationType: '',
+                educationType: 'non-student',
                 password: '',
                 confirmPassword: '',
                 errorMessage: '',

@@ -39,12 +39,11 @@
                         password: this.password,
                     });
                     alert(response.data.message);
-                    localStorage.setItem('token', response.data.token); // Store token
-        localStorage.setItem('userId', response.data.userId); // Store userId
-        // Redirect to a protected route (optional)
-        this.$router.push('/');
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userId', response.data.userId);
+                    this.$router.push('/'); // redirect user to home page
                 } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'An error occurred during login.';
+                    this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
                 }
             },
             goToSignUp() {
