@@ -29,7 +29,6 @@ export default {
 :root {
   --primary-color: #fff;
   --secondary-color: #e60000;
-  --background-color: #fff;
   --text-color: #333;
   --border-color: #ddd;
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
