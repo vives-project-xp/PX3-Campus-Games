@@ -4,7 +4,6 @@ import { registerSchema } from '../middleware/validation.js';
 import jwt from 'jsonwebtoken';
 
 
-
 const getAllUsers = async (req, res) => {
     try {
         const [result] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
@@ -88,6 +87,7 @@ const registerUser = async (req, res) => {
         res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
     } catch (error) {
         res.status(500).json({ error: error.message });
+        console.error(error);
     }
 };
 
