@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
             process.env.JWT_SECRET, // Zorg ervoor dat je een geheime sleutel hebt in je .env bestand (your_secret_key)
             { expiresIn: '24h' } // Token verloopt in 24 uur
         );
-        res.json({ message: 'Login succesvol', token, userId: user[0].id });
+        res.json({ message: 'Login succesvol!', token, userId: user[0].id });
 
         /* 
         What should the frontend do?
