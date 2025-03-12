@@ -1,7 +1,7 @@
 <template>
     <div class="signup-container">
         <div class="spacer"></div>
-        <div class="logo-placeholder">Logo Here</div>
+        <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo"></div>
 
         <label class="input-label">Gebruikersnaam</label>
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
@@ -83,12 +83,10 @@
         height: 4rem;
     }
 
-    .logo-placeholder {
-        width: 90%;
+    .logo {
+        width: 100%;
         max-height: 50vh;
-        background-color: lightgray;
         text-align: center;
-        padding: 4rem 1rem 4rem 1rem;
         margin-bottom: 2rem;
     }
 
