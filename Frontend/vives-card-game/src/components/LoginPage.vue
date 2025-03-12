@@ -39,6 +39,10 @@
                         password: this.password,
                     });
                     alert(response.data.message);
+                    localStorage.setItem('token', response.data.token); // Store token
+        localStorage.setItem('userId', response.data.userId); // Store userId
+        // Redirect to a protected route (optional)
+        this.$router.push('/');
                 } catch (error) {
                     this.errorMessage = error.response?.data?.error || 'An error occurred during login.';
                 }
