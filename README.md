@@ -13,7 +13,7 @@
     - [Database](#Database)
   - [Frontend](#Frontend)
   - [Hardware](#Hardware)
-      -[Robotics](#Robotics)
+      -[Robot](#Robot)
 - [Artwork](#Artwork)
     - [Generatieproces](#Generatieproces)
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
