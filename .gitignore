@@ -4,6 +4,6 @@
 /Backend/.env
 
 # Frontend:
-/Frontend/package-lock.json
-/Frontend/node_modules
-/Frontend/.env
+/Frontend/vives-card-game/package-lock.json
+/Frontend/vives-card-game/node_modules
+/Frontend/vives-card-game/.env

@@ -1,6 +1,6 @@
 <template>
     <div class="card-collection">
-        <h2 v-if="isCollectionRoute">Your Cards:</h2>
+        <h2 v-if="isCollectionRoute" class="heading">Your Cards:</h2>
 
         <!-- Fixed Top Section -->
         <div class="fixed-container">
@@ -21,7 +21,7 @@
             <div class="search-box">
                 <div class="total-cards">
                     <img src="path/to/icon.png" alt="Total Cards Icon" class="icon" />
-                    <span>Total Cards: {{ filteredCards.length }}</span>
+                    <span>{{ filteredCards.length }}</span>
                 </div>
                 <div class="search-input">
                     <input type="text" v-model="searchQuery" placeholder="Search cards..." />
@@ -44,7 +44,6 @@
         </div>
     </div>
 </template>
-
 <script>
     import PlayingCard from './PlayingCard.vue';
     import { useRoute } from 'vue-router';
@@ -103,30 +102,32 @@
 
 <style scoped>
     .card-collection {
-        padding: 1rem;
+        padding: 0.3rem;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .container-box {
-        max-width: 1200px;
-        width: 95%;
-        margin: 0 auto;
-        padding: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #f9f9f9;
+    .heading {
+        margin-top: 3.5rem;
+        margin-bottom: 0.6rem;
     }
 
-    /* Filter Buttons */
+    .fixed-container {
+        margin-top: 0rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Centered Filters */
     .filter-box {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start; /* Align buttons to the left */
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        max-width: 300px; /* Prevents buttons from spreading too far */
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        max-width: 20rem;
     }
 
     .filter-row {
@@ -136,13 +137,13 @@
 
         .filter-row button {
             padding: 0.5rem 0.5rem;
-            margin: 0.5rem;
+            margin: 0.5rem 0rem;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
+            border-radius: 0.3rem;
             background-color: white;
             color: rgb(32, 32, 32);
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.2s, color 0.3s;
             font-size: 1rem;
         }
 
@@ -151,57 +152,40 @@
                 color: white;
             }
 
-    /* Mobile Layout: 3 buttons on top, 2 below */
-    @media (max-width: 600px) {
-        .filter-box {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 buttons in first row */
-            max-width: 250px;
-        }
-
-        .filter-row:nth-child(2) {
-            grid-column: span 3; /* Ultra Rare & Legendary below */
-            justify-content: center;
-        }
-    }
-
-    /* Larger screens: All buttons next to each other on the left */
-    @media (min-width: 600px) {
-        .filter-box {
-            flex-direction: row;
-            flex-wrap: nowrap;
-        }
-    }
-
     /* Search Box */
     .search-box {
+        margin-top: 0.3rem;
+        margin-bottom: 0.7rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        justify-content: center;
+        width: 100%;
+        max-width: 25rem;
     }
 
     .total-cards {
         display: flex;
         align-items: center;
+        margin-right: 0.5rem;
     }
 
     .icon {
         width: 20px;
         height: 20px;
-        margin-right: 0.5rem;
+        margin-right: 0.3rem;
     }
 
     .search-input {
+        flex-grow: 1;
         display: flex;
         align-items: center;
     }
 
         .search-input input {
+            flex-grow: 1;
             padding: 0.5rem;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-right: 0.5rem;
         }
 
         .search-input button {
@@ -216,41 +200,21 @@
     /* Card Container */
     .card-container {
         overflow-y: auto;
-        max-height: 70vh;
         width: 100%;
+        flex-grow: 1;
     }
 
-    /* Smaller Cards */
     .card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         gap: 0.4rem;
         justify-items: center;
+        padding-bottom: 2rem;
     }
 
-    .playing-card {
-        width: 90px;
-        height: 130px;
-        padding: 0.5rem;
-        border-radius: 5px;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-        .playing-card img {
-            width: 100%;
-            height: auto;
-        }
-
-    /* Even Smaller Cards on Mobile */
     @media (max-width: 600px) {
         .card-grid {
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        }
-
-        .playing-card {
-            width: 75px;
-            height: 110px;
+            grid-template-columns: repeat(3, 1fr);
         }
     }
-
 </style>

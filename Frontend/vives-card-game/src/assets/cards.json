@@ -3,108 +3,225 @@
         "id": 1,
         "name": "Programmer",
         "rarity": "common",
-        "image": "artwork/testcard.png",
+        "image": "Cards/doctortemp.png",
         "attack": 10,
         "defense": 5,
         "health": 60
     },
     {
         "id": 2,
-        "name": "Doctor",
-        "rarity": "rare",
-        "image": "artwork/testcard.png",
-        "attack": 6,
-        "defense": 8,
-        "health": 45
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
         "id": 3,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
         "id": 4,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
         "id": 5,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
         "id": 6,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 4,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 7,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 5,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 8,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 6,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 9,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 4,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 10,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 5,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 11,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     },
     {
-        "id": 6,
-        "name": "Teacher",
-        "rarity": "legendary",
-        "image": "artwork/testcard.png",
-        "attack": 50,
-        "defense": 50,
-        "health": 300
+        "id": 12,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 13,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 14,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 15,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 16,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 17,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 18,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 19,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 20,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 21,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 22,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 23,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 24,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
+    },
+    {
+        "id": 25,
+        "name": "Programmer",
+        "rarity": "common",
+        "image": "Cards/doctortemp.png",
+        "attack": 10,
+        "defense": 5,
+        "health": 60
     }
-  ]
+]

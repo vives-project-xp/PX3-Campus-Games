@@ -56,8 +56,10 @@ html, body {
 }
 
 main {
-  padding: 20px;
+  /*
+  padding: 1rem;
   max-width: 1200px;
+  */
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;

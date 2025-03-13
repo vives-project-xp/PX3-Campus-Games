@@ -10,10 +10,10 @@
 
     <nav v-if="isMenuOpen" class="menu">
       <router-link to="/" @click="closeMenu">Home</router-link>
-      <router-link to="/collection" @click="closeMenu">Collection</router-link>
-      <router-link to="/trading" @click="closeMenu">Trading</router-link>
-      <router-link to="/battle" @click="closeMenu">Battle</router-link>
-      <router-link to="/shop" @click="closeMenu">Shop</router-link>
+      <router-link to="/collection" @click="closeMenu">Collectie</router-link>
+      <router-link to="/trading" @click="closeMenu">Ruilen</router-link>
+      <router-link to="/battle" @click="closeMenu">battle?</router-link>
+      <router-link to="/shop" @click="closeMenu">Winkel</router-link>
       <router-link to="/account" @click="closeMenu">Account</router-link>
     </nav>
   </div>
