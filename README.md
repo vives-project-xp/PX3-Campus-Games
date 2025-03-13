@@ -11,7 +11,7 @@ Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelij
 - frontend : 
 - backend : 10.2.3
 
-##Team:
+## Team:
 (taken: frontend, backend, graphics designer, game logic, database, ambassadeur, Robotics)
 
 - Verstraete Domien: Front/Back-end developer
@@ -31,6 +31,8 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 ## Hoe werkt het
 
 ### Back-end
+
+#### Database
 
 
 
