@@ -6,8 +6,8 @@ import * as LeaderboardController from '../controllers/LeaderboardController.js'
 import * as ScoreUpdateController from '../controllers/ScoreUpdateController.js';
 
 // users
-router.post('/users/register', UserController.registerUser); // origineel = router.post('/register', UserController.registerUser);
-router.post('/users/login', UserController.loginUser); // origineel = router.post('/login', UserController.loginUser);
+router.post('/register', UserController.registerUser); // origineel = router.post('/register', UserController.registerUser);
+router.post('/login', UserController.loginUser);
 router.get('/getAllUsers', UserController.getAllUsers);
 router.get('/getUserBy/:param/:value', UserController.getUserBy); // param = column name, value = value to search for
 router.delete('/deleteUser/:id', UserController.deleteUser);

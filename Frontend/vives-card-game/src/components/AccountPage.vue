@@ -1,136 +1,90 @@
 <template>
-    <div class="signup-container">
-        <div class="spacer"></div>
-        <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo"></div>
-
-        <label class="input-label">Gebruikersnaam</label>
-        <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
-
-        <label class="input-label">Studiegebied</label>
-        <select v-model="educationType" class="input-field">
-            <option value="non-student">Geen student van Hogeschool Vives</option>
-            <option value="technology">Technology & Bio</option>
-            <option value="healthcare">Gezondheidszorg</option>
-            <option value="marketing">Marketing & Business</option>
-            <option value="education">Onderwijs & Sociaal</option>
-        </select>
-
-        <label class="input-label">Wachtwoord</label>
-        <input v-model="password" type="password" placeholder="Wachtwoord" class="input-field" />
-
-        <label class="input-label">Wachtwoord herhalen</label>
-        <input v-model="confirmPassword" type="password" placeholder="Wachtwoord herhalen" class="input-field" />
-
-        <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
-
-        <button @click="register" class="signup-button">Registreren</button>
-
+    <div class="account-container">
+      <div v-if="isLoggedIn">
+        <h1>Account Details</h1>
+        <p>Gebruikersnaam: {{ username }}</p>
+        <button class="logout-button" @click="logout">Log Out</button>
+      </div>
+      <div v-else>
+        <h1>Account</h1>
+        <p>You are not logged in yet.</p>
         <p class="login-text">
-            Heb je al een account? <span class="login-link" @click="goToLogin">Log in</span>
+            <span class="login-link" @click="goToLogin">Log in</span>
         </p>
+      </div>
     </div>
-</template>
+  </template>
 
 <script>
-    import axios from 'axios';
-    //import dotenv from 'dotenv';
-
-    export default {
-        data() {
-            return {
-                username: '',
-                educationType: 'non-student',
-                password: '',
-                confirmPassword: '',
-                errorMessage: '',
-            };
-        },
-        methods: {
-            async register() {
-                this.errorMessage = '';
-                if (this.password !== this.confirmPassword) {
-                    this.errorMessage = 'Wachtwoorden komen niet overeen!';
-                    return;
-                }
-                try {
-                    const response = await axios.post('http://localhost:3000/api/users/register', {
-                        username: this.username,
-                        opleiding: this.educationType,
-                        password: this.password,
-                    });
-                    alert(response.data.message);
-                } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
-                }
-            },
-            goToLogin() {
-                this.$router.push('/login');
-            }
-        }
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+      username: '',
     };
+  },
+  mounted() {
+    this.checkLoginStatus();
+  },
+  methods: {
+    checkLoginStatus() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.isLoggedIn = true;
+        try {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const payload = JSON.parse(atob(base64));
+          this.username = payload.username;
+        } catch (error) {
+          console.error('Error decoding token:', error);
+          this.logout();
+        }
+      } else {
+        this.isLoggedIn = false;
+      }
+    },
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      this.isLoggedIn = false;
+      this.username = '';
+      this.$router.push('/login');
+    },
+    goToLogin() {
+        this.$router.push('/login');
+    }
+  },
+};
 </script>
 
 <style scoped>
-    .signup-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 90%;
-        margin: auto;
-    }
+.account-container {
+  padding: 20px;
+  text-align: center;
+}
 
-    .spacer {
-        height: 4rem;
-    }
+.account-container h1 {
+  margin-bottom: 20px;
+}
 
-    .logo {
-        width: 100%;
-        max-height: 50vh;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+.account-container a {
+  color: #007bff;
+  text-decoration: none;
+}
 
-    .input-label {
-        align-self: flex-start;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
+.login-link {
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+}
 
-    .input-field {
-        width: 100%;
-        padding: 1rem;
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-        border: 0.1rem solid #ccc;
-        border-radius: 0.6rem;
-    }
-
-    .error-space {
-        height: 2rem;
-        color: red;
-        text-align: center;
-    }
-
-    .signup-button {
-        width: 100%;
-        padding: 1.5rem;
-        background-color: red;
-        color: white;
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .login-text {
-        margin-top: 1rem;
-        color: black;
-    }
-
-    .login-link {
-        color: red;
-        text-decoration: underline;
-        cursor: pointer;
-    }
+.logout-button {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+}
 </style>

@@ -6,48 +6,65 @@
         <label class="input-label">Gebruikersnaam</label>
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
 
+        <label class="input-label">Studiegebied</label>
+        <select v-model="educationType" class="input-field">
+            <option value="non-student">Geen student van Hogeschool Vives</option>
+            <option value="technology">Technology & Bio</option>
+            <option value="healthcare">Gezondheidszorg</option>
+            <option value="marketing">Marketing & Business</option>
+            <option value="education">Onderwijs & Sociaal</option>
+        </select>
+
         <label class="input-label">Wachtwoord</label>
         <input v-model="password" type="password" placeholder="Wachtwoord" class="input-field" />
 
+        <label class="input-label">Wachtwoord herhalen</label>
+        <input v-model="confirmPassword" type="password" placeholder="Wachtwoord herhalen" class="input-field" />
+
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
 
-        <button @click="login" class="signup-button">Inloggen</button>
+        <button @click="register" class="signup-button">Registreren</button>
 
-        <p class="signup-text">
-            Heb je nog geen account? <span class="signup-link" @click="goToSignUp">Registreren</span>
+        <p class="login-text">
+            Heb je al een account? <span class="login-link" @click="goToLogin">Log in</span>
         </p>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
+    //import dotenv from 'dotenv';
 
     export default {
         data() {
             return {
                 username: '',
+                educationType: 'non-student',
                 password: '',
+                confirmPassword: '',
                 errorMessage: '',
             };
         },
         methods: {
-            async login() {
+            async register() {
                 this.errorMessage = '';
+                if (this.password !== this.confirmPassword) {
+                    this.errorMessage = 'Wachtwoorden komen niet overeen!';
+                    return;
+                }
                 try {
-                    const response = await axios.post('http://localhost:3000/api/users/login', {
+                    const response = await axios.post('http://localhost:3000/api/users/register', {
                         username: this.username,
+                        opleiding: this.educationType,
                         password: this.password,
                     });
                     alert(response.data.message);
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('userId', response.data.userId);
-                    this.$router.push('/account');
                 } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
+                    this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
                 }
             },
-            goToSignUp() {
-                this.$router.push('/register');
+            goToLogin() {
+                this.$router.push('/login');
             }
         }
     };
@@ -68,7 +85,7 @@
 
     .logo {
         width: 100%;
-        max-height: 50vh;
+        /*max-height: 50vh;*/
         text-align: center;
         margin-bottom: 2rem;
     }
@@ -95,7 +112,7 @@
     }
 
     .signup-button {
-        max-width: 500px;
+        width: 100%;
         padding: 1.5rem;
         background-color: red;
         color: white;
@@ -106,12 +123,12 @@
         margin-bottom: 2rem;
     }
 
-    .signup-text {
+    .login-text {
         margin-top: 1rem;
         color: black;
     }
 
-    .signup-link {
+    .login-link {
         color: red;
         text-decoration: underline;
         cursor: pointer;
