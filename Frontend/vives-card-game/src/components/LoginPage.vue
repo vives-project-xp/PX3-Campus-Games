@@ -95,7 +95,7 @@
     }
 
     .signup-button {
-        width: 100%;
+        max-width: 500px;
         padding: 1.5rem;
         background-color: red;
         color: white;
