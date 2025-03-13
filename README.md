@@ -6,7 +6,7 @@
 - [Vives Card Game](#Vives-Card-game)
 - [Inhoud](#Inhoud)
 - [Doel](#Doel)
-- [nmp versies](#nmp-versies)
+- [npm versies](#npm-versies)
 - [Team](#Team)
 - [Hoe werkt het](#Hoe-werkt-het)
   - [Backend](#Backend)
