@@ -80,7 +80,7 @@ const registerUser = async (req, res) => {
 
         // Voeg gebruiker toe aan database
         const [result] = await db.execute(
-            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
+            'INSERT INTO users (name, education, password) VALUES (?, ?, ?)',
             [username, opleiding, hashedPassword]
         );
 
