@@ -22,7 +22,7 @@ app.use((req, res, next) => { // Log alle inkomende requests
 
 // Hello World route
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World! from the backend')
 });
 
 // Test database verbinding

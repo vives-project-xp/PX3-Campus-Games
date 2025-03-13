@@ -40,7 +40,7 @@ WORKDIR /app/Backend
 RUN npm install
 
 # Expose necessary ports
-EXPOSE 5173 3000
+EXPOSE 8000 3000
 
 # Pull latest changes and start both frontend and backend
 CMD ["sh", "-c", "cd /app && git pull origin $BRANCH && cd Backend && npm run dev & cd ../Frontend/vives-card-game && npm run serve"]
