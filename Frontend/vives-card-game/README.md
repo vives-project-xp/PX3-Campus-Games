@@ -1,6 +1,6 @@
 # vives-card-game
 
-##Handleiding
+## Installation guide
 
 ### Before you can start, run the following commands in your terminal:
 
