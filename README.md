@@ -12,8 +12,6 @@
   - [Backend](#Backend)
     - [Database](#Database)
   - [Frontend](#Frontend)
-  - [Hardware](#Hardware)
-      - [Robot](#Robot)
 - [Artwork](#Artwork)
     - [Generatieproces](#Generatieproces)
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
