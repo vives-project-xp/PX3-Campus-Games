@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Frontend",
+    "\\Frontend\\vives-card-game",
+    "\\Frontend\\vives-card-game\\src"
   ],
+  "SelectedNode": "\\Frontend\\vives-card-game\\src\\main.js",
   "PreviewInSolutionExplorer": false
 }
