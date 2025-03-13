@@ -44,6 +44,7 @@ export default {
         this.isLoggedIn = false;
       }
     },
+
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
@@ -51,6 +52,7 @@ export default {
       this.username = '';
       this.$router.push('/login');
     },
+
     goToLogin() {
         this.$router.push('/login');
     }
@@ -86,5 +88,6 @@ export default {
     border-radius: 5px;
     padding: 10px 20px;
     border: none;
+    font-size: 15px;
 }
 </style>

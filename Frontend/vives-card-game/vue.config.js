@@ -10,7 +10,7 @@ module.exports = defineConfig({
 const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables
 
-console.log(`🚀 vives-card-game-backend draait op http://localhost:${process.env.PORT}`); // Output port to terminal
+console.log(`🚀 vives-card-game-frontend draait op http://localhost:${process.env.PORT}`); // Output port to terminal
 
 module.exports = {
   devServer: {

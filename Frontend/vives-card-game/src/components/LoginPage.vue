@@ -1,7 +1,7 @@
 <template>
     <div class="signup-container">
         <div class="spacer"></div>
-        <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo"></div>
+        <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
 
         <label class="input-label">Gebruikersnaam</label>
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
@@ -11,7 +11,7 @@
 
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
 
-        <button @click="login" class="signup-button">Inloggen</button>
+        <button @click="login" class="login-button">Log in</button>
 
         <p class="signup-text">
             Heb je nog geen account? <span class="signup-link" @click="goToSignUp">Registreren</span>
@@ -73,6 +73,12 @@
         margin-bottom: 2rem;
     }
 
+    .logo-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
     .input-label {
         align-self: flex-start;
         margin-bottom: 0.5rem;
@@ -94,9 +100,8 @@
         text-align: center;
     }
 
-    .signup-button {
-        max-width: 500px;
-        padding: 1.5rem;
+    .login-button {
+        padding: 15px;
         background-color: red;
         color: white;
         border: none;
@@ -104,6 +109,7 @@
         cursor: pointer;
         margin-top: 1rem;
         margin-bottom: 2rem;
+        font-size: 15px;
     }
 
     .signup-text {
