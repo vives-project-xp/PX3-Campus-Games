@@ -12,6 +12,8 @@
   - [Backend](#Backend)
     - [Database](#Database)
   - [Frontend](#Frontend)
+  - [Hardware](#Hardware)
+      -[Robotics](#Robotics)
 - [Artwork](#Artwork)
     - [Generatieproces](#Generatieproces)
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
@@ -54,7 +56,9 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 
 ### Frontend
 
+### Hardware
 
+#### Robot
 
 ## Artwork
 
