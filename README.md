@@ -1,6 +1,6 @@
 # Vives Card Game
 
-![game logo](./Frontend/vives-card-game/public/logo-campus-games.jpg)
+![game logo](Frontend/vives-card-game/public/logo-campus-games.jpg)
 ## Doel
 Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
 
