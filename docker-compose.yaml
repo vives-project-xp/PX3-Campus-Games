@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: Campus-Games-Vives
+    ports:
+      - "5173:5173" # Frontend (Vue)
+      - "3001:3000" # Backend (Express) - Changed host port to 3001
+    environment:
+      - NODE_ENV=development
+      - PORT=3000 # Set the backend port
+
+    volumes:
+      - ./Frontend:/app/Frontend
+      - ./backend:/app/backend

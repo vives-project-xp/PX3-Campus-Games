@@ -13,6 +13,10 @@
 
   <style scoped>
   h2 {
-    font-size: 40px;
+    font-size:40px;
+  }
+
+  p{
+    font-size:20px;
   }
   </style>

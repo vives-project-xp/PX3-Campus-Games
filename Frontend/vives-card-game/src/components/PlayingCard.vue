@@ -1,13 +1,8 @@
 <template>
   <div class="card" :class="{ 'selected': isSelected, 'damaged': health < 20 }">
-    <img :src="cardImage" :alt="cardName" class="card-image">
+    <img :src="require(`@/assets/` + cardImage)" :alt="cardName" class="card-image">
     <div class="card-info">
-      <h2 class="card-name">{{ cardName }}</h2>
-      <p>Attack: {{ attack }}</p>
-      <p>Defense: {{ defense }}</p>
-      <p>Health: <span :style="{ color: healthColor }">{{ health }}</span></p>
-      <slot></slot>
-    </div>
+      </div>
   </div>
 </template>
 
@@ -15,67 +10,62 @@
 export default {
   name: 'playing-card',
   props: {
+    cardName: { type: String, required: true },
     cardImage: { type: String, required: true },
+    attack: { type: Number, required: true }, // curently not used, but can be used to display attack value
+    defense: { type: Number, required: true }, //curently not used, but can be used to display defense value
+    health: { type: Number, required: true }, //curently not used, but can be used to display health value
     isSelected: { type: Boolean, default: false }
-  },
-  computed: {
-    healthColor() {
-      if (this.health >= 50) {
-        return 'green';
-      } else if (this.health >= 20) {
-        return 'orange';
-      } else {
-        return 'red';
-      }
-    }
   }
 };
+
 </script>
 
 <style scoped>
 .card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background-color: white;
-  width: 20px;
-  height: 20px;
+  border: 0.1rem solid var(--border-color);  /* Change border color */
+  border-radius: var(--border-radius);   /* Change to adjust corner roundness */
+  width: 100%;        /* Card takes full width of its grid cell */
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease, box-shadow 0.5s ease;
+  background-color: var(--primary-color);
+  box-sizing: border-box;
+  display: flex;          /* Use flexbox for vertical layout */
+  flex-direction: column; /* Stack content vertically */
+    height: auto;    /*  Change this to set minimum height */
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px); /*  Slightly move up on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*  Stronger shadow on hover */
 }
 
 .card.selected {
-  border-color: blue;
-  box-shadow: 0 4px 8px rgba(0, 0, 255, 0.3);
-}
-
-.card.damaged {
-    background-color: #ffdddd;
+  border-color: var(--secondary-color); /*  Change border color when selected */
+  box-shadow: 0 4px 8px rgba(230, 0, 0, 0.3); /*  Change shadow when selected */
 }
 
 .card-image {
-  max-width: 100%;
-  max-height:150px;
-  width: auto;
-  height: auto;
+  width: 100%;          /* Image takes full width of card */
+  height: auto;         /* Image height adjusts automatically to maintain aspect ratio */
+  object-fit: cover;   /* Image fills area, cropping if needed */
   display: block;
-  margin: 0 auto;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 8px;
+  margin: 0 auto;      /* Center image horizontally */
+  border-radius: var(--border-radius) var(--border-radius) 0 0; /* Rounded corners on top */
 }
 
 .card-name {
-  font-size: 1.1em;
-  margin-bottom: 6px;
+  font-size: 1em;
+  margin-top: 0.3rem;    /*  <--  Change to adjust space *above* the name */
+  margin-bottom: 0;   /*  <--  No space below the name */
   font-weight: bold;
+  color: var(--secondary-color);
+  text-align: center;
 }
-
-.card-info p {
-  margin: 4px 0;
+.card-info{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
 }
 </style>

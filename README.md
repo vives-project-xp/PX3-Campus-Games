@@ -4,6 +4,10 @@ Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbi
 
 Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
 
+### npm versies
+- frontend : 
+- backend : 10.2.3
+
 ### team:
 (taken: frontend, backend, graphics designer, game logic, database, ambassadeur)
 
