@@ -12,7 +12,7 @@ dotenv.config(); // Load environment variables
 
 module.exports = {
   devServer: {
-    port: process.env.PORT, // start frontend on the port from .env
+    port: process.env.PORT_FRONT, // start frontend on the port from .env
     host: 'localhost'
   },
 };
