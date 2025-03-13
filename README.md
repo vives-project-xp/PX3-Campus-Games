@@ -8,7 +8,7 @@ Om dit te bereiken, creëren we een online kaartspel. Spelers kunnen kaarten ver
 - frontend : 
 - backend : 10.2.3
 
-### team:
+### Team:
 (taken: frontend, backend, graphics designer, game logic, database, ambassadeur)
 
 - Verstraete Domien: Front/Back-end developer
