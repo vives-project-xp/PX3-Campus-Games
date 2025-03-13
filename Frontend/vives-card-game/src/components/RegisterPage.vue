@@ -85,7 +85,7 @@
 
     .logo {
         width: 100%;
-        max-height: 50vh;
+        /*max-height: 50vh;*/
         text-align: center;
         margin-bottom: 2rem;
     }
