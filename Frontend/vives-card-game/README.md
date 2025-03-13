@@ -3,7 +3,6 @@
 ### Before you can start, run the following commands in your terminal:
 
 ```bash
-npm install
 npm install -g @vue/cli
 npm install --save-dev @vue/cli-service
 npm install axios
