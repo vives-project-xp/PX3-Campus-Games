@@ -6,7 +6,7 @@ import BattlePage from './components/BattlePage.vue';
 import ShopPage from './components/ShopPage.vue';
 import HomePage from './components/HomePage.vue';
 import TradingPage from './components/TradingPage.vue';
-import AccountPage from './components/AccountPage.vue';
+import RegisterPage from './components/RegisterPage.vue';
 import LoginPage from './components/LoginPage.vue';
 
 const routes = [
@@ -15,7 +15,7 @@ const routes = [
   { path: '/battle', component: BattlePage },
   { path: '/shop', component: ShopPage },
   { path: '/trading', component: TradingPage },
-  { path: '/account', component: AccountPage },
+  { path: '/register', component: RegisterPage },
   { path: '/login', component: LoginPage },
 ];
 

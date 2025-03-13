@@ -47,7 +47,7 @@
                 }
             },
             goToSignUp() {
-                this.$router.push('/account');
+                this.$router.push('/register');
             }
         }
     };
