@@ -1,5 +1,5 @@
 ### Overview
-Een card bevat volgende info: [](images/new%20design.png)
+Een card bevat volgende info: [](images/NEWERdesign.png)
 -	Name		    (Center title)
 -	Artwork		    (Frame)
 -	Rarity 		    (Border)
