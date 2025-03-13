@@ -33,7 +33,7 @@
 
 <script>
     import axios from 'axios';
-    import dotenv from 'dotenv';
+    //import dotenv from 'dotenv';
 
     export default {
         data() {
