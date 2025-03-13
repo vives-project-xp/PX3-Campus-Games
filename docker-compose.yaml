@@ -8,10 +8,11 @@ services:
     container_name: Campus-Games-Vives
     ports:
       - "8000:8000" # Frontend (Vue)
-      - "3000:3000" # Backend (Express) - Changed host port to 3001
+      - "3001:3000" # Backend (Express) - Changed host port to 3001
     environment:
       - NODE_ENV=development
       - PORT=3000 # Set the backend port
+      - PORT_FRONT=8000
 
     volumes:
       - ./Frontend:/app/Frontend

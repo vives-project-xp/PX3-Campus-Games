@@ -6,6 +6,8 @@ ENV NODE_VERSION=18
 ENV NPM_VERSION=9
 ENV REPO_URL="https://github.com/vives-project-xp/PX3-Campus-Games.git"
 ENV BRANCH="main"
+ENV PORT 3000
+ENV PORT_FRONT 8000
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
