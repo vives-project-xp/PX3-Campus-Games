@@ -7,7 +7,7 @@
 - [Inhoud](Inhoud)
 - [Doel](Doel)
 - [nmp versies](nmp-versies)
-- [Team](Team:)
+- [Team](Team)
 - [Hoe werkt het](Hoe-werkt-het)
   - [Backend](Backend)
     - [Database](Database)
@@ -27,7 +27,7 @@ Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelij
 - frontend : 
 - backend : 10.2.3
 
-## Team:
+## Team
 (taken: frontend, backend, graphics designer, game logic, database, ambassadeur, Robotics)
 
 - Verstraete Domien: Front/Back-end developer
