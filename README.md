@@ -2,6 +2,22 @@
 
 ![logo_campus_games](https://github.com/user-attachments/assets/83abe292-f3c2-4d02-8858-8ffd983cb7be)
 
+## Inhoud
+- [Vives Card Game](Vives-Card-game)
+- [Inhoud](Inhoud)
+- [Doel](Doel)
+- [nmp versies](nmp-versies)
+- [Team](Team:)
+- [Hoe werkt het](Hoe-werkt-het)
+  - [Backend](Backend)
+    - [Database](Database)
+  - [Frontend](Frontend)
+- [Artwork](Artwork)
+    - [Generatieproces](Generatieproces)
+    - [Stijlrichtlijnen](Stijlrichtlijnen)
+    - [Tools en Nabewerking](Tools-en-Nabewerking)
+    - [Bestandsbeheer](Bestandsbeheer)
+
 ## Doel
 Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
 
@@ -30,7 +46,7 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 
 ## Hoe werkt het
 
-### Back-end
+### Backend
 
 #### Database
 
