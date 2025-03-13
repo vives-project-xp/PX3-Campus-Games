@@ -12,7 +12,7 @@ Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelij
 - backend : 10.2.3
 
 ### Team:
-(taken: frontend, backend, graphics designer, game logic, database, ambassadeur)
+(taken: frontend, backend, graphics designer, game logic, database, ambassadeur, Robotics)
 
 - Verstraete Domien: Front/Back-end developer
 
