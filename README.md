@@ -84,7 +84,7 @@ Om een consistente stijl te behouden, hanteren we de volgende richtlijnen:
 ### Tools en Nabewerking
 Voor de generaties en nabewerking maken we gebruik van:
 
-A- I-tools: Voor het genereren van ruwe afbeeldingen
+- AI-tools: Voor het genereren van ruwe afbeeldingen
 
 - Adobe Express: Voor correcties en stijlbewaking
 
