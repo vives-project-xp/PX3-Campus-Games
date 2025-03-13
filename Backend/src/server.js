@@ -11,7 +11,7 @@ const port = process.env.PORT; // Gebruik PORT in plaats van DB_PORT
 
 app.use(express.json());
 app.use(cors({ // probeersel van registerUser error
-  origin: 'http://localhost:8080',
+  origin: 'http://localhost:8000',
 }));
 app.use('/api', apiRoutes);
 app.use((req, res, next) => { // Log alle inkomende requests
