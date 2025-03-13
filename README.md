@@ -60,7 +60,7 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 Een belangrijk onderdeel van de kaarten is het artwork, dat een herkenbare en aantrekkelijke visuele stijl moet hebben. We hebben gekozen voor een cartoonstijl, omdat deze toegankelijk en visueel aantrekkelijk is voor een breed publiek.
 
 ### Kaart template
-we maken gebruik van een template voor de kaarten zodat we enkel de kleur moeten aanpassen en de afbeelding er in plaatsen.
+we maken gebruik van een template voor de kaarten zodat we enkel de kleur, attack, abilitie en levens moeten aanpassen en de afbeelding er in plaatsen.
 
 <img src="https://github.com/user-attachments/assets/e76e9065-ee1f-4336-87df-db3b6f5fb4fe" width="200" height="300">
 
