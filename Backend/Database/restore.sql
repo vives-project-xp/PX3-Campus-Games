@@ -6,7 +6,7 @@ USE kaartspel_db;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
-    opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
+    education ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
     password VARCHAR(255) NOT NULL,
     user_score INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -21,7 +21,8 @@ CREATE TABLE Cards_dex (
     ability ENUM('heal', 'block', 'damage_multiplier', 'free_switch') NOT NULL,
     rarity ENUM('Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Legendary') NOT NULL,
     description TEXT,
-    artwork_path VARCHAR(255) NOT NULL
+    education ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
+    cards_path VARCHAR(255) NOT NULL
 );
 
 -- Tussenliggende tabel voor gebruikerskaarten (JOIN TABLE)
