@@ -7,7 +7,7 @@
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
 
         <label class="input-label">Studiegebied</label>
-        <select v-model="educationType" class="input-field">
+        <select v-model="education" class="input-field">
             <option value="non-student">Geen student van Hogeschool Vives</option>
             <option value="technology">Technology & Bio</option>
             <option value="healthcare">Gezondheidszorg</option>
@@ -33,13 +33,12 @@
 
 <script>
     import axios from 'axios';
-    //import dotenv from 'dotenv';
 
     export default {
         data() {
             return {
                 username: '',
-                educationType: 'non-student',
+                education: 'non-student',
                 password: '',
                 confirmPassword: '',
                 errorMessage: '',
@@ -55,7 +54,7 @@
                 try {
                     const response = await axios.post('http://localhost:3000/api/users/register', {
                         username: this.username,
-                        opleiding: this.educationType,
+                        education: this.education,
                         password: this.password,
                     });
                     alert(response.data.message);
