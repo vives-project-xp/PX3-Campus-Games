@@ -34,70 +34,90 @@
         <div class="card-container">
             <div class="card-grid" v-if="filteredCards.length > 0">
                 <PlayingCard v-for="card in filteredCards"
-                             :key="card.id + card.image"
+                             :key="card.card_id + card.cards_path"
                              :cardName="card.name"
-                             :cardImage="card.image"
-                             :isSelected="selectedCards.includes(card.id)"
-                             @click="toggleCardSelection(card.id)" />
+                             :cardImage="getCardImagePath(card.cards_path)"
+                             :isSelected="selectedCards.includes(card.card_id)"
+                             @click="toggleCardSelection(card.card_id)" />
             </div>
             <div v-else class="no-cards">Geen kaarten gevonden.</div>
         </div>
     </div>
 </template>
+
 <script>
-    import PlayingCard from './PlayingCard.vue';
-    import { useRoute } from 'vue-router';
-    import { computed, ref } from 'vue';
+import PlayingCard from './PlayingCard.vue';
+import { useRoute } from 'vue-router';
+import { computed, ref, onMounted } from 'vue';
 
-    export default {
-        name: 'collection-page',
-        components: {
-            PlayingCard,
-        },
-        setup() {
-            const route = useRoute();
-            const cards = ref(require('../assets/cards.json'));
-            const selectedCards = ref([]);
-            const selectedRarities = ref([]);
-            const searchQuery = ref('');
+export default {
+    name: 'collection-page',
+    components: {
+        PlayingCard,
+    },
+    setup() {
+        const route = useRoute();
+        const cards = ref([]);
+        const selectedCards = ref([]);
+        const selectedRarities = ref([]);
+        const searchQuery = ref('');
 
-            const isCollectionRoute = computed(() => route.path === '/collection');
+        const isCollectionRoute = computed(() => route.path === '/collection');
 
-            const toggleFilter = (rarity) => {
-                if (selectedRarities.value.includes(rarity)) {
-                    selectedRarities.value = selectedRarities.value.filter(r => r !== rarity);
-                } else {
-                    selectedRarities.value.push(rarity);
-                }
-            };
+        const toggleFilter = (rarity) => {
+            if (selectedRarities.value.includes(rarity)) {
+                selectedRarities.value = selectedRarities.value.filter(r => r !== rarity);
+            } else {
+                selectedRarities.value.push(rarity);
+            }
+        };
 
-            const clearSearch = () => {
-                searchQuery.value = '';
-            };
+        const clearSearch = () => {
+            searchQuery.value = '';
+        };
 
-            const filteredCards = computed(() => {
-                let filtered = cards.value;
-                if (selectedRarities.value.length > 0) {
-                    filtered = filtered.filter(card => selectedRarities.value.includes(card.rarity));
-                }
-                if (searchQuery.value) {
-                    filtered = filtered.filter(card => card.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
-                }
-                return filtered;
-            });
+        const filteredCards = computed(() => {
+            let filtered = cards.value;
+            if (selectedRarities.value.length > 0) {
+                filtered = filtered.filter(card => selectedRarities.value.includes(card.rarity));
+            }
+            if (searchQuery.value) {
+                filtered = filtered.filter(card => card.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+            }
+            return filtered;
+        });
 
-            const toggleCardSelection = (cardId) => {
-                const index = selectedCards.value.indexOf(cardId);
-                if (index > -1) {
-                    selectedCards.value.splice(index, 1);
-                } else {
-                    selectedCards.value.push(cardId);
-                }
-            };
+        const toggleCardSelection = (cardId) => {
+            const index = selectedCards.value.indexOf(cardId);
+            if (index > -1) {
+                selectedCards.value.splice(index, 1);
+            } else {
+                selectedCards.value.push(cardId);
+            }
+        };
 
-            return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection };
-        },
-    };
+        const getCardImagePath = (path) => {
+            return path;
+        };
+
+        const fetchUserCards = async () => {
+            try {
+                const userId = 1; // Replace with actual user ID
+                const response = await fetch(`/users/${userId}/cards`);
+                const data = await response.json();
+                cards.value = data;
+            } catch (error) {
+                console.error('Error fetching user cards:', error);
+            }
+        };
+
+        onMounted(() => {
+            fetchUserCards();
+        });
+
+        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection, getCardImagePath };
+    },
+};
 </script>
 
 <style scoped>
