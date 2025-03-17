@@ -20,107 +20,107 @@
 </template>
 
 <script>
-    import axios from 'axios';
+import axios from 'axios';
 
-    export default {
-        data() {
-            return {
-                username: '',
-                password: '',
-                errorMessage: '',
-            };
-        },
-        methods: {
-            async login() {
-                this.errorMessage = '';
-                try {
-                    const response = await axios.post('http://localhost:3000/api/users/login', {
-                        username: this.username,
-                        password: this.password,
-                    });
-                    alert(response.data.message);
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('userId', response.data.userId);
-                    this.$router.push('/account');
-                } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
-                }
-            },
-            goToSignUp() {
-                this.$router.push('/register');
+export default {
+    data() {
+        return {
+            username: '',
+            password: '',
+            errorMessage: '',
+        };
+    },
+    methods: {
+        async login() {
+            this.errorMessage = '';
+            try {
+                const response = await axios.post('http://localhost:3000/api/login', {
+                    username: this.username,
+                    password: this.password,
+                });
+                alert(response.data.message);
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userId', response.data.userId);
+                this.$router.push('/account');
+            } catch (error) {
+                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
             }
+        },
+        goToSignUp() {
+            this.$router.push('/register');
         }
-    };
+    }
+};
 </script>
 
 <style scoped>
-    .signup-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 90%;
-        margin: auto;
-    }
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
 
-    .spacer {
-        height: 4rem;
-    }
+.spacer {
+    height: 4rem;
+}
 
-    .logo {
-        width: 100%;
-        max-height: 50vh;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+.logo {
+    width: 100%;
+    max-height: 50vh;
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
-    .logo-image {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: auto;
-    }
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
 
-    .input-label {
-        align-self: flex-start;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
+.input-label {
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
 
-    .input-field {
-        width: 100%;
-        padding: 1rem;
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-        border: 0.1rem solid #ccc;
-        border-radius: 0.6rem;
-    }
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.6rem;
+}
 
-    .error-space {
-        height: 2rem;
-        color: red;
-        text-align: center;
-    }
+.error-space {
+    height: 2rem;
+    color: red;
+    text-align: center;
+}
 
-    .login-button {
-        padding: 15px;
-        background-color: red;
-        color: white;
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-        font-size: 15px;
-    }
+.login-button {
+    padding: 15px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    font-size: 15px;
+}
 
-    .signup-text {
-        margin-top: 1rem;
-        color: black;
-    }
+.signup-text {
+    margin-top: 1rem;
+    color: black;
+}
 
-    .signup-link {
-        color: red;
-        text-decoration: underline;
-        cursor: pointer;
-    }
+.signup-link {
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>

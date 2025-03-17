@@ -34,7 +34,7 @@
             async login() {
                 this.errorMessage = '';
                 try {
-                    const response = await axios.post('http://localhost:3000/api/users/login', {
+                    const response = await axios.post('http://localhost:3000/api/login', {
                         username: this.username,
                         password: this.password,
                     });
