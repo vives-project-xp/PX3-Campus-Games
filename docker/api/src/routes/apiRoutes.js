@@ -21,6 +21,7 @@ router.post('/addCard', CardController.addCardToUser);
 router.get('/userCards/:user_id', CardController.getUserCards);  
 router.post('/tradeCards', CardController.tradeCards);  
 router.post('/starter-pack', CardController.giveStarterPack);
+router.post('/general-pack', CardController.giveGeneralPack);
 
 // score
 router.patch('/addPoints/:id', ScoreUpdateController.addPoints);

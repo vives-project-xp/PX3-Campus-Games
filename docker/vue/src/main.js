@@ -8,6 +8,7 @@ import HomePage from './components/HomePage.vue';
 import TradingPage from './components/TradingPage.vue';
 import AccountPage from './components/AccountPage.vue';
 import LoginPage from './components/LoginPage.vue';
+import RegisterPage from './components/RegisterPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/trading', component: TradingPage },
   { path: '/account', component: AccountPage },
   { path: '/login', component: LoginPage },
+  {path: '/register', component: RegisterPage},
 ];
 
 const router = createRouter({

@@ -10,7 +10,6 @@ const app = express();
 const port = process.env.PORT || 3000; // Gebruik PORT in plaats van DB_PORT
 
 app.use(express.json());
-app.use('/api', apiRoutes);
 app.use(cors({ // Updated CORS configuration for Docker
   origin: '*', // Allow all origins for Docker
 }));
@@ -20,9 +19,11 @@ app.use((req, res, next) => { // Log alle inkomende requests
   next();
 });
 
+app.use('/api', apiRoutes);
+
 // Hello World route
 app.get('/', (req, res) => {
-  res.send('Hello World! from the backend aaaaa')
+  res.send('Hello World! from the backend aaaaa');
 });
 
 // Test database verbinding
@@ -34,6 +35,11 @@ app.get('/test-db', async (req, res) => {
       console.error("❌ Database fout:", err);
       res.status(500).send("Database connectie mislukt!");
   }
+});
+
+// Fallback route voor niet-bestaande routes
+app.use((req, res) => {
+  res.status(404).send('Route niet gevonden');
 });
 
 app.listen(port, () => {

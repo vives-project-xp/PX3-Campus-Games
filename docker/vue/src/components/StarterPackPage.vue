@@ -1,50 +1,34 @@
 <template>
     <div class="starter-pack-container">
-        <div class="spacer"></div>
-        <div class="logo-placeholder">Logo Here</div>
-
-        <h2>Welkom, {{ username }}</h2>
-
-        <button @click="openStarterPack" class="open-button">OPEN Starter Pack</button>
-
-        <div class="cards-container" v-if="cards.length > 0">
-            <h3>Ontvangen Kaarten:</h3>
-            <ul>
-                <li v-for="card in cards" :key="card.card_id">{{ card.name }}</li>
-            </ul>
-        </div>
-
-        <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
+        <h2>Starter Pack</h2>
+        <button @click="claimStarterPack">Claim Starter Pack</button>
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export default {
     data() {
         return {
-            username: localStorage.getItem('username') || '',
-            cards: [],
             errorMessage: '',
         };
     },
     methods: {
-        async openStarterPack() {
+        async claimStarterPack() {
             this.errorMessage = '';
             try {
-                const userId = localStorage.getItem('userId');
-                const response = await axios.post('http://localhost:3000/api/starter-pack', { userId });
-                this.cards = response.data.cards;
-                alert('Starter pack geopend!');
+                const userId = 1; // Replace with actual user ID
+                const response = await axios.post(`${API_URL}/api/starter-pack`, { userId });
+                alert(response.data.message);
+                this.$router.push('/collection');
             } catch (error) {
-                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het openen van het starter pack.';
+                this.errorMessage = error.response?.data?.error || 'An error occurred while claiming the starter pack.';
             }
-        }
+        },
     },
-    mounted() {
-        this.username = localStorage.getItem('username');
-    }
 };
 </script>
 
@@ -53,43 +37,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90%;
-    margin: auto;
+    padding: 2rem;
 }
 
-.spacer {
-    height: 4rem;
-}
-
-.logo-placeholder {
-    width: 90%;
-    max-height: 50vh;
-    background-color: lightgray;
-    text-align: center;
-    padding: 4rem 1rem 4rem 1rem;
-    margin-bottom: 2rem;
-}
-
-.open-button {
-    width: 100%;
-    padding: 1.5rem;
-    background-color: green;
-    color: white;
-    border: none;
-    border-radius: 1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-}
-
-.cards-container {
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.error-space {
-    height: 2rem;
+.error-message {
     color: red;
-    text-align: center;
+    margin-top: 1rem;
 }
 </style>

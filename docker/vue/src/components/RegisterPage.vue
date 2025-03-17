@@ -33,6 +33,8 @@
 
 <script>
 import axios from 'axios';
+import { API_URL } from '../config';
+
 
 export default {
     data() {
@@ -52,7 +54,7 @@ export default {
                 return;
             }
             try {
-                const response = await axios.post('http://localhost:3000/api/register', {
+                const response = await axios.post(`${API_URL}/api/register`, {
                     username: this.username,
                     educationType: this.educationType,
                     password: this.password,

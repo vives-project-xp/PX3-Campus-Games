@@ -20,7 +20,7 @@
             <!-- Search and Total Cards -->
             <div class="search-box">
                 <div class="total-cards">
-                    <img src="../assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
+                    <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
                     <span>{{ filteredCards.length }}</span>
                 </div>
                 <div class="search-input">
@@ -49,6 +49,7 @@
 import PlayingCard from './PlayingCard.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
+import { API_URL } from '../config';
 
 export default {
     name: 'collection-page',
@@ -103,7 +104,7 @@ export default {
         const fetchUserCards = async () => {
             try {
                 const userId = 1; // Replace with actual user ID
-                const response = await fetch(`/users/${userId}/cards`);
+                const response = await fetch(`${API_URL}/users/${userId}/cards`);
                 const data = await response.json();
                 cards.value = data;
             } catch (error) {

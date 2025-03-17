@@ -3,13 +3,11 @@ import db from '../db.js';
 import { registerSchema } from '../middleware/validation.js';
 import jwt from 'jsonwebtoken';
 
-
-
 const getAllUsers = async (req, res) => {
     try {
         const [result] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
         res.json(result);
-        } catch (error) {
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
@@ -34,7 +32,6 @@ const getUserBy = async (req, res) => {
     }
 };
 
-
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
@@ -56,8 +53,6 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
 
 const registerUser = async (req, res) => {
     console.log("Request body:", req.body);
@@ -132,4 +127,4 @@ export {
     deleteUser,
     registerUser,
     loginUser,
-}
+};

@@ -20,99 +20,103 @@
 </template>
 
 <script>
-    import axios from 'axios';
+import axios from 'axios';
+import { API_URL } from '../config';
 
-    export default {
-        data() {
-            return {
-                username: '',
-                password: '',
-                errorMessage: '',
-            };
-        },
-        methods: {
-            async login() {
-                this.errorMessage = '';
-                try {
-                    const response = await axios.post('http://localhost:3000/api/login', {
-                        username: this.username,
-                        password: this.password,
-                    });
-                    alert(response.data.message);
-                } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'An error occurred during login.';
-                }
-            },
-            goToSignUp() {
+export default {
+    data() {
+        return {
+            username: '',
+            password: '',
+            errorMessage: '',
+        };
+    },
+    methods: {
+        async login() {
+            this.errorMessage = '';
+            try {
+                const response = await axios.post(`${API_URL}/api/login`, {
+                    username: this.username,
+                    password: this.password,
+                });
+                alert(response.data.message);
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userId', response.data.userId);
                 this.$router.push('/account');
+            } catch (error) {
+                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
             }
+        },
+        goToSignUp() {
+            this.$router.push('/register');
         }
-    };
+    }
+};
 </script>
 
 <style scoped>
-    .signup-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 90%;
-        margin: auto;
-    }
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
 
-    .spacer {
-        height: 4rem;
-    }
+.spacer {
+    height: 4rem;
+}
 
-    .logo-placeholder {
-        width: 90%;
-        max-height: 50vh;
-        background-color: lightgray;
-        text-align: center;
-        padding: 11.1rem 1rem 10rem 1rem;
-        margin-bottom: 2rem;
-    }
+.logo-placeholder {
+    width: 90%;
+    max-height: 50vh;
+    background-color: lightgray;
+    text-align: center;
+    padding: 11.1rem 1rem 10rem 1rem;
+    margin-bottom: 2rem;
+}
 
-    .input-label {
-        align-self: flex-start;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
+.input-label {
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
 
-    .input-field {
-        width: 100%;
-        padding: 1rem;
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-        border: 0.1rem solid #ccc;
-        border-radius: 0.6rem;
-    }
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.6rem;
+}
 
-    .error-space {
-        height: 2rem;
-        color: red;
-        text-align: center;
-    }
+.error-space {
+    height: 2rem;
+    color: red;
+    text-align: center;
+}
 
-    .signup-button {
-        width: 100%;
-        padding: 1.5rem;
-        background-color: red;
-        color: white;
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-    }
+.signup-button {
+    width: 100%;
+    padding: 1.5rem;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
 
-    .signup-text {
-        margin-top: 1rem;
-        color: black;
-    }
+.signup-text {
+    margin-top: 1rem;
+    color: black;
+}
 
-    .signup-link {
-        color: red;
-        text-decoration: underline;
-        cursor: pointer;
-    }
+.signup-link {
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>
