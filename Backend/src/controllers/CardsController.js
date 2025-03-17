@@ -115,8 +115,25 @@ const giveGeneralPack = async (req, res) => {
 
         // Voeg de kaarten toe aan de gebruiker
         for (const card of cards) {
-            await db.execute('INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)', 
-                [userId, card.card_id]);
+            // Controleer of de kaart al bestaat in het bezit van de speler
+            const [existingCard] = await db.execute(
+                'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
+                [userId, card.card_id]
+            );
+
+            if (existingCard.length > 0) {
+                // Update de hoeveelheid als de kaart al bestaat
+                await db.execute(
+                    'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
+                    [1, userId, card.card_id]
+                );
+            } else {
+                // Voeg een nieuwe kaart toe aan de speler
+                await db.execute(
+                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
+                    [userId, card.card_id, 1]
+                );
+            }
         }
 
         res.json({ message: 'Algemene pack ontvangen!' });
