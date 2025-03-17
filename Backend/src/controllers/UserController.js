@@ -74,7 +74,7 @@ const registerUser = async (req, res) => {
         if (existingUser && existingUser.length > 0) {
             return res.status(400).json({ error: 'Gebruiker bestaat al' });
         }
-
+        
         // Hash het wachtwoord
         const hashedPassword = await bcrypt.hash(password, 10);
 
