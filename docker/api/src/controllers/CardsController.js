@@ -87,7 +87,7 @@ const giveStarterPack = async (req, res) => {
 
         // Haal de opleiding van de gebruiker op
         const [user] = await db.execute(
-            'SELECT education FROM users WHERE id = ?',
+            'SELECT opleiding FROM users WHERE id = ?',
             [userId]
         );
 
@@ -95,12 +95,12 @@ const giveStarterPack = async (req, res) => {
             return res.status(404).json({ error: 'Gebruiker niet gevonden' });
         }
 
-        const education = user[0].education;
+        const opleiding = user[0].opleiding;
 
         // Selecteer 3 random kaarten uit de database die specifiek zijn voor de opleiding
         const [cards] = await db.execute(
-            'SELECT card_id FROM Cards_dex WHERE education = ? ORDER BY RAND() LIMIT 3',
-            [education]
+            'SELECT card_id FROM Cards_dex WHERE opleiding = ? ORDER BY RAND() LIMIT 3',
+            [opleiding]
         );
 
         // Voeg de kaarten toe aan de gebruiker
