@@ -7,12 +7,12 @@
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
 
         <label class="input-label">Studiegebied</label>
-        <select v-model="educationType" class="input-field">
+        <select v-model="opleiding" class="input-field">
             <option value="non-student">Non-student</option>
-            <option value="option1">Technology & Bio</option>
-            <option value="option2">Gezondheidszorg</option>
-            <option value="option3">Marketing & Business</option>
-            <option value="option4">Onderwijs & Sociaal</option>
+            <option value="technology&bio">Technology & Bio</option>
+            <option value="gezondheidszorg">Gezondheidszorg</option>
+            <option value="handel&business">Marketing & Business</option>
+            <option value="onderwijs&sociaal">Onderwijs & Sociaal</option>
         </select>
 
         <label class="input-label">Wachtwoord</label>
@@ -35,12 +35,11 @@
 import axios from 'axios';
 import { API_URL } from '../config';
 
-
 export default {
     data() {
         return {
             username: '',
-            educationType: 'non-student',
+            opleiding: 'non-student',
             password: '',
             confirmPassword: '',
             errorMessage: '',
@@ -56,7 +55,7 @@ export default {
             try {
                 const response = await axios.post(`${API_URL}/api/register`, {
                     username: this.username,
-                    educationType: this.educationType,
+                    opleiding: this.opleiding,
                     password: this.password,
                 });
                 alert(response.data.message);
