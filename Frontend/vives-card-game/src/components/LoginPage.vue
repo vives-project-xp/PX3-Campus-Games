@@ -1,26 +1,26 @@
 <template>
-    <div class="signup-container">
-        <div class="spacer"></div>
+    <div class="login-container">
         <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
-
+        
         <label class="input-label">Gebruikersnaam</label>
         <input v-model="username" placeholder="Gebruikersnaam" class="input-field" />
-
+        
         <label class="input-label">Wachtwoord</label>
         <input v-model="password" type="password" placeholder="Wachtwoord" class="input-field" />
-
+        
         <div class="error-space" v-if="errorMessage">{{ errorMessage }}</div>
-
+        
         <button @click="login" class="login-button">Log in</button>
-
+        
         <p class="signup-text">
             Heb je nog geen account? <span class="signup-link" @click="goToSignUp">Registreren</span>
         </p>
-    </div>
+    </div>      
 </template>
 
 <script>
     import axios from 'axios';
+import { nextTick } from 'vue';
 
     export default {
         data() {
@@ -28,9 +28,30 @@
                 username: '',
                 password: '',
                 errorMessage: '',
+                isLoggedIn: false,
             };
         },
+        mounted() {
+            this.checkLoginStatus();
+        },
         methods: {
+            checkLoginStatus() {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    this.isLoggedIn = true;
+                    try {
+                        const base64Url = token.split('.')[1];
+                        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                        const payload = JSON.parse(atob(base64));
+                        this.username = payload.username;
+                    } catch (error) {
+                        console.error('Error decoding token:', error);
+                        this.logout();
+                    }
+                } else {
+                    this.isLoggedIn = false;
+                }
+            },
             async login() {
                 this.errorMessage = '';
                 try {
@@ -38,7 +59,6 @@
                         username: this.username,
                         password: this.password,
                     });
-                    alert(response.data.message);
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId);
                     this.$router.push('/account');
@@ -46,24 +66,33 @@
                     this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
                 }
             },
+            goToAcccount() {
+                this.$router.push('/account');
+            },
             goToSignUp() {
                 this.$router.push('/register');
-            }
-        }
-    };
+            },
+        },
+            watch: {
+                isLoggedIn(newValue){
+                    if(newValue){
+                        nextTick(() => {
+                            this.goToAcccount();
+                        });
+                    }
+                },
+            },
+        };
 </script>
 
 <style scoped>
-    .signup-container {
+    .login-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 90%;
         margin: auto;
-    }
-
-    .spacer {
-        height: 4rem;
+        margin-top: 40px;
     }
 
     .logo {
@@ -103,6 +132,8 @@
 
     .login-button {
         padding: 15px;
+        width: 100%;
+        padding: 1.5rem;
         background-color: red;
         color: white;
         border: none;
@@ -116,6 +147,7 @@
     .signup-text {
         margin-top: 1rem;
         color: black;
+        text-align: center;
     }
 
     .signup-link {

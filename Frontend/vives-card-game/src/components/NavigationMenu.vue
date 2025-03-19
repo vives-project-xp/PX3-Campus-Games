@@ -14,7 +14,7 @@
       <router-link to="/trading" @click="closeMenu">Ruilen</router-link>
       <router-link to="/battle" @click="closeMenu">battle?</router-link>
       <router-link to="/shop" @click="closeMenu">Winkel</router-link>
-      <router-link to="/account" @click="closeMenu">Account</router-link>
+      <router-link to="/login" @click="closeMenu">Account</router-link>
     </nav>
   </div>
 </template>

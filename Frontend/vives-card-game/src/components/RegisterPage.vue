@@ -1,6 +1,5 @@
 <template>
     <div class="signup-container">
-        <div class="spacer"></div>
         <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo"></div>
 
         <label class="input-label">Gebruikersnaam</label>
@@ -42,11 +41,17 @@
                 password: '',
                 confirmPassword: '',
                 errorMessage: '',
+                succesMessage: '',
             };
         },
         methods: {
             async register() {
                 this.errorMessage = '';
+                this.succesMessage = '';
+                if (!this.username || !this.password || !this.confirmPassword) {
+                    this.errorMessage = 'Vul alle velden in!';
+                    return;
+                }
                 if (this.password !== this.confirmPassword) {
                     this.errorMessage = 'Wachtwoorden komen niet overeen!';
                     return;
@@ -57,9 +62,26 @@
                         education: this.education,
                         password: this.password,
                     });
-                    alert(response.data.message);
+                    this.succesMessage = response.data.message;
+
+                    await this.login();
+                    
                 } catch (error) {
                     this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
+                }
+            },
+            async login() {
+                this.errorMessage = '';
+                try {
+                    const response = await axios.post('http://localhost:3000/api/users/login', {
+                        username: this.username,
+                        password: this.password,
+                    });
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userId', response.data.userId);
+                    this.$router.push('/account');
+                } catch (error) {
+                    this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
                 }
             },
             goToLogin() {
@@ -76,15 +98,11 @@
         align-items: center;
         width: 90%;
         margin: auto;
-    }
-
-    .spacer {
-        height: 4rem;
+        margin-top: 40px;
     }
 
     .logo {
         width: 100%;
-        /*max-height: 50vh;*/
         text-align: center;
         margin-bottom: 2rem;
     }
@@ -125,6 +143,7 @@
     .login-text {
         margin-top: 1rem;
         color: black;
+        text-align: center;
     }
 
     .login-link {
