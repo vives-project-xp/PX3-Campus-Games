@@ -64,6 +64,7 @@ export default {
                 localStorage.setItem('userId', response.data.userId);
                 this.$router.push('/starter-pack');
             } catch (error) {
+                console.error('Registration error:', error); // debugging
                 this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
             }
         },
