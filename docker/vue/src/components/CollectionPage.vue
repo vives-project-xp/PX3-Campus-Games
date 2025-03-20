@@ -103,8 +103,8 @@ export default {
 
         const fetchUserCards = async () => {
             try {
-                const userId = 1; // Replace with actual user ID
-                const response = await fetch(`${API_URL}/users/${userId}/cards`);
+                const userId = localStorage.getItem('userId');
+                const response = await fetch(`${API_URL}/api/userCards/${userId}`);
                 const data = await response.json();
                 cards.value = data;
             } catch (error) {
