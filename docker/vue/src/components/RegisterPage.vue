@@ -125,14 +125,14 @@
 
     .error-space {
         height: 2rem;
-        color: blue;
+        color: red;
         text-align: center;
     }
 
     .signup-button {
         width: 100%;
         padding: 1.5rem;
-        background-color: blue;
+        background-color: red;
         color: white;
         border: none;
         border-radius: 1rem;
@@ -148,7 +148,7 @@
     }
 
     .login-link {
-        color: blue;
+        color: red;
         text-decoration: underline;
         cursor: pointer;
     }
