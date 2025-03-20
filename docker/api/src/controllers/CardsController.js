@@ -74,6 +74,24 @@ const updateTradeSelection = async (req, res) => {
     }
 };
 
+// als QR code gescanned is, zorg ervoor om de trade te joinen
+export const joinTrade = (req, res) => {
+    const { tradeCode } = req.body;
+
+    if (!activeTrades[tradeCode]) {
+        return res.status(400).json({ error: "Invalid trade code" });
+    }
+
+    if (!activeTrades[tradeCode].user1) {
+        activeTrades[tradeCode].user1 = req.body.userId;
+    } else if (!activeTrades[tradeCode].user2) {
+        activeTrades[tradeCode].user2 = req.body.userId;
+    } else {
+        return res.status(400).json({ error: "Trade is already full" });
+    }
+
+    res.json({ message: "Joined trade successfully", tradeCode });
+};
 
 
 const tradeCards = async (req, res) => {
