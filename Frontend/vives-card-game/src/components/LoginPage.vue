@@ -20,8 +20,7 @@
 
 <script>
     import axios from 'axios';
-    import { API_URL } from '../config';
-    import { nextTick } from 'vue';
+import { nextTick } from 'vue';
 
     export default {
         data() {
@@ -56,7 +55,7 @@
             async login() {
                 this.errorMessage = '';
                 try {
-                    const response = await axios.post(`${API_URL}/api/login`, {
+                    const response = await axios.post('http://localhost:3000/api/users/login', {
                         username: this.username,
                         password: this.password,
                     });

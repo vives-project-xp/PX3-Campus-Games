@@ -32,7 +32,6 @@
 
 <script>
     import axios from 'axios';
-    import { API_URL } from '../config';
 
     export default {
         data() {
@@ -58,7 +57,7 @@
                     return;
                 }
                 try {
-                    const response = await axios.post(`${API_URL}/api/register`, {
+                    const response = await axios.post('http://localhost:3000/api/register', {
                         username: this.username,
                         education: this.education,
                         password: this.password,
@@ -74,7 +73,7 @@
             async login() {
                 this.errorMessage = '';
                 try {
-                    const response = await axios.post(`${API_URL}/api/login`, {
+                    const response = await axios.post('http://localhost:3000/api/users/login', {
                         username: this.username,
                         password: this.password,
                     });
