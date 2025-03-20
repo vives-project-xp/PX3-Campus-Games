@@ -4,7 +4,6 @@ Een card bevat volgende info: [](images/NEWERdesign.png)
 -	Artwork		    (Frame)
 -	Rarity 		    (Border)
 -	Type 		    (Left circle)
--	Subtype	        (Under title)
 -	Hit points	    (Above title)
 -	Attack	        (Left square)
 -	Ability     	(Right square)
@@ -22,8 +21,8 @@ Vijf rarities met verschillende border textures:
 -	Common
 -	Uncommon
 -	Rare
--	Very rare
 -	Ultra rare
+-	Legendary
 
 ### Type & Subtype
 Vier types gebaseerd op studiegebieden binnenin campus vives brugge:
@@ -32,9 +31,11 @@ Vier types gebaseerd op studiegebieden binnenin campus vives brugge:
 -	Onderwijs & Sociaal	    🎓
 -	Technology		        ⚙
 
-Veel subtypes van een viertal kaarten elk, over een specifieke subbranche of kennisonderdeel van het bijbehorende type.
-
-Cards krijgen een info bubble/description over wat de subbranche inhoud.
-
 ### HP, ATK, ABL
 Zie battling
+
+### Maak een kaart
+Installeer paint.net
+Open het document en sleep de artwork naar de laag 'image/art here'
+reveal de juiste rarity laag en type laag
+* voor ultra rare en legendary cards wordt een kleurenovergang gebruikt op de colorbody, msg jules voor hoe dat te doen
