@@ -65,7 +65,7 @@
                     });
                     this.succesMessage = response.data.message;
 
-                    await this.login();
+                    /*await this.login();*/
                     
                 } catch (error) {
                     this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';

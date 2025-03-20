@@ -20,7 +20,7 @@
 
 <script>
     import axios from 'axios';
-import { nextTick } from 'vue';
+    import { nextTick } from 'vue';
 
     export default {
         data() {
