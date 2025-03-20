@@ -21,7 +21,7 @@ export default {
             this.errorMessage = '';
             try {
                 const userId = localStorage.getItem('userId'); // Replace with actual user ID
-                const response = await axios.post(`${API_URL}/api/starter-pack`, { userId });
+                const response = await axios.post(`${API_URL}/api/general-pack`, { userId });
                 alert(response.data.message);
                 this.$router.push('/collection');
             } catch (error) {
