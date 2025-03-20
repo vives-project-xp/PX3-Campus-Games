@@ -29,7 +29,6 @@ export default {
 :root {
   --primary-color: #fff;
   --secondary-color: #e60000;
-  --background-color: #f5f5f5;
   --text-color: #333;
   --border-color: #ddd;
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -39,8 +38,9 @@ export default {
 
 html, body {
   margin: 0;
-  padding: 0;
+  padding: 5px;
   height: 100%;
+  margin-top: 10px;
 }
 
 #app {
