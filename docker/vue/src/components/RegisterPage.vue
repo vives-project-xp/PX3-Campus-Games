@@ -51,6 +51,10 @@ export default {
                 this.errorMessage = 'Wachtwoorden komen niet overeen!';
                 return;
             }
+            if (this.opleiding === 'non-student') {
+                this.errorMessage = 'Gelieve een studiegebied te selecteren.';
+                return;
+            }
             try {
                 const response = await axios.post(`${API_URL}/api/register`, {
                     username: this.username,
