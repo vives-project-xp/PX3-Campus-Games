@@ -37,7 +37,7 @@ const addCardToUser = async (req, res) => {
         const { user_id } = req.params;
 
         const [cards] = await db.execute(
-            `SELECT c.card_id, c.cardName, c.health, c.attack, c.ability, c.rarity, uc.quantity
+            `SELECT c.card_id, c.cardName, c.health, c.attack, c.ability, c.rarity, uc.quantity, c.info, c.artwork_path
             FROM user_cards uc
             JOIN Cards_dex c ON uc.card_id = c.card_id
             WHERE uc.user_id = ?`,

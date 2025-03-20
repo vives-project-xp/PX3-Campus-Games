@@ -37,6 +37,8 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+
+
 // Fallback route voor niet-bestaande routes
 app.use((req, res) => {
   res.status(404).send('Route niet gevonden');

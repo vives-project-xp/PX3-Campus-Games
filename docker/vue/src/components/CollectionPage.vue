@@ -33,12 +33,15 @@
         <!-- Scrollable Card Grid -->
         <div class="card-container">
             <div class="card-grid" v-if="filteredCards.length > 0">
-                <PlayingCard v-for="card in filteredCards"
-                             :key="card.card_id + card.cards_path"
-                             :cardName="card.name"
-                             :cardImage="getCardImagePath(card.cards_path)"
-                             :isSelected="selectedCards.includes(card.card_id)"
-                             @click="toggleCardSelection(card.card_id)" />
+                <PlayingCard
+                    v-for="card in filteredCards"
+                    :key="card.card_id"
+                    :cardName="card.cardName"
+                    :cardImage="card.artwork_path"
+                    :isSelected="selectedCards.includes(card.card_id)"
+                    @click="toggleCardSelection(card.card_id)"
+                    @mounted="console.log('Card props:', { cardName: card.cardName, cardImage: card.artwork_path })"
+                />
             </div>
             <div v-else class="no-cards">Geen kaarten gevonden.</div>
         </div>
@@ -50,7 +53,6 @@ import PlayingCard from './PlayingCard.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
 import { API_URL } from '../config';
-
 
 export default {
     name: 'collection-page',
@@ -84,7 +86,7 @@ export default {
                 filtered = filtered.filter(card => selectedRarities.value.includes(card.rarity));
             }
             if (searchQuery.value) {
-                filtered = filtered.filter(card => card.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+                filtered = filtered.filter(card => card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase()));
             }
             return filtered;
         });
@@ -98,18 +100,19 @@ export default {
             }
         };
 
-        const getCardImagePath = (path) => {
-            return path;
-        };
-
         const fetchUserCards = async () => {
             try {
-                const userId = localStorage.getItem('userId');
-                const response = await fetch(`${API_URL}/api/userCards/${userId}`);
-                const data = await response.json();
-                cards.value = data;
+            const userId = localStorage.getItem('userId');
+            const response = await fetch(`${API_URL}/api/userCards/${userId}`);
+            const data = await response.json();
+            // Bouw de volledige URL voor de afbeeldingen
+            data.forEach(card => {
+            // Verwijder het extra punt aan het begin van het pad
+            card.artwork_path = `${API_URL}${card.artwork_path.replace('./', '/')}`;
+            });
+            cards.value = data;
             } catch (error) {
-                console.error('Error fetching user cards:', error);
+            console.error('Error fetching user cards:', error);
             }
         };
 
@@ -117,133 +120,133 @@ export default {
             fetchUserCards();
         });
 
-        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection, getCardImagePath };
+        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection };
     },
 };
 </script>
 
 <style scoped>
-    .card-collection {
-        padding: 0.3rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+.card-collection {
+    padding: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading {
+    margin-top: 3.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.fixed-container {
+    margin-top: 0rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Centered Filters */
+.filter-box {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.filter-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+    .filter-row button {
+        padding: 0.5rem 0.5rem;
+        margin: 0.5rem 0rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 0.3rem;
+        background-color: white;
+        color: rgb(32, 32, 32);
+        transition: background-color 0.2s, color 0.3s;
+        font-size: 1rem;
     }
 
-    .heading {
-        margin-top: 3.5rem;
-        margin-bottom: 0.6rem;
-    }
-
-    .fixed-container {
-        margin-top: 0rem;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Centered Filters */
-    .filter-box {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        width: 100%;
-        max-width: 20rem;
-    }
-
-    .filter-row {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-        .filter-row button {
-            padding: 0.5rem 0.5rem;
-            margin: 0.5rem 0rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 0.3rem;
-            background-color: white;
-            color: rgb(32, 32, 32);
-            transition: background-color 0.2s, color 0.3s;
-            font-size: 1rem;
-        }
-
-            .filter-row button.active {
-                background-color: red;
-                color: white;
-            }
-
-    /* Search Box */
-    .search-box {
-        margin-top: 0.3rem;
-        margin-bottom: 0.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 25rem;
-    }
-
-    .total-cards {
-        display: flex;
-        align-items: center;
-        margin-right: 0.5rem;
-    }
-
-    .icon {
-        width: 20px;
-        height: 20px;
-        margin-right: 0.3rem;
-    }
-
-    .search-input {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-    }
-
-        .search-input input {
-            flex-grow: 1;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .search-input button {
-            padding: 0.5rem 0.75rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #dc3545;
+        .filter-row button.active {
+            background-color: red;
             color: white;
         }
 
-    /* Card Container */
-    .card-container {
-        overflow-y: auto;
-        width: 100%;
+/* Search Box */
+.search-box {
+    margin-top: 0.3rem;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 25rem;
+}
+
+.total-cards {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.3rem;
+}
+
+.search-input {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+    .search-input input {
         flex-grow: 1;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
     }
 
+    .search-input button {
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #dc3545;
+        color: white;
+    }
+
+/* Card Container */
+.card-container {
+    overflow-y: auto;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.4rem;
+    justify-items: center;
+    padding-bottom: 2rem;
+}
+
+.no-cards {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
     .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 0.4rem;
-        justify-items: center;
-        padding-bottom: 2rem;
+        grid-template-columns: repeat(3, 1fr);
     }
-
-    .no-cards {
-        margin-top: 2rem;
-        text-align: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-        .card-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
+}
 </style>
