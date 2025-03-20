@@ -76,7 +76,6 @@ const updateTradeSelection = async (req, res) => {
 
 
 
-// 🔄 Ruil een kaart met een andere speler
 const tradeCards = async (req, res) => {
     try {
         const { tradeCode, userId, cardId } = req.body;
@@ -99,27 +98,27 @@ const tradeCards = async (req, res) => {
             const { user1, user2 } = activeTrades[tradeCode];
 
             const [user1HasCard] = await db.execute(
-                "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?", 
+            "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?",
                 [user1.id, user1.card]
-            );
+        );
             const [user2HasCard] = await db.execute(
-                "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?", 
+            "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?",
                 [user2.id, user2.card]
-            );
+        );
 
             if (user1HasCard.length === 0 || user2HasCard.length === 0) {
-                return res.status(400).json({ error: "One or both users do not own the selected card" });
-            }
+            return res.status(400).json({ error: "One or both users do not own the selected card" });
+        }
 
             // trade happens
-            await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
                 [user2.id, user1.id, user1.card]);
-            await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
                 [user1.id, user2.id, user2.card]);
 
             delete activeTrades[tradeCode];
 
-            return res.json({ message: "Trade successful" });
+        return res.json({ message: "Trade successful" });
         }
 
         res.json({ message: "Trade updated, waiting for both users" });
@@ -127,6 +126,8 @@ const tradeCards = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 
 const giveStarterPack = async (req, res) => {
