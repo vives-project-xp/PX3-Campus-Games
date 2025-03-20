@@ -19,9 +19,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
     import axios from 'axios';
-import { nextTick } from 'vue';
+    import { API_URL } from '../config';
+    import { nextTick } from 'vue';
 
     export default {
         data() {
@@ -56,7 +56,7 @@ import { nextTick } from 'vue';
             async login() {
                 this.errorMessage = '';
                 try {
-                    const response = await axios.post('http://localhost:3000/api/users/login', {
+                    const response = await axios.post(`${API_URL}/api/login`, {
                         username: this.username,
                         password: this.password,
                     });
@@ -95,53 +95,6 @@ import { nextTick } from 'vue';
         margin: auto;
         margin-top: 40px;
     }
-=======
-import axios from 'axios';
-
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-            errorMessage: '',
-        };
-    },
-    methods: {
-        async login() {
-            this.errorMessage = '';
-            try {
-                const response = await axios.post('http://localhost:3000/api/login', {
-                    username: this.username,
-                    password: this.password,
-                });
-                alert(response.data.message);
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('userId', response.data.userId);
-                this.$router.push('/account');
-            } catch (error) {
-                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
-            }
-        },
-        goToSignUp() {
-            this.$router.push('/register');
-        }
-    }
-};
-</script>
-
-<style scoped>
-.signup-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-    margin: auto;
-}
-
-.spacer {
-    height: 4rem;
-}
->>>>>>> main
 
 .logo {
     width: 100%;
@@ -178,7 +131,6 @@ export default {
     text-align: center;
 }
 
-<<<<<<< HEAD
     .login-button {
         padding: 15px;
         width: 100%;
@@ -198,24 +150,6 @@ export default {
         color: black;
         text-align: center;
     }
-=======
-.login-button {
-    padding: 15px;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    font-size: 15px;
-}
-
-.signup-text {
-    margin-top: 1rem;
-    color: black;
-}
->>>>>>> main
 
 .signup-link {
     color: red;
