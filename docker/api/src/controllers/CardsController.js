@@ -151,10 +151,21 @@ const giveGeneralPack = async (req, res) => {
     }
 };
 
+const getCard_dex = async (req, res) => {
+    try {
+        const [cards] = await db.execute('SELECT * FROM Cards_dex');
+        res.json(cards);
+    } catch (error) {
+        console.error('Fout bij ophalen van kaarten:', error);
+        res.status(500).json({ error: 'Kan kaarten niet ophalen' });
+    }
+};
+
 export {
     addCardToUser,
     getUserCards,
     tradeCards,
     giveStarterPack,
     giveGeneralPack,
+    getCard_dex,
 };
