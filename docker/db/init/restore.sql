@@ -35,7 +35,7 @@ CREATE TABLE user_cards (
     FOREIGN KEY (card_id) REFERENCES Cards_dex(card_id) ON DELETE CASCADE
 );
 
-
+-- Tabel voor dagelijkse quests
 CREATE TABLE daily_quests (
     quest_id INT AUTO_INCREMENT PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
@@ -43,6 +43,7 @@ CREATE TABLE daily_quests (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabel voor gebruikersquests
 CREATE TABLE user_quests (
     user_id INT NOT NULL,
     quest_id INT NOT NULL,
@@ -52,6 +53,7 @@ CREATE TABLE user_quests (
     FOREIGN KEY (quest_id) REFERENCES daily_quests(quest_id) ON DELETE CASCADE
 );
 
+-- Voeg kaarten toe aan Cards_dex
 -- Technology & Bio
 INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
@@ -120,5 +122,22 @@ VALUES
 'De hotelmanager houdt alles draaiende in een hotel. Van gastvrijheid tot logistiek, hij zorgt ervoor dat elke gast een perfecte ervaring heeft.', 
 'handel&business', './api/Cards/Hotelmanager_HnBd.png');
 
+-- Voeg een paar gebruikers toe
+INSERT INTO users (name, opleiding, password)
+VALUES 
+('admin1', 'technology&bio', 'admin1'),
+('admin2', 'technology&bio', 'admin2');
 
-
+-- Voeg kaarten toe aan gebruikers
+INSERT INTO user_cards (user_id, card_id, quantity)
+VALUES 
+(1, 1, 1), 
+(1, 2, 1), 
+(1, 3, 1), 
+(1, 4, 1), 
+(1, 5, 1),
+(2, 1, 1), 
+(2, 2, 1), 
+(2, 3, 1), 
+(2, 4, 1), 
+(2, 5, 1);
