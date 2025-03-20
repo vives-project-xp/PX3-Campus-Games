@@ -1,6 +1,6 @@
 <template>
     <div class="trading-page">
-      <h1>Card Trading</h1>
+      <h1>Ruilen</h1>
   
       <!-- Temporary cheat button to add cards -->
       <button @click="addCheatCards" class="cheat-button">Add Cheat Cards</button>
@@ -8,8 +8,8 @@
       <div class="players">
         <!-- Player 1's card selection -->
         <div class="player">
-          <h2>Your Cards</h2>
-          <div v-if="player1Cards.length === 0">You don't have any cards yet!</div>
+          <h2>kaarten sturen</h2>
+          <div v-if="player1Cards.length === 0">Selecteer kaarten</div>
           <div class="card-container">
             <div
               v-for="card in player1Cards"
@@ -26,8 +26,8 @@
   
         <!-- Player 2's card selection -->
         <div class="player">
-          <h2>Friend's Cards</h2>
-          <div v-if="player2Cards.length === 0">Your friend doesn't have any cards yet!</div>
+          <h2>Kaarten krijgen</h2>
+          <div v-if="player2Cards.length === 0">Selecteer kaarten</div>
           <div class="card-container">
             <div
               v-for="card in player2Cards"
@@ -49,7 +49,7 @@
       </div>
   
       <div v-if="player1SelectedCard && player2SelectedCard">
-        <button @click="acceptTrade" class="accept-trade">Accept Trade</button>
+        <button @click="acceptTrade" class="accept-trade">Accepteer</button>
       </div>
     </div>
   </template>
