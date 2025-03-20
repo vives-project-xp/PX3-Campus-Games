@@ -57,7 +57,6 @@ export default {
                     opleiding: this.opleiding,
                     password: this.password,
                 });
-                alert(response.data.message);
                 localStorage.setItem('username', this.username);
                 localStorage.setItem('userId', response.data.userId);
                 this.$router.push('/starter-pack');
