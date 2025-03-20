@@ -12,3 +12,4 @@
 /docker/.env
 /docker/db/data
 /docker/db/*
+/docker/compose.yaml
