@@ -11,3 +11,4 @@
 # docker
 /docker/.env
 /docker/db/data
+/docker/db/*
