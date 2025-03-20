@@ -44,8 +44,8 @@
       </div>
   
       <div v-if="player1SelectedCard && player2SelectedCard">
-        <h3>Your Selected Card: {{ player1SelectedCard.name }}</h3>
-        <h3>Friend's Selected Card: {{ player2SelectedCard.name }}</h3>
+        <h3>Kaarten sturen: {{ player1SelectedCard.name }}</h3>
+        <h3>Kaarten krijgen: {{ player2SelectedCard.name }}</h3>
       </div>
   
       <div v-if="player1SelectedCard && player2SelectedCard">

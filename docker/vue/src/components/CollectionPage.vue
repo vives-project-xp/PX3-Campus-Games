@@ -1,6 +1,6 @@
 <template>
     <div class="card-collection">
-        <h2 v-if="isCollectionRoute" class="heading">Your Cards:</h2>
+        <h2 v-if="isCollectionRoute" class="heading">Eigen kaarten:</h2>
 
         <!-- Fixed Top Section -->
         <div class="fixed-container">
