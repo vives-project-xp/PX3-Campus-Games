@@ -2,9 +2,9 @@
     <div class="trading-page">
       <h1>Trade Cards</h1>
       <div v-if="!qrScanned">
-        <!-- Removed QR code section -->
-        <p>Deel deze SQ code om te kunnen traden</p>
-        <p>Code: {{ qrCode }}</p>
+        <!-- Skip QR code part and show a button to proceed -->
+        <p>Deel deze SQ code om te kunnen traden (optioneel)</p>
+        <button @click="skipQRCode">Ga verder</button>
       </div>
       <div v-else>
         <div class="cards-container">
@@ -43,7 +43,6 @@
   export default {
     data() {
       return {
-        qrCode: this.generateCode(),
         qrScanned: false,
         userCards: [],
         friendCards: [],
@@ -55,8 +54,9 @@
       };
     },
     methods: {
-      generateCode() {
-        return Math.random().toString(36).substring(2, 12);
+      skipQRCode() {
+        // Skip QR code and move to next part
+        this.qrScanned = true;
       },
       async fetchCards() {
         this.userCards = (await axios.get(`/api/cards/${this.userId}`)).data;
