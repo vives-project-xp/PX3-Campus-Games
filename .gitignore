@@ -12,4 +12,5 @@
 /docker/.env
 /docker/db/data
 /docker/db/*
+/docker/package-lock.json
 

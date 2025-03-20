@@ -50,6 +50,7 @@ import PlayingCard from './PlayingCard.vue';
 import { useRoute } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
 import { API_URL } from '../config';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
     name: 'collection-page',
@@ -102,15 +103,17 @@ export default {
         };
 
         const fetchUserCards = async () => {
-            try {
-                const userId = localStorage.getItem('userId');
-                const response = await fetch(`${API_URL}/api/userCards/${userId}`);
-                const data = await response.json();
-                cards.value = data;
-            } catch (error) {
-                console.error('Error fetching user cards:', error);
-            }
-        };
+    try {
+        const token = document.cookie.split('; ').find(row => row.startsWith('authToken=')).split('=')[1];
+        const decodedToken = jwtDecode(token);
+        const userId = decodedToken.user_id; // Haal user_id uit het token
+        const response = await fetch(`${API_URL}/api/userCards/${userId}`);
+        const data = await response.json();
+        cards.value = data;
+    } catch (error) {
+        console.error('Error fetching user cards:', error);
+    }
+};
 
         onMounted(() => {
             fetchUserCards();
