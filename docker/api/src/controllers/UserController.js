@@ -55,8 +55,6 @@ const deleteUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-    console.log("Request body:", req.body);
-    console.log("registerUser function reached"); // output naar console als de api wordt gecalled
     try {
         const { error } = registerSchema.validate(req.body);
         if (error) return res.status(400).json({ error: error.details[0].message });
@@ -65,9 +63,7 @@ const registerUser = async (req, res) => {
 
         // Check of de user al bestaat
         const [existingUser] = await db.execute('SELECT id FROM users WHERE userName = ?', [username]);
-        console.log("Existing user query result:", existingUser); // output naar console als user al bestaat
-
-        if (existingUser && existingUser.length > 0) {
+        if (existingUser.length > 0) {
             return res.status(400).json({ error: 'Gebruiker bestaat al' });
         }
 
@@ -91,30 +87,24 @@ const loginUser = async (req, res) => {
         const { username, password } = req.body;
 
         // Zoek de gebruiker
-        const [user] = await db.execute('SELECT id, userPassword FROM users WHERE userName = ?', [username]);
-        if (user.length === 0) {
+        const [users] = await db.execute('SELECT id, userPassword FROM users WHERE userName = ?', [username]);
+        if (users.length === 0) {
             return res.status(401).json({ error: 'Ongeldige username' });
         }
 
+        const user = users[0];
+
         // Check wachtwoord
-        const validPassword = await bcrypt.compare(password, user[0].password);
+        const validPassword = await bcrypt.compare(password, user.userPassword);
         if (!validPassword) return res.status(401).json({ error: 'Ongeldig wachtwoord' });
 
         // Genereer een token
         const token = jwt.sign(
-            { userId: user[0].id, username }, 
+            { userId: user.id, username }, 
             process.env.JWT_SECRET, // Zorg ervoor dat je een geheime sleutel hebt in je .env bestand (your_secret_key)
             { expiresIn: '24h' } // Token verloopt in 24 uur
         );
-        res.json({ message: 'Login succesvol', token, userId: user[0].id });
-
-        /* 
-        What should the frontend do?
-        Once the frontend receives { token, userId }, it should:
-
-        Store the token (e.g., in localStorage or HttpOnly cookies).
-        Use the token for authentication in protected routes.
-        */
+        res.json({ message: 'Login succesvol', token, userId: user.id });
 
     } catch (error) {
         res.status(500).json({ error: error.message });
