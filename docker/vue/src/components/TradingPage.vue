@@ -2,15 +2,15 @@
     <div class="trading-page">
       <h1>Trade Cards</h1>
       <div v-if="!qrScanned">
-        <p>Deel deze SQ code om te kunnen traden</p>
-        <qrcode-vue :value="qrCode" :size="200" level="H" />
-        <p>Code: {{ qrCode }}</p>
+        <!-- Skip QR code part and show a button to proceed -->
+        <p>Deel deze SQ code om te kunnen traden (optioneel)</p>
+        <button @click="skipQRCode">Ga verder</button>
       </div>
       <div v-else>
         <div class="cards-container">
           <div class="user-card">
             <h2>Jou kaarten:</h2>
-            <button @click="addTestCard(userId)">Voeg een test kaar toe</button>
+            <button @click="addTestCard(userId)">Voeg een test kaart toe</button>
             <ul>
               <li v-for="card in userCards" :key="card.card_id" @click="selectCard(card, 'user')">
                 {{ card.name }} (x{{ card.quantity }})
@@ -39,13 +39,10 @@
   
   <script>
   import axios from 'axios';
-  import QrcodeVue from 'qrcode.vue';
   
   export default {
-    components: { QrcodeVue },
     data() {
       return {
-        qrCode: this.generateCode(),
         qrScanned: false,
         userCards: [],
         friendCards: [],
@@ -57,8 +54,9 @@
       };
     },
     methods: {
-      generateCode() {
-        return Math.random().toString(36).substring(2, 12);
+      skipQRCode() {
+        // Skip QR code and move to next part
+        this.qrScanned = true;
       },
       async fetchCards() {
         this.userCards = (await axios.get(`/api/cards/${this.userId}`)).data;

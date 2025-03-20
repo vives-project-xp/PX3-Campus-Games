@@ -1,7 +1,7 @@
 <template>
     <div>
-      <h2>Shop Page</h2>
-      <p>Not finished yet.</p>
+      <h2>Winkel</h2>
+      <p>Komt binnenkort.</p>
     </div>
   </template>
   
