@@ -1,3 +1,4 @@
+
 -- Maak een nieuwe database aan als deze nog niet bestaat
 CREATE DATABASE IF NOT EXISTS kaartspel_db;
 USE kaartspel_db;
@@ -35,7 +36,6 @@ CREATE TABLE user_cards (
     FOREIGN KEY (card_id) REFERENCES Cards_dex(card_id) ON DELETE CASCADE
 );
 
--- Tabel voor dagelijkse quests
 CREATE TABLE daily_quests (
     quest_id INT AUTO_INCREMENT PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
@@ -43,7 +43,6 @@ CREATE TABLE daily_quests (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabel voor gebruikersquests
 CREATE TABLE user_quests (
     user_id INT NOT NULL,
     quest_id INT NOT NULL,
@@ -53,7 +52,7 @@ CREATE TABLE user_quests (
     FOREIGN KEY (quest_id) REFERENCES daily_quests(quest_id) ON DELETE CASCADE
 );
 
--- Voeg kaarten toe aan Cards_dex
+-- Insert sample data
 -- Technology & Bio
 INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
