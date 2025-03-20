@@ -9,6 +9,7 @@ import TradingPage from './components/TradingPage.vue';
 import AccountPage from './components/AccountPage.vue';
 import LoginPage from './components/LoginPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
+import StarterPackPage from './components/StarterPackPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/account', component: AccountPage },
   { path: '/login', component: LoginPage },
   {path: '/register', component: RegisterPage},
+  { path: '/starter-pack', component: StarterPackPage },
 ];
 
 const router = createRouter({
