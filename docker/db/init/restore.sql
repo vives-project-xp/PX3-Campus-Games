@@ -6,9 +6,9 @@ USE kaartspel_db;
 -- Maak de users tabel aan
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    userName VARCHAR(100) NOT NULL UNIQUE,
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    userPassword VARCHAR(255) NOT NULL,
     user_score INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -16,12 +16,12 @@ CREATE TABLE users (
 -- Table voor alle informatie van alle kaarten
 CREATE TABLE Cards_dex (
     card_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    cardName VARCHAR(100) NOT NULL UNIQUE,
     health INT DEFAULT 0,
     attack INT DEFAULT 0,
     ability ENUM('heal', 'block', 'damage_multiplier', 'free_switch') NOT NULL,
     rarity ENUM('Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Legendary') NOT NULL,
-    description TEXT,
+    info TEXT,
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
     artwork_path VARCHAR(255) NOT NULL
 );
@@ -39,7 +39,7 @@ CREATE TABLE user_cards (
 
 CREATE TABLE daily_quests (
     quest_id INT AUTO_INCREMENT PRIMARY KEY,
-    description VARCHAR(255) NOT NULL,
+    info VARCHAR(255) NOT NULL,
     reward INT NOT NULL,  -- Aantal coins of een kaart
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -54,7 +54,7 @@ CREATE TABLE user_quests (
 );
 
 -- Technology & Bio
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
+INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
 ('AI', 220, 100, 'block', 'Legendary', 
 'AI is technologie die computers laat leren en problemen oplossen zoals mensen. Het wordt gebruikt voor spraakherkenning, aanbevelingen en automatisering.', 
@@ -93,7 +93,7 @@ VALUES
 'technology&bio', './api/Cards/Firewall_Tech.png');
 
 -- Gezondheidszorg
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
+INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
 ('Dokter', 180, 120, 'heal', 'Common', 
 'Een dokter helpt mensen beter te worden door ziektes te behandelen en advies te geven over gezondheid. Ze redden levens en zorgen voor welzijn.', 
@@ -132,7 +132,7 @@ VALUES
 'gezondheidszorg', './api/Cards/Virus_Vplg.png');
 
 -- Onderwijs & Sociaal
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
+INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
 ('Kleuterjuf', 260, 80, 'damage_multiplier', 'Common', 
 'Een kleuterjuf begeleidt jonge kinderen bij hun eerste stappen in het leren en ontwikkelen. Ze zorgt voor een veilige en speelse leeromgeving.', 
@@ -151,7 +151,7 @@ VALUES
 'onderwijs&sociaal', './api/Cards/Psycholoog_OwSo.png');
 
 -- Handel & Business
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
+INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
 ('Salesman', 180, 140, 'free_switch', 'Rare', 
 'Een salesman overtuigt klanten om producten of diensten te kopen. Met charme en kennis bouwt hij relaties op en verhoogt hij de verkoop.', 
@@ -166,7 +166,7 @@ VALUES
 'handel&business', './api/Cards/Hotelmanager_HnBd.png');
 
 -- Voeg een paar gebruikers toe
-INSERT INTO users (name, opleiding, password)
+INSERT INTO users (userName, opleiding, userPassword)
 VALUES 
 ('admin1', 'technology&bio', 'admin1'),
 ('admin2', 'technology&bio', 'admin2');
