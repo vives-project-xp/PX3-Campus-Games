@@ -53,7 +53,7 @@ CREATE TABLE user_quests (
 );
 
 -- Technology & Bio
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, education, cards_path) 
+INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
 ('AI', 220, 100, 'block', 'Legendary', 
 'AI is technologie die computers laat leren en problemen oplossen zoals mensen. Het wordt gebruikt voor spraakherkenning, aanbevelingen en automatisering.', 
@@ -76,7 +76,7 @@ VALUES
 'technology&bio', './api/Cards/Java_Tech.png');
 
 -- Gezondheidszorg
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, education, cards_path) 
+INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
 ('Dokter', 180, 120, 'heal', 'Common', 
 'Een dokter helpt mensen beter te worden door ziektes te behandelen en advies te geven over gezondheid. Ze redden levens en zorgen voor welzijn.', 
@@ -91,7 +91,7 @@ VALUES
 'gezondheidszorg', './api/Cards/Hart_Vplg.png');
 
 -- Onderwijs & Sociaal
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, education, cards_path) 
+INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
 ('Kleuterjuf', 260, 80, 'damage_multiplier', 'Common', 
 'Een kleuterjuf begeleidt jonge kinderen bij hun eerste stappen in het leren en ontwikkelen. Ze zorgt voor een veilige en speelse leeromgeving.', 
@@ -106,7 +106,7 @@ VALUES
 'onderwijs&sociaal', './api/Cards/HRManager_OwSo.png');
 
 -- Handel & Business
-INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, education, cards_path) 
+INSERT INTO Cards_dex (name, health, attack, ability, rarity, description, opleiding, artwork_path) 
 VALUES 
 ('Salesman', 180, 140, 'free_switch', 'Rare', 
 'Een salesman overtuigt klanten om producten of diensten te kopen. Met charme en kennis bouwt hij relaties op en verhoogt hij de verkoop.', 

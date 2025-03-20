@@ -14,7 +14,7 @@ const addCardToUser = async (req, res) => {
             // Update de hoeveelheid als de kaart al bestaat
             await db.execute(
                 'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                [user_id, card_id, 1]
+                [1, user_id, card_id]
             );
         } else {
             // Voeg een nieuwe kaart toe aan de speler
