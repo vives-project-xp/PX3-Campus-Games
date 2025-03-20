@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${DB_DATABASE}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
     volumes:
       - ./db/init:/docker-entrypoint-initdb.d
       - ./db/data:/var/lib/mysql

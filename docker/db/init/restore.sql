@@ -105,7 +105,7 @@ VALUES
 
 ('Hart', 200, 100, 'heal', 'Uncommon', 
 'Het hart pompt bloed door het lichaam en houdt je in leven. Het staat symbool voor kracht, emotie en uithoudingsvermogen.', 
-'gezondheidszorg', './api/Cards/Hart_Vplg.png');
+'gezondheidszorg', './api/Cards/Hart_Vplg.png'),
 
 ('Apotheker', 180, 120, 'heal', 'Uncommon', 
 'Een apotheker is een gezondheidswerker die gespecialiseerd is in medicijnen. Ze geven advies over het juiste gebruik van medicijnen en zorgen ervoor dat patiënten de juiste medicijnen krijgen.', 
