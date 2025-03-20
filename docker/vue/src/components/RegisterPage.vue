@@ -8,10 +8,10 @@
         <label class="input-label">Studiegebied</label>
         <select v-model="opleiding" class="input-field">
             <option value="non-student">Geen student van Hogeschool Vives</option>
-            <option value="technology">Technology & Bio</option>
-            <option value="healthcare">Gezondheidszorg</option>
-            <option value="marketing">Marketing & Business</option>
-            <option value="education">Onderwijs & Sociaal</option>
+            <option value="technology&bio">Technology & Bio</option>
+            <option value="gezondheidszorg">Gezondheidszorg</option>
+            <option value="handel&business">Marketing & Business</option>
+            <option value="onderwijs&sociaal">Onderwijs & Sociaal</option>
         </select>
 
         <label class="input-label">Wachtwoord</label>
@@ -31,65 +31,46 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import { API_URL } from '../config';
+import axios from 'axios';
+import { API_URL } from '../config';
 
-    export default {
-        data() {
-            return {
-                username: '',
-                opleiding: 'non-student',
-                password: '',
-                confirmPassword: '',
-                errorMessage: '',
-                succesMessage: '',
-            };
-        },
-        methods: {
-            async register() {
-                this.errorMessage = '';
-                this.succesMessage = '';
-                if (!this.username || !this.password || !this.confirmPassword) {
-                    this.errorMessage = 'Vul alle velden in!';
-                    return;
-                }
-                if (this.password !== this.confirmPassword) {
-                    this.errorMessage = 'Wachtwoorden komen niet overeen!';
-                    return;
-                }
-                try {
-                    const response = await axios.post(`${API_URL}/api/register`, {
-                        username: this.username,
-                        opleiding: this.opleiding,
-                        password: this.password,
-                    });
-                    this.succesMessage = response.data.message;
-
-                    /*await this.login();*/
-                    
-                } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
-                }
-            },
-            async login() {
-                this.errorMessage = '';
-                try {
-                    const response = await axios.post(`${API_URL}/api/login`, {
-                        username: this.username,
-                        password: this.password,
-                    });
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('userId', response.data.userId);
-                    this.$router.push('/account');
-                } catch (error) {
-                    this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
-                }
-            },
-            goToLogin() {
-                this.$router.push('/login');
+export default {
+    data() {
+        return {
+            username: '',
+            opleiding: 'non-student',
+            password: '',
+            confirmPassword: '',
+            errorMessage: '',
+        };
+    },
+    methods: {
+        async register() {
+            this.errorMessage = '';
+            if (this.password !== this.confirmPassword) {
+                this.errorMessage = 'Wachtwoorden komen niet overeen!';
+                return;
             }
+            try {
+                const response = await axios.post(`${API_URL}/api/register`, {
+                    username: this.username,
+                    opleiding: this.opleiding,
+                    password: this.password,
+                });
+                alert(response.data.message);
+                localStorage.setItem('username', this.username);
+                localStorage.setItem('userId', response.data.userId);
+                this.$router.push('/starter-pack');
+            } catch (error) {
+                console.error('Registration error:', error); // debugging
+                this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
+            }
+        },
+        goToLogin() {
+            this.$router.push('/login');
         }
-    };
+    }
+};
 </script>
 
 <style scoped>

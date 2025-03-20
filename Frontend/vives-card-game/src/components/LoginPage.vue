@@ -134,7 +134,7 @@
         padding: 15px;
         width: 100%;
         padding: 1.5rem;
-        background-color: red;
+        background-color: blue;
         color: white;
         border: none;
         border-radius: 1rem;
