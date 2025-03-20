@@ -24,7 +24,7 @@
                     <span>{{ filteredCards.length }}</span>
                 </div>
                 <div class="search-input">
-                    <input type="text" v-model="searchQuery" placeholder="Search cards..." />
+                    <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
                     <button @click="clearSearch">x</button>
                 </div>
             </div>
