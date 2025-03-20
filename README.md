@@ -12,8 +12,6 @@
   - [Backend](#Backend)
     - [Database](#Database)
   - [Frontend](#Frontend)
-  - [Hardware](#Hardware)
-      - [Robot](#Robot)
 - [Artwork](#Artwork)
     - [Generatieproces](#Generatieproces)
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
@@ -23,7 +21,7 @@
 ## Doel
 Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
 
-Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. Met deze score word er een leaderboard gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien voor een breed plubliek aan te spreken.
+Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. Met deze score word er een leaderboard gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien voor een breed plubliek aan te spreken. Om te ruilen moet je fysiek bij elkaar staan, dit word waargemaakt door het scannen van een QR-code om met elkaar te ruilen.
 
 ## npm versies
 - frontend : 
@@ -56,13 +54,15 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 
 ### Frontend
 
-### Hardware
-
-#### Robot
 
 ## Artwork
 
 Een belangrijk onderdeel van de kaarten is het artwork, dat een herkenbare en aantrekkelijke visuele stijl moet hebben. We hebben gekozen voor een cartoonstijl, omdat deze toegankelijk en visueel aantrekkelijk is voor een breed publiek.
+
+### Kaart template
+we maken gebruik van een template voor de kaarten zodat we enkel de kleur, attack, abilitie en levens moeten aanpassen en de afbeelding er in plaatsen.
+
+<img src="https://github.com/user-attachments/assets/e76e9065-ee1f-4336-87df-db3b6f5fb4fe" width="200" height="300">
 
 ### Generatieproces
 De afbeeldingen voor de kaarten worden gegenereerd met behulp van AI. Vervolgens passen we handmatige nabewerking toe om:
@@ -89,7 +89,7 @@ Om een consistente stijl te behouden, hanteren we de volgende richtlijnen:
 ### Tools en Nabewerking
 Voor de generaties en nabewerking maken we gebruik van:
 
-A- I-tools: Voor het genereren van ruwe afbeeldingen
+- AI-tools: Voor het genereren van ruwe afbeeldingen
 
 - Adobe Express: Voor correcties en stijlbewaking
 

@@ -10,7 +10,7 @@
       {
         "id": <userId>,
         "name": "<username>",
-        "opleiding": "<opleiding>",
+        "education": "<education>",
         "created_at": "<timestamp>"
       },
       ...
@@ -27,7 +27,7 @@
 - **Endpoint:** `/users/:param/:value`
 - **Methode:** `GET`
 - **Parameters:**
-  - `param` (string, verplicht): De kolomnaam (id, name, opleiding) om op te zoeken.
+  - `param` (string, verplicht): De kolomnaam (id, name, education) om op te zoeken.
   - `value` (string, verplicht): De waarde om te zoeken.
 - **Response:**
   - **200 OK**
@@ -36,7 +36,7 @@
       {
         "id": <userId>,
         "name": "<username>",
-        "opleiding": "<opleiding>",
+        "education": "<education>",
         "created_at": "<timestamp>"
       }
     ]
@@ -67,7 +67,7 @@
       "oldUser": {
         "id": <userId>,
         "name": "<username>",
-        "opleiding": "<opleiding>",
+        "education": "<education>",
         ...
       }
     }
@@ -133,7 +133,7 @@
     ```json
     [
       {
-        "opleiding": "<opleiding>",
+        "education": "<education>",
         "total_score": <totalScore>
       },
       ...
@@ -209,8 +209,11 @@
         "name": "<cardName>",
         "health": <health>,
         "attack": <attack>,
-        "defense": <defense>,
+        "ability": "<ability>",
         "rarity": "<rarity>",
+        "description": "<description>",
+        "education": "<education>",
+        "cards_path": "<cards_path>",
         "quantity": <quantity>
       },
       ...
@@ -229,8 +232,8 @@
 - **Parameters:**
   - `senderId` (integer, verplicht): De ID van de verzender.
   - `receiverId` (integer, verplicht): De ID van de ontvanger.
-  - `senderCardId` (integer, verplicht): De ID van de kaart van de verzender.
-  - `receiverCardId` (integer, verplicht): De ID van de kaart van de ontvanger.
+  - `senderCardName` (string, verplicht): De naam van de kaart van de verzender.
+  - `receiverCardName` (string, verplicht): De naam van de kaart van de ontvanger.
 - **Response:**
   - **200 OK**
     ```json
@@ -251,11 +254,31 @@
     }
     ```
 
-### 11. **Geef een starter pack aan een gebruiker**
+### 11. **Geef een algemene pack aan een gebruiker**
+- **Endpoint:** `/users/general-pack`
+- **Methode:** `POST`
+- **Parameters:**
+  - `userId` (integer, verplicht): De ID van de gebruiker die het algemene pack ontvangt.
+- **Response:**
+  - **200 OK**
+    ```json
+    {
+      "message": "Algemene pack ontvangen!"
+    }
+    ```
+  - **500 Internal Server Error**
+    ```json
+    {
+      "error": "<error message>"
+    }
+    ```
+
+### 12. **Geef een starter pack aan een gebruiker**
 - **Endpoint:** `/users/starter-pack`
 - **Methode:** `POST`
 - **Parameters:**
   - `userId` (integer, verplicht): De ID van de gebruiker die het starter pack ontvangt.
+  - `education` (string, verplicht): De opleiding van de gebruiker.
 - **Response:**
   - **200 OK**
     ```json
@@ -270,12 +293,12 @@
     }
     ```
 
-### 12. **Registreer een gebruiker**
+### 13. **Registreer een gebruiker**
 - **Endpoint:** `/register`
 - **Methode:** `POST`
 - **Parameters:**
   - `username` (string, verplicht): De naam van de gebruiker.
-  - `opleiding` (string, verplicht): Het opleiding van de gebruiker.
+  - `education` (string, verplicht): De opleiding van de gebruiker.
   - `password` (string, verplicht): Het wachtwoord van de gebruiker.
 - **Response:**
   - **201 Created**
@@ -298,7 +321,7 @@
     }
     ```
 
-### 13. **Login een gebruiker**
+### 14. **Login een gebruiker**
 - **Endpoint:** `/login`
 - **Methode:** `POST`
 - **Parameters:**
@@ -331,3 +354,4 @@ Alle API-eindpunten kunnen een foutmelding teruggeven in het geval van een inter
 {
   "error": "<error message>"
 }
+```

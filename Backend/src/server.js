@@ -10,10 +10,11 @@ const app = express();
 const port = process.env.PORT; // Gebruik PORT in plaats van DB_PORT
 
 app.use(express.json());
-app.use(cors({ // probeersel van registerUser error
-  origin: 'http://localhost:8000',
-}));
 app.use('/api', apiRoutes);
+app.use(cors({ // Updated CORS configuration for Docker
+  origin: '*', // Allow all origins for Docker
+}));
+
 app.use((req, res, next) => { // Log alle inkomende requests
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next();
@@ -21,7 +22,7 @@ app.use((req, res, next) => { // Log alle inkomende requests
 
 // Hello World route
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World! from the backend')
 });
 
 // Test database verbinding

@@ -19,6 +19,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
     import axios from 'axios';
 import { nextTick } from 'vue';
 
@@ -94,42 +95,90 @@ import { nextTick } from 'vue';
         margin: auto;
         margin-top: 40px;
     }
+=======
+import axios from 'axios';
 
-    .logo {
-        width: 100%;
-        max-height: 50vh;
-        text-align: center;
-        margin-bottom: 2rem;
+export default {
+    data() {
+        return {
+            username: '',
+            password: '',
+            errorMessage: '',
+        };
+    },
+    methods: {
+        async login() {
+            this.errorMessage = '';
+            try {
+                const response = await axios.post('http://localhost:3000/api/login', {
+                    username: this.username,
+                    password: this.password,
+                });
+                alert(response.data.message);
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userId', response.data.userId);
+                this.$router.push('/account');
+            } catch (error) {
+                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
+            }
+        },
+        goToSignUp() {
+            this.$router.push('/register');
+        }
     }
+};
+</script>
 
-    .logo-image {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: auto;
-    }
+<style scoped>
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
 
-    .input-label {
-        align-self: flex-start;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-    }
+.spacer {
+    height: 4rem;
+}
+>>>>>>> main
 
-    .input-field {
-        width: 100%;
-        padding: 1rem;
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-        border: 0.1rem solid #ccc;
-        border-radius: 0.6rem;
-    }
+.logo {
+    width: 100%;
+    max-height: 50vh;
+    text-align: center;
+    margin-bottom: 2rem;
+}
 
-    .error-space {
-        height: 2rem;
-        color: red;
-        text-align: center;
-    }
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
 
+.input-label {
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.6rem;
+}
+
+.error-space {
+    height: 2rem;
+    color: red;
+    text-align: center;
+}
+
+<<<<<<< HEAD
     .login-button {
         padding: 15px;
         width: 100%;
@@ -149,10 +198,28 @@ import { nextTick } from 'vue';
         color: black;
         text-align: center;
     }
+=======
+.login-button {
+    padding: 15px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    font-size: 15px;
+}
 
-    .signup-link {
-        color: red;
-        text-decoration: underline;
-        cursor: pointer;
-    }
+.signup-text {
+    margin-top: 1rem;
+    color: black;
+}
+>>>>>>> main
+
+.signup-link {
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+}
 </style>

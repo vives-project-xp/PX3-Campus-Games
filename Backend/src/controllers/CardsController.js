@@ -2,7 +2,7 @@ import db from '../db.js';
 
 const addCardToUser = async (req, res) => {
     try {
-        const { user_id, card_id} = req.body;
+        const { user_id, card_id } = req.body;
 
         // Controleer of de kaart al bestaat in het bezit van de speler
         const [existingCard] = await db.execute(
@@ -14,7 +14,7 @@ const addCardToUser = async (req, res) => {
             // Update de hoeveelheid als de kaart al bestaat
             await db.execute(
                 'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                [user_id, card_id, 1]
+                [1, user_id, card_id]
             );
         } else {
             // Voeg een nieuwe kaart toe aan de speler
@@ -32,17 +32,20 @@ const addCardToUser = async (req, res) => {
 };
 
 // 🔍 Haal alle kaarten van een speler op
- const getUserCards = async (req, res) => {
+const getUserCards = async (req, res) => {
     try {
         const { user_id } = req.params;
+        console.log("Fetching cards for user_id:", user_id); // Debug logging
 
         const [cards] = await db.execute(
-            `SELECT c.card_id, c.name, c.health, c.attack, c.defense, c.rarity, uc.quantity
+            `SELECT c.card_id, c.name, c.health, c.attack, c.ability, c.rarity, c.description, c.education, c.cards_path, uc.quantity
             FROM user_cards uc
             JOIN Cards_dex c ON uc.card_id = c.card_id
             WHERE uc.user_id = ?`,
             [user_id]
         );
+
+        console.log("Cards fetched:", cards); // Debug logging
 
         res.json(cards);
     } catch (error) {
@@ -54,16 +57,37 @@ const addCardToUser = async (req, res) => {
 // 🔄 Ruil een kaart met een andere speler
 const tradeCards = async (req, res) => {
     try {
-        const { senderId, receiverId, senderCardId, receiverCardId } = req.body;
+        const { senderId, receiverId, senderCardName, receiverCardName } = req.body;
+
+        // Haal de card_id op basis van de kaartnaam voor de zender
+        const [senderCard] = await db.execute(
+            'SELECT card_id FROM Cards_dex WHERE name = ?',
+            [senderCardName]
+        );
+
+        // Haal de card_id op basis van de kaartnaam voor de ontvanger
+        const [receiverCard] = await db.execute(
+            'SELECT card_id FROM Cards_dex WHERE name = ?',
+            [receiverCardName]
+        );
+
+        if (senderCard.length === 0 || receiverCard.length === 0) {
+            return res.status(400).json({ error: 'Een of beide kaarten bestaan niet' });
+        }
+
+        const senderCardId = senderCard[0].card_id;
+        const receiverCardId = receiverCard[0].card_id;
 
         // Check of beide spelers de kaarten bezitten
-        const [senderHasCard] = await db.execute(`
-            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
-        `, [senderId, senderCardId]);
+        const [senderHasCard] = await db.execute(
+            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
+            [senderId, senderCardId]
+        );
 
-        const [receiverHasCard] = await db.execute(`
-            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
-        `, [receiverId, receiverCardId]);
+        const [receiverHasCard] = await db.execute(
+            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
+            [receiverId, receiverCardId]
+        );
 
         if (senderHasCard.length === 0 || receiverHasCard.length === 0) {
             return res.status(400).json({ error: 'Beide spelers moeten de kaart bezitten' });
@@ -81,12 +105,53 @@ const tradeCards = async (req, res) => {
     }
 };
 
-const giveStarterPack = async (req, res) => {
+// 🎁 Geef een algemene pack met willekeurige kaarten
+const giveGeneralPack = async (req, res) => {
     try {
         const { userId } = req.body;
 
         // Selecteer 3 random kaarten uit de database
         const [cards] = await db.execute('SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3');
+
+        // Voeg de kaarten toe aan de gebruiker
+        for (const card of cards) {
+            // Controleer of de kaart al bestaat in het bezit van de speler
+            const [existingCard] = await db.execute(
+                'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
+                [userId, card.card_id]
+            );
+
+            if (existingCard.length > 0) {
+                // Update de hoeveelheid als de kaart al bestaat
+                await db.execute(
+                    'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
+                    [1, userId, card.card_id]
+                );
+            } else {
+                // Voeg een nieuwe kaart toe aan de speler
+                await db.execute(
+                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
+                    [userId, card.card_id, 1]
+                );
+            }
+        }
+
+        res.json({ message: 'Algemene pack ontvangen!' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// 🎁 Geef een starter pack met kaarten specifiek voor de opleiding van de gebruiker
+const giveStarterPack = async (req, res) => {
+    try {
+        const { userId, education } = req.body;
+
+        // Selecteer 3 random kaarten uit de database die specifiek zijn voor de opleiding
+        const [cards] = await db.execute(
+            'SELECT card_id FROM Cards_dex WHERE education = ? ORDER BY RAND() LIMIT 3',
+            [education]
+        );
 
         // Voeg de kaarten toe aan de gebruiker
         for (const card of cards) {
@@ -104,5 +169,6 @@ export {
     addCardToUser,
     getUserCards,
     tradeCards,
+    giveGeneralPack,
     giveStarterPack,
 };

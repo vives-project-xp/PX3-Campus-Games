@@ -1,0 +1,47 @@
+services:
+  db:
+    container_name: db
+    image: mariadb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/mysql
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_PORT=3306
+      - VUE_HOST=${VUE_HOST}:5000
+    depends_on:
+      - db
+  
+  vue:
+    container_name: vue
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_API_HOST: ${API_HOST}:3001
+    restart: unless-stopped
+    working_dir: /app
+    env_file: .env
+    ports:
+      - 5000:80
+    depends_on: 
+      - api

@@ -1,0 +1,5 @@
+../backend/node_modules
+../frontend/vives-card-game/node_modules
+
+/db/data
+/db/data/*
