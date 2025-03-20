@@ -23,7 +23,7 @@ app.use('/api', apiRoutes);
 
 // Hello World route
 app.get('/', (req, res) => {
-  res.send('Hello World! from the backend aaaaa');
+  res.send('Hello World! from the backend');
 });
 
 // Test database verbinding

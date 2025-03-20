@@ -37,7 +37,7 @@ services:
       context: ./vue
       dockerfile: Dockerfile
       args:
-        VUE_APP_API_HOST: ${API_HOST}:3001
+        VUE_APP_API_HOST: ${API_HOST}:3000
     restart: unless-stopped
     working_dir: /app
     env_file: .env

@@ -16,7 +16,7 @@ const addCardToUser = async (req, res) => {
             // Update de hoeveelheid als de kaart al bestaat
             await db.execute(
                 'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                [user_id, card_id, 1]
+                [1, user_id, card_id]
             );
         } else {
             // Voeg een nieuwe kaart toe aan de speler
@@ -39,7 +39,7 @@ const addCardToUser = async (req, res) => {
         const { user_id } = req.params;
 
         const [cards] = await db.execute(
-            `SELECT c.card_id, c.name, c.health, c.attack, c.defense, c.rarity, uc.quantity
+            `SELECT c.card_id, c.name, c.health, c.attack, c.ability, c.rarity, uc.quantity
             FROM user_cards uc
             JOIN Cards_dex c ON uc.card_id = c.card_id
             WHERE uc.user_id = ?`,
@@ -199,10 +199,21 @@ const giveGeneralPack = async (req, res) => {
     }
 };
 
+const getCard_dex = async (req, res) => {
+    try {
+        const [cards] = await db.execute('SELECT * FROM Cards_dex');
+        res.json(cards);
+    } catch (error) {
+        console.error('Fout bij ophalen van kaarten:', error);
+        res.status(500).json({ error: 'Kan kaarten niet ophalen' });
+    }
+};
+
 export {
     addCardToUser,
     getUserCards,
     tradeCards,
     giveStarterPack,
     giveGeneralPack,
+    getCard_dex,
 };
