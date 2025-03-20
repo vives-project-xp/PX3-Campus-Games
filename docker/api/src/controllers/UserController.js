@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const getAllUsers = async (req, res) => {
     try {
-        const [result] = await db.execute('SELECT id, name, opleiding, created_at FROM users');
+        const [result] = await db.execute('SELECT id, userName, opleiding, created_at FROM users');
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -17,13 +17,13 @@ const getUserBy = async (req, res) => {
         const { param, value } = req.params; // Get column name and value from URL params
         
         // Validate the column name to prevent SQL injection
-        const allowedParams = ['id', 'name', 'opleiding']; // Define allowed columns
+        const allowedParams = ['id', 'userName', 'opleiding']; // Define allowed columns
         if (!allowedParams.includes(param)) {
             return res.status(400).json({ error: "Invalid search parameter" });
         }
 
         // Query database dynamically
-        const query = `SELECT id, name, opleiding, created_at FROM users WHERE ${param} = ?`;
+        const query = `SELECT id, userName, opleiding, created_at FROM users WHERE ${param} = ?`;
         const [result] = await db.execute(query, [value]);
 
         res.json(result);
@@ -37,7 +37,7 @@ const deleteUser = async (req, res) => {
         const { id } = req.params;
 
         // Haal de oude gebruikersgegevens op (zonder SELECT *)
-        const [oldUser] = await db.execute('SELECT id, name, opleiding FROM users WHERE id = ?', [id]);
+        const [oldUser] = await db.execute('SELECT id, userName, opleiding FROM users WHERE id = ?', [id]);
         
         // Controleer of de gebruiker bestaat
         if (oldUser.length === 0) {
@@ -64,7 +64,7 @@ const registerUser = async (req, res) => {
         const { username, opleiding, password } = req.body;
 
         // Check of de user al bestaat
-        const [existingUser] = await db.execute('SELECT id FROM users WHERE name = ?', [username]);
+        const [existingUser] = await db.execute('SELECT id FROM users WHERE userName = ?', [username]);
         console.log("Existing user query result:", existingUser); // output naar console als user al bestaat
 
         if (existingUser && existingUser.length > 0) {
@@ -76,7 +76,7 @@ const registerUser = async (req, res) => {
 
         // Voeg gebruiker toe aan database
         const [result] = await db.execute(
-            'INSERT INTO users (name, opleiding, password) VALUES (?, ?, ?)',
+            'INSERT INTO users (userName, opleiding, userPassword) VALUES (?, ?, ?)',
             [username, opleiding, hashedPassword]
         );
 
@@ -91,7 +91,7 @@ const loginUser = async (req, res) => {
         const { username, password } = req.body;
 
         // Zoek de gebruiker
-        const [user] = await db.execute('SELECT id, password FROM users WHERE name = ?', [username]);
+        const [user] = await db.execute('SELECT id, userPassword FROM users WHERE userName = ?', [username]);
         if (user.length === 0) {
             return res.status(401).json({ error: 'Ongeldige username' });
         }
