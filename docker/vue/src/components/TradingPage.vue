@@ -1,102 +1,193 @@
 <template>
     <div class="trading-page">
-      <h1>Trade Cards</h1>
-      <div v-if="!qrScanned">
-        <!-- Skip QR code part and show a button to proceed -->
-        <p>Deel deze SQ code om te kunnen traden (optioneel)</p>
-        <button @click="skipQRCode">Ga verder</button>
+      <h1>Card Trading</h1>
+  
+      <!-- Temporary cheat button to add cards -->
+      <button @click="addCheatCards" class="cheat-button">Add Cheat Cards</button>
+  
+      <div class="players">
+        <!-- Player 1's card selection -->
+        <div class="player">
+          <h2>Your Cards</h2>
+          <div v-if="player1Cards.length === 0">You don't have any cards yet!</div>
+          <div class="card-container">
+            <div
+              v-for="card in player1Cards"
+              :key="card.card_id"
+              class="card"
+              :class="{'selected': player1SelectedCard && player1SelectedCard.card_id === card.card_id}"
+              @click="selectCard(1, card)"
+            >
+              <img :src="card.image" alt="Card" />
+              <p>{{ card.name }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Player 2's card selection -->
+        <div class="player">
+          <h2>Friend's Cards</h2>
+          <div v-if="player2Cards.length === 0">Your friend doesn't have any cards yet!</div>
+          <div class="card-container">
+            <div
+              v-for="card in player2Cards"
+              :key="card.card_id"
+              class="card"
+              :class="{'selected': player2SelectedCard && player2SelectedCard.card_id === card.card_id}"
+              @click="selectCard(2, card)"
+            >
+              <img :src="card.image" alt="Card" />
+              <p>{{ card.name }}</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div v-else>
-        <div class="cards-container">
-          <div class="user-card">
-            <h2>Jou kaarten:</h2>
-            <button @click="addTestCard(userId)">Voeg een test kaart toe</button>
-            <ul>
-              <li v-for="card in userCards" :key="card.card_id" @click="selectCard(card, 'user')">
-                {{ card.name }} (x{{ card.quantity }})
-              </li>
-            </ul>
-            <p>Geselecteerd: {{ selectedUserCard?.name || 'None' }}</p>
-          </div>
-          <div class="friend-card">
-            <h2>Kaart van andere</h2>
-            <button @click="addTestCard(friendId)">Voeg een test kaart toe</button>
-            <ul>
-              <li v-for="card in friendCards" :key="card.card_id" @click="selectCard(card, 'friend')">
-                {{ card.name }} (x{{ card.quantity }})
-              </li>
-            </ul>
-            <p>Geselecteerd: {{ selectedFriendCard?.name || 'None' }}</p>
-          </div>
-        </div>
-        <div class="trade-actions">
-          <button :disabled="!selectedUserCard || !selectedFriendCard" @click="confirmTrade">Accepteer</button>
-          <p v-if="tradeAccepted">Wachten voor andere om te accepteren...</p>
-        </div>
+  
+      <div v-if="player1SelectedCard && player2SelectedCard">
+        <h3>Your Selected Card: {{ player1SelectedCard.name }}</h3>
+        <h3>Friend's Selected Card: {{ player2SelectedCard.name }}</h3>
+      </div>
+  
+      <div v-if="player1SelectedCard && player2SelectedCard">
+        <button @click="acceptTrade" class="accept-trade">Accept Trade</button>
       </div>
     </div>
   </template>
   
   <script>
-  import axios from 'axios';
+  import axios from "axios";
+  import { API_URL } from '../config';
   
   export default {
     data() {
       return {
-        qrScanned: false,
-        userCards: [],
-        friendCards: [],
-        selectedUserCard: null,
-        selectedFriendCard: null,
-        tradeAccepted: false,
-        userId: 0, // Testing
-        friendId: 1, // Testing
+        player1Cards: [],
+        player2Cards: [],
+        player1SelectedCard: null,
+        player2SelectedCard: null,
+        player1Id: 1, // Replace with actual player 1 id
+        player2Id: 2, // Replace with actual player 2 id
       };
     },
+    mounted() {
+      // Fetch player 1's and player 2's cards when the page loads
+      this.fetchPlayerCards(1);
+      this.fetchPlayerCards(2);
+    },
     methods: {
-      skipQRCode() {
-        // Skip QR code and move to next part
-        this.qrScanned = true;
-      },
-      async fetchCards() {
-        this.userCards = (await axios.get(`/api/cards/${this.userId}`)).data;
-        this.friendCards = (await axios.get(`/api/cards/${this.friendId}`)).data;
-      },
-      async selectCard(card, type) {
-        if (type === 'user') {
-          this.selectedUserCard = card;
-          await axios.post('/api/trade/select', { userId: this.userId, selectedCard: card.card_id });
-        } else {
-          this.selectedFriendCard = card;
-          await axios.post('/api/trade/select', { userId: this.friendId, selectedCard: card.card_id });
+      async fetchPlayerCards(player) {
+        try {
+          const response = await axios.get(`${API_URL}/api/userCards/${player === 1 ? this.player1Id : this.player2Id}`);
+          if (player === 1) {
+            this.player1Cards = response.data;
+          } else {
+            this.player2Cards = response.data;
+          }
+        } catch (error) {
+          console.error("Error fetching cards:", error);
         }
       },
-      async confirmTrade() {
-        this.tradeAccepted = true;
-        await axios.post('/api/trade/accept', { userId: this.userId });
+  
+      selectCard(player, card) {
+        if (player === 1) {
+          this.player1SelectedCard = card;
+        } else {
+          this.player2SelectedCard = card;
+        }
       },
-      async addTestCard(userId) {
-        const testCardId = 99; // Test card ID
-        await axios.post('/api/cards/add', { user_id: userId, card_id: testCardId });
-        this.fetchCards();
-      }
+  
+      async acceptTrade() {
+        if (this.player1SelectedCard && this.player2SelectedCard) {
+          try {
+            const tradePayload = {
+              senderId: this.player1Id,
+              receiverId: this.player2Id,
+              senderCardId: this.player1SelectedCard.card_id,
+              receiverCardId: this.player2SelectedCard.card_id,
+            };
+            const response = await axios.post(`${API_URL}/api/tradeCards`, tradePayload);
+            alert(response.data.message);
+            // Reload the cards to show the updated state
+            this.fetchPlayerCards(1);
+            this.fetchPlayerCards(2);
+          } catch (error) {
+            console.error("Error accepting trade:", error);
+          }
+        } else {
+          alert("Please select a card to trade!");
+        }
+      },
+  
+      // Temporary cheat button to add cards to the database
+      async addCheatCards() {
+        try {
+          await axios.post(`${API_URL}/api/addCard`, { user_id: this.player1Id, card_id: 1 });
+          await axios.post(`${API_URL}/api/addCard`, { user_id: this.player1Id, card_id: 2 });
+          await axios.post(`${API_URL}/api/addCard`, { user_id: this.player1Id, card_id: 3 });
+          this.fetchPlayerCards(1); // Reload player 1's cards
+        } catch (error) {
+          console.error("Error adding cheat cards:", error);
+        }
+      },
     },
-    mounted() {
-      this.fetchCards();
-    }
   };
   </script>
   
   <style scoped>
   .trading-page {
+    padding: 20px;
     text-align: center;
   }
-  .cards-container {
-    display: flex;
-    justify-content: space-around;
+  
+  .cheat-button {
+    margin-bottom: 20px;
   }
-  .trade-actions {
+  
+  .players {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .player {
+    width: 45%;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .card {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .card.selected {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+  
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .accept-trade {
     margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .accept-trade:hover {
+    background-color: #218838;
   }
   </style>
   
