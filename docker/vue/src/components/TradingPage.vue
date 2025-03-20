@@ -1,26 +1,37 @@
 <template>
-    <div class="trading-container">
-      <h2>Trade Your Cards</h2>
-      <div v-if="!tradeCode">
-        <button @click="generateTradeCode">Generate Trade QR Code</button>
-        <p v-if="qrCode">Scan this QR Code: {{ qrCode }}</p>
+    <div class="trading-page">
+      <h1>Trade Cards</h1>
+      <div v-if="!qrScanned">
+        <p>Share this QR code with your friend to initiate the trade.</p>
+        <qrcode-vue :value="qrCode" :size="200" level="H" />
+        <p>Code: {{ qrCode }}</p>
       </div>
-      
-      <div v-else class="trade-section">
-        <div class="card-selection">
-          <h3>Your Card</h3>
-          <select v-model="selectedCard" @change="updateTrade">
-            <option v-for="card in userCards" :key="card.id" :value="card.id">
-              {{ card.name }}
-            </option>
-          </select>
-        </div>
-        <div class="card-selection">
-          <h3>Friend's Card</h3>
-          <p v-if="friendSelectedCard">Selected: {{ friendSelectedCard.name }}</p>
+      <div v-else>
+        <div class="cards-container">
+          <div class="user-card">
+            <h2>Your Cards</h2>
+            <button @click="addTestCard(userId)">Add Test Card</button>
+            <ul>
+              <li v-for="card in userCards" :key="card.card_id" @click="selectCard(card, 'user')">
+                {{ card.name }} (x{{ card.quantity }})
+              </li>
+            </ul>
+            <p>Selected: {{ selectedUserCard?.name || 'None' }}</p>
+          </div>
+          <div class="friend-card">
+            <h2>Friend's Cards</h2>
+            <button @click="addTestCard(friendId)">Add Test Card</button>
+            <ul>
+              <li v-for="card in friendCards" :key="card.card_id" @click="selectCard(card, 'friend')">
+                {{ card.name }} (x{{ card.quantity }})
+              </li>
+            </ul>
+            <p>Selected: {{ selectedFriendCard?.name || 'None' }}</p>
+          </div>
         </div>
         <div class="trade-actions">
-          <button @click="acceptTrade" :disabled="!selectedCard || !friendSelectedCard">Accept Trade</button>
+          <button :disabled="!selectedUserCard || !selectedFriendCard" @click="confirmTrade">Accept Trade</button>
+          <p v-if="tradeAccepted">Waiting for friend to accept...</p>
         </div>
       </div>
     </div>
@@ -28,37 +39,66 @@
   
   <script>
   import axios from 'axios';
+  import QrcodeVue from 'qrcode.vue';
+  
   export default {
+    components: { QrcodeVue },
     data() {
       return {
-        tradeCode: null,
-        qrCode: null,
+        qrCode: this.generateCode(),
+        qrScanned: false,
         userCards: [],
-        selectedCard: null,
-        friendSelectedCard: null,
+        friendCards: [],
+        selectedUserCard: null,
+        selectedFriendCard: null,
+        tradeAccepted: false,
+        userId: 0, // Testing
+        friendId: 1, // Testing
       };
     },
     methods: {
-      async generateTradeCode() {
-        this.qrCode = Math.random().toString(36).substr(2, 10).toUpperCase();
-        this.tradeCode = this.qrCode;
+      generateCode() {
+        return Math.random().toString(36).substring(2, 12);
       },
-      async updateTrade() {
-        await axios.post('/api/updateTradeSelection', { tradeCode: this.tradeCode, cardId: this.selectedCard });
+      async fetchCards() {
+        this.userCards = (await axios.get(`/api/cards/${this.userId}`)).data;
+        this.friendCards = (await axios.get(`/api/cards/${this.friendId}`)).data;
       },
-      async acceptTrade() {
-        await axios.post('/api/acceptTrade', { tradeCode: this.tradeCode });
+      async selectCard(card, type) {
+        if (type === 'user') {
+          this.selectedUserCard = card;
+          await axios.post('/api/trade/select', { userId: this.userId, selectedCard: card.card_id });
+        } else {
+          this.selectedFriendCard = card;
+          await axios.post('/api/trade/select', { userId: this.friendId, selectedCard: card.card_id });
+        }
+      },
+      async confirmTrade() {
+        this.tradeAccepted = true;
+        await axios.post('/api/trade/accept', { userId: this.userId });
+      },
+      async addTestCard(userId) {
+        const testCardId = 99; // Test card ID
+        await axios.post('/api/cards/add', { user_id: userId, card_id: testCardId });
+        this.fetchCards();
       }
     },
+    mounted() {
+      this.fetchCards();
+    }
   };
   </script>
   
   <style scoped>
-  .trading-container {
+  .trading-page {
     text-align: center;
   }
-  .card-selection {
-    margin: 20px;
+  .cards-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  .trade-actions {
+    margin-top: 20px;
   }
   </style>
   
