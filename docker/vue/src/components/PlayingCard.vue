@@ -33,7 +33,7 @@ export default {
 .card {
   border: 0.1rem solid var(--border-color);
   border-radius: var(--border-radius);
-  width: 80%;
+  width: 100%;
   box-shadow: var(--box-shadow);
   transition: transform 0.3s ease, box-shadow 0.5s ease;
   background-color: var(--primary-color);
@@ -54,7 +54,7 @@ export default {
 }
 
 .card-image {
-  width: 100%;
+  width: 70%;
   height: auto;
   object-fit: cover;
   display: block;
