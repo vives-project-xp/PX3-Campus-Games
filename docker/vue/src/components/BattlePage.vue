@@ -1,7 +1,7 @@
 <template>
     <div>
-      <h2>Battle Page</h2>
-      <p>Not finished yet.</p>
+      <h2>Uitdaging</h2>
+      <p>Onder constructie.</p>
     </div>
   </template>
   

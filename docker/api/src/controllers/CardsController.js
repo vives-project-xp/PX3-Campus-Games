@@ -1,5 +1,7 @@
 import db from '../db.js';
 
+const activeTrades = {}; // Store active trade selections
+
 const addCardToUser = async (req, res) => {
     try {
         const { user_id, card_id} = req.body;
@@ -51,35 +53,100 @@ const addCardToUser = async (req, res) => {
     }
 };
 
-// 🔄 Ruil een kaart met een andere speler
-const tradeCards = async (req, res) => {
+// API to update selected card for trading
+const updateTradeSelection = async (req, res) => {
     try {
-        const { senderId, receiverId, senderCardId, receiverCardId } = req.body;
+        const { tradeCode, cardId } = req.body;
 
-        // Check of beide spelers de kaarten bezitten
-        const [senderHasCard] = await db.execute(`
-            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
-        `, [senderId, senderCardId]);
-
-        const [receiverHasCard] = await db.execute(`
-            SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?
-        `, [receiverId, receiverCardId]);
-
-        if (senderHasCard.length === 0 || receiverHasCard.length === 0) {
-            return res.status(400).json({ error: 'Beide spelers moeten de kaart bezitten' });
+        if (!activeTrades[tradeCode]) {
+            activeTrades[tradeCode] = { user1Card: null, user2Card: null };
         }
 
-        // Voer de ruil uit
-        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
-            [receiverId, senderId, senderCardId]);
-        await db.execute('UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?', 
-            [senderId, receiverId, receiverCardId]);
+        if (!activeTrades[tradeCode].user1Card) {
+            activeTrades[tradeCode].user1Card = cardId;
+        } else {
+            activeTrades[tradeCode].user2Card = cardId;
+        }
 
-        res.json({ message: 'Trade succesvol' });
+        res.json({ message: 'Trade selection updated', tradeData: activeTrades[tradeCode] });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+// als QR code gescanned is, zorg ervoor om de trade te joinen
+export const joinTrade = (req, res) => {
+    const { tradeCode } = req.body;
+
+    if (!activeTrades[tradeCode]) {
+        return res.status(400).json({ error: "Invalid trade code" });
+    }
+
+    if (!activeTrades[tradeCode].user1) {
+        activeTrades[tradeCode].user1 = req.body.userId;
+    } else if (!activeTrades[tradeCode].user2) {
+        activeTrades[tradeCode].user2 = req.body.userId;
+    } else {
+        return res.status(400).json({ error: "Trade is already full" });
+    }
+
+    res.json({ message: "Joined trade successfully", tradeCode });
+};
+
+
+const tradeCards = async (req, res) => {
+    try {
+        const { tradeCode, userId, cardId } = req.body;
+
+        if (!tradeCode) {
+            return res.status(400).json({ error: "Trade code is required" });
+        }
+
+        // start the trade in case it does not exist
+        if (!activeTrades[tradeCode]) {
+            activeTrades[tradeCode] = { user1: { id: userId, card: cardId }, user2: null };
+        } else if (!activeTrades[tradeCode].user2) {
+            activeTrades[tradeCode].user2 = { id: userId, card: cardId };
+        } else {
+            return res.status(400).json({ error: "Trade already has two participants" });
+        }
+
+        // If both players have selected a card, say it's valid
+        if (activeTrades[tradeCode].user1 && activeTrades[tradeCode].user2) {
+            const { user1, user2 } = activeTrades[tradeCode];
+
+            const [user1HasCard] = await db.execute(
+            "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?",
+                [user1.id, user1.card]
+        );
+            const [user2HasCard] = await db.execute(
+            "SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?",
+                [user2.id, user2.card]
+        );
+
+            if (user1HasCard.length === 0 || user2HasCard.length === 0) {
+            return res.status(400).json({ error: "One or both users do not own the selected card" });
+        }
+
+            // trade happens
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
+                [user2.id, user1.id, user1.card]);
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", 
+                [user1.id, user2.id, user2.card]);
+
+            delete activeTrades[tradeCode];
+
+        return res.json({ message: "Trade successful" });
+        }
+
+        res.json({ message: "Trade updated, waiting for both users" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
 
 const giveStarterPack = async (req, res) => {
     try {

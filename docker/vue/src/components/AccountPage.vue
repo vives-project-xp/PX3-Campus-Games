@@ -1,36 +1,25 @@
 <template>
-    <div class="account-container">
-      <div v-if="isLoggedIn">
-        <h1>Account Details</h1>
-        <p>Gebruikersnaam: {{ username }}</p>
-        <button class="logout-button" @click="logout">Log Out</button>
-      </div>
-      <div v-else>
-        <h1>Account</h1>
-        <p>Je bent momenteel niet ingelogd.</p>
-        <p class="login-text">
-            <span class="login-link" @click="goToLogin">Log in</span>
-        </p>
-      </div>
-    </div>
-  </template>
+  <div class="account-container">
+    <h1>Account Details</h1>
+    <p>Gebruikersnaam: {{ username }}</p>
+    <button class="logout-button" @click="logout">Uitloggen</button>
+  </div>
+</template>
 
 <script>
 export default {
   data() {
     return {
-      isLoggedIn: false,
       username: '',
     };
   },
   mounted() {
-    this.checkLoginStatus();
+    this.fetchUsername();
   },
   methods: {
-    checkLoginStatus() {
+    fetchUsername() {
       const token = localStorage.getItem('token');
       if (token) {
-        this.isLoggedIn = true;
         try {
           const base64Url = token.split('.')[1];
           const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -41,21 +30,15 @@ export default {
           this.logout();
         }
       } else {
-        this.isLoggedIn = false;
+        this.$router.push('/login');
       }
     },
-
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-      this.isLoggedIn = false;
       this.username = '';
       this.$router.push('/login');
     },
-
-    goToLogin() {
-        this.$router.push('/login');
-    }
   },
 };
 </script>
@@ -70,24 +53,13 @@ export default {
   margin-bottom: 20px;
 }
 
-.account-container a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.login-link {
-    color: red;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 .logout-button {
-    background-color: red;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    font-size: 15px;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: none;
+  font-size: 15px;
 }
 </style>

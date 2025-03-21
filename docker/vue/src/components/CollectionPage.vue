@@ -1,6 +1,6 @@
 <template>
     <div class="card-collection">
-        <h2 v-if="isCollectionRoute" class="heading">Your Cards:</h2>
+        <h2 v-if="isCollectionRoute" class="heading">Eigen kaarten:</h2>
 
         <!-- Fixed Top Section -->
         <div class="fixed-container">
@@ -24,7 +24,7 @@
                     <span>{{ filteredCards.length }}</span>
                 </div>
                 <div class="search-input">
-                    <input type="text" v-model="searchQuery" placeholder="Search cards..." />
+                    <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
                     <button @click="clearSearch">x</button>
                 </div>
             </div>

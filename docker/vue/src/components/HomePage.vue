@@ -8,8 +8,8 @@
       </p>
       <h3>Ruilen:</h3>
       <p>
-        There's a trading system, made to interact with other students on the campus. You can trade cards, only if you're in the same GPS-location.
-        <br> To start the trade, one player will be able to generate a QR-code that can be scanned by the other player. If both players confirm the trade, the cards will be transfered.
+        Er is een ruilsysteem ontworpen om met andere studenten op de campus te communiceren.
+        <br> Om de ruil te starten, kan één speler een QR-code genereren die door de andere speler kan worden gescand. Als beide spelers de ruil bevestigen, worden de kaarten overgedragen.
       </p>
       <!--<h3>Vechten:</h3>
       <p>
