@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import apiRoutes from './routes/apiRoutes.js';
 import pool from './db.js';  // Importeer database connectie
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -37,7 +39,17 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+// Verkrijg de directorynaam
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log('Directory:', __dirname);
 
+
+// Serveer de Cards map
+app.use('/api/Cards', (req, res, next) => {
+  console.log(`Serving static file: ${req.url}`);
+  next();
+}, express.static(path.join(__dirname, 'Cards')));
 
 // Fallback route voor niet-bestaande routes
 app.use((req, res) => {

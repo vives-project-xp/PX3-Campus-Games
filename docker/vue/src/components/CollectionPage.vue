@@ -1,127 +1,86 @@
 <template>
-    <div class="card-collection">
-        <h2 v-if="isCollectionRoute" class="heading">Eigen kaarten:</h2>
-
-        <!-- Fixed Top Section -->
-        <div class="fixed-container">
-            <!-- Filter Buttons -->
-            <div class="filter-box">
-                <div class="filter-row">
-                    <button :class="{ active: selectedRarities.includes('rare') }" @click="toggleFilter('rare')">Rare</button>
-                    <button :class="{ active: selectedRarities.includes('uncommon') }" @click="toggleFilter('uncommon')">Uncommon</button>
-                    <button :class="{ active: selectedRarities.includes('common') }" @click="toggleFilter('common')">Common</button>
-                </div>
-                <div class="filter-row">
-                    <button :class="{ active: selectedRarities.includes('ultraRare') }" @click="toggleFilter('ultraRare')">Ultra Rare</button>
-                    <button :class="{ active: selectedRarities.includes('legendary') }" @click="toggleFilter('legendary')">Legendary</button>
-                </div>
-            </div>
-
-            <!-- Search and Total Cards -->
-            <div class="search-box">
-                <div class="total-cards">
-                    <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
-                    <span>{{ filteredCards.length }}</span>
-                </div>
-                <div class="search-input">
-                    <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
-                    <button @click="clearSearch">x</button>
-                </div>
-            </div>
+  <div class="card-collection">
+    <div class="fixed-container">
+      <div class="search-box">
+        <div class="total-cards">
+          <span>{{ filteredCards.length }}</span>
         </div>
-
-        <!-- Scrollable Card Grid -->
-        <div class="card-container">
-            <div class="card-grid" v-if="filteredCards.length > 0">
-                <PlayingCard
-                    v-for="card in filteredCards"
-                    :key="card.card_id"
-                    :cardName="card.cardName"
-                    :cardImage="card.artwork_path"
-                    :isSelected="selectedCards.includes(card.card_id)"
-                    @click="toggleCardSelection(card.card_id)"
-                    @mounted="console.log('Card props:', { cardName: card.cardName, cardImage: card.artwork_path })"
-                />
-            </div>
-            <div v-else class="no-cards">Geen kaarten gevonden.</div>
+        <div class="search-input">
+          <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
+          <button @click="clearSearch">x</button>
         </div>
+      </div>
     </div>
+
+    <!-- Scrollable Card Grid -->
+    <div class="card-container">
+      <div class="card-grid" v-if="filteredCards && filteredCards.length > 0">
+        <PlayingCard
+            v-for="card in filteredCards"
+            :key="card.card_id"
+            :cardName="card.cardName"
+            :cardImage="card.artwork_path"
+            :attack="card.attack"
+            :ability="card.ability"
+            :health="card.health"
+            :isSelected="selectedCards.includes(card.card_id)"
+            @click="toggleCardSelection(card.card_id)"
+/>
+      </div>
+      <div v-else class="no-cards">Geen kaarten gevonden.</div>
+    </div>
+  </div>
 </template>
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRoute } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
-import { API_URL } from '../config';
 
 export default {
-    name: 'collection-page',
-    components: {
-        PlayingCard,
-    },
-    setup() {
-        const route = useRoute();
-        const cards = ref([]);
-        const selectedCards = ref([]);
-        const selectedRarities = ref([]);
-        const searchQuery = ref('');
+  name: 'CollectionPage',
+  components: { PlayingCard },
+  setup() {
+    const cards = ref([]);
 
-        const isCollectionRoute = computed(() => route.path === '/collection');
+   const filteredCards = computed(() => {
+  if (!cards.value) return [];
+  return cards.value.map(card => ({
+    ...card,
+    artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
+  }));
+});
+    const searchQuery = ref('');
+    const selectedCards = ref([]);
 
-        const toggleFilter = (rarity) => {
-            if (selectedRarities.value.includes(rarity)) {
-                selectedRarities.value = selectedRarities.value.filter(r => r !== rarity);
-            } else {
-                selectedRarities.value.push(rarity);
-            }
-        };
+    const fetchUserCards = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(`http://localhost:3000/api/userCards/${userId}`);
+        const data = await response.json();
+        console.log('Fetched cards:', data); // Log alle kaarten
+        cards.value = data;
+      } catch (error) {
+        console.error('Error fetching user cards:', error);
+      }
+    };
 
-        const clearSearch = () => {
-            searchQuery.value = '';
-        };
+    const toggleCardSelection = cardId => {
+      if (selectedCards.value.includes(cardId)) {
+        selectedCards.value = selectedCards.value.filter(id => id !== cardId);
+      } else {
+        selectedCards.value.push(cardId);
+      }
+    };
 
-        const filteredCards = computed(() => {
-            let filtered = cards.value;
-            if (selectedRarities.value.length > 0) {
-                filtered = filtered.filter(card => selectedRarities.value.includes(card.rarity));
-            }
-            if (searchQuery.value) {
-                filtered = filtered.filter(card => card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase()));
-            }
-            return filtered;
-        });
+    onMounted(fetchUserCards);
 
-        const toggleCardSelection = (cardId) => {
-            const index = selectedCards.value.indexOf(cardId);
-            if (index > -1) {
-                selectedCards.value.splice(index, 1);
-            } else {
-                selectedCards.value.push(cardId);
-            }
-        };
-
-        const fetchUserCards = async () => {
-            try {
-            const userId = localStorage.getItem('userId');
-            const response = await fetch(`${API_URL}/api/userCards/${userId}`);
-            const data = await response.json();
-            // Bouw de volledige URL voor de afbeeldingen
-            data.forEach(card => {
-            // Verwijder het extra punt aan het begin van het pad
-            card.artwork_path = `${API_URL}${card.artwork_path.replace('./', '/')}`;
-            });
-            cards.value = data;
-            } catch (error) {
-            console.error('Error fetching user cards:', error);
-            }
-        };
-
-        onMounted(() => {
-            fetchUserCards();
-        });
-
-        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection, fetchUserCards };
-    },
+    return {
+      filteredCards,
+      searchQuery,
+      selectedCards,
+      toggleCardSelection,
+    };
+  },
 };
 </script>
 
@@ -231,7 +190,7 @@ export default {
 
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     gap: 0.4rem;
     justify-items: center;
     padding-bottom: 2rem;
