@@ -120,7 +120,7 @@ export default {
             fetchUserCards();
         });
 
-        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection };
+        return { isCollectionRoute, filteredCards, selectedCards, toggleFilter, selectedRarities, searchQuery, clearSearch, toggleCardSelection, fetchUserCards };
     },
 };
 </script>
