@@ -21,7 +21,10 @@
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "qrcode": "^1.4.4",
+    "qr-scanner": "^1.4.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
