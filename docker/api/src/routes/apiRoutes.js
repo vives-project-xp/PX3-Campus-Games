@@ -28,6 +28,8 @@ router.get('/getCard_dex', CardController.getCard_dex);
 // Start Trade Route
 router.post("/startTrade", TradingController.startTrade);
 router.post("/joinTrade", TradingController.joinTrade);
+router.post("/selectCard", TradingController.selectCard);
+router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 
 // score
 router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
