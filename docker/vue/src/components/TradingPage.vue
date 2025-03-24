@@ -60,7 +60,7 @@ export default {
       qrCodeUrl: null,
       scanner: null,
       tradeJoined: false,
-      userId: "1", // Placeholder for user ID, replace with real user data
+      userId: localStorage.getItem('userId'),
       userCards: [],
       selectedCard: null,
       friendCard: null,
