@@ -53,45 +53,45 @@ const addCardToUser = async (req, res) => {
     }
 };
 
-// API to update selected card for trading
-const updateTradeSelection = async (req, res) => {
-    try {
-        const { tradeCode, cardId } = req.body;
+// // API to update selected card for trading
+// const updateTradeSelection = async (req, res) => {
+//     try {
+//         const { tradeCode, cardId } = req.body;
 
-        if (!activeTrades[tradeCode]) {
-            activeTrades[tradeCode] = { user1Card: null, user2Card: null };
-        }
+//         if (!activeTrades[tradeCode]) {
+//             activeTrades[tradeCode] = { user1Card: null, user2Card: null };
+//         }
 
-        if (!activeTrades[tradeCode].user1Card) {
-            activeTrades[tradeCode].user1Card = cardId;
-        } else {
-            activeTrades[tradeCode].user2Card = cardId;
-        }
+//         if (!activeTrades[tradeCode].user1Card) {
+//             activeTrades[tradeCode].user1Card = cardId;
+//         } else {
+//             activeTrades[tradeCode].user2Card = cardId;
+//         }
 
-        res.json({ message: 'Trade selection updated', tradeData: activeTrades[tradeCode] });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+//         res.json({ message: 'Trade selection updated', tradeData: activeTrades[tradeCode] });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
-// als QR code gescanned is, zorg ervoor om de trade te joinen
-export const joinTrade = (req, res) => {
-    const { tradeCode } = req.body;
+// // als QR code gescanned is, zorg ervoor om de trade te joinen
+// export const joinTrade = (req, res) => {
+//     const { tradeCode } = req.body;
 
-    if (!activeTrades[tradeCode]) {
-        return res.status(400).json({ error: "Invalid trade code" });
-    }
+//     if (!activeTrades[tradeCode]) {
+//         return res.status(400).json({ error: "Invalid trade code" });
+//     }
 
-    if (!activeTrades[tradeCode].user1) {
-        activeTrades[tradeCode].user1 = req.body.userId;
-    } else if (!activeTrades[tradeCode].user2) {
-        activeTrades[tradeCode].user2 = req.body.userId;
-    } else {
-        return res.status(400).json({ error: "Trade is already full" });
-    }
+//     if (!activeTrades[tradeCode].user1) {
+//         activeTrades[tradeCode].user1 = req.body.userId;
+//     } else if (!activeTrades[tradeCode].user2) {
+//         activeTrades[tradeCode].user2 = req.body.userId;
+//     } else {
+//         return res.status(400).json({ error: "Trade is already full" });
+//     }
 
-    res.json({ message: "Joined trade successfully", tradeCode });
-};
+//     res.json({ message: "Joined trade successfully", tradeCode });
+// };
 
 
 const tradeCards = async (req, res) => {

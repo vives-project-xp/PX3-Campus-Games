@@ -64,7 +64,6 @@ export const joinTrade = (req, res) => {
 const notifyUserToUpdate = async (userId, tradeCode) => {
     try {
         console.log("Notifying user:", userId, "to update trade:", tradeCode);
-        // Check if we have a socket for the user
         const socketId = userSockets[userId];
         if (socketId) {
             io.to(socketId).emit("tradeUpdated", { tradeCode });
@@ -73,7 +72,6 @@ const notifyUserToUpdate = async (userId, tradeCode) => {
         console.error("Error notifying user to update:", error);
     }
 };
-
 
 
 // Select a card for trading
@@ -92,12 +90,17 @@ export const selectCard = (req, res) => {
         return res.status(400).json({ error: "User not part of this trade" });
     }
 
+    // Notify both users of the card selection update
+    notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
+    notifyUserToUpdate(activeTrades[tradeCode].user2, tradeCode);
+
     // Return the updated trade state so the frontend updates immediately
     res.json({
         message: "Card selected successfully",
         tradeStatus: activeTrades[tradeCode] // Send the updated trade state
     });
 };
+
 
 
 // Get the current trade status (does it exist)
@@ -135,4 +138,62 @@ export const fetchTradeUpdates = (req, res) => {
     });
 };
 
+// When a user accepts the trade
+export const acceptTrade = async (req, res) => {
+    const { tradeCode, userId } = req.body;
 
+    if (!tradeCode || !userId) {
+        return res.status(400).json({ error: "Trade code and user ID are required" });
+    }
+
+    if (!activeTrades[tradeCode]) {
+        return res.status(400).json({ error: "Trade not found" });
+    }
+
+    const trade = activeTrades[tradeCode];
+    if (trade.user1 === userId) {
+        trade.user1Accepted = true;
+    } else if (trade.user2 === userId) {
+        trade.user2Accepted = true;
+    } else {
+        return res.status(400).json({ error: "User not part of this trade" });
+    }
+
+    // Check if both users have accepted
+    if (trade.user1Accepted && trade.user2Accepted) {
+        console.log("tradeCards(tradeCode);");
+        await tradeCards(tradeCode); // Call the trade logic to exchange the cards
+    } else {
+        // Notify the other user that this user has accepted the trade
+        const otherUserId = trade.user1 === userId ? trade.user2 : trade.user1;
+        notifyUserToUpdate(otherUserId, tradeCode);
+    }
+
+    res.json({ message: "Trade accepted", tradeStatus: trade });
+};
+
+// The tradeCards function will handle the actual trade logic
+const tradeCards = async (tradeCode) => {
+    try {
+      const trade = activeTrades[tradeCode];
+      const user1 = trade.user1;
+      const user2 = trade.user2;
+  
+      const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
+      const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
+  
+      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+        [user2, user1, user1CardId]);
+      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+        [user1, user2, user2CardId]);
+  
+      // Mark trade as complete rather than deleting immediately
+      trade.completed = true;
+      notifyUserToUpdate(user1, tradeCode);
+      notifyUserToUpdate(user2, tradeCode);
+  
+      console.log("Trade completed successfully");
+    } catch (error) {
+      console.error("Error executing trade:", error);
+    }
+  };  

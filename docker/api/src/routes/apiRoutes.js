@@ -31,7 +31,7 @@ router.post("/joinTrade", TradingController.joinTrade);
 router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 router.post("/api/fetchTradeUpdates", TradingController.fetchTradeUpdates);
-
+router.post("/acceptTrade", TradingController.acceptTrade);
 
 // score
 router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
