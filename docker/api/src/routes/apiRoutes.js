@@ -25,11 +25,13 @@ router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
 
-// Start Trade Route
+// trading
 router.post("/startTrade", TradingController.startTrade);
 router.post("/joinTrade", TradingController.joinTrade);
 router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
+router.post("/api/fetchTradeUpdates", TradingController.fetchTradeUpdates);
+
 
 // score
 router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
