@@ -14,10 +14,11 @@
     "jwt-decode": "^4.0.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
-    "vue": "^3.2.13",
-    "vue-router": "^4.5.0",
+    "qr-scanner": "^1.4.2",
     "qrcode": "^1.4.4",
-    "qr-scanner": "^1.4.2"
+    "socket.io-client": "^4.8.1",
+    "vue": "^3.2.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
