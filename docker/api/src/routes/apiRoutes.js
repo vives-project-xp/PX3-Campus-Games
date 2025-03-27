@@ -24,7 +24,6 @@ router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
 
-
 // trading
 router.post("/startTrade", TradingController.startTrade);
 router.post("/joinTrade", TradingController.joinTrade);
