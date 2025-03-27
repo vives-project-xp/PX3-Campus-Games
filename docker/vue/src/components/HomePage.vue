@@ -18,7 +18,7 @@
         <br> If you can kill all the cards of your opponent, you win the battle and gain yourself the total amount of points of the cards you defeated. 
         <br> The loser also gets some points, they get the amount of points from the lowest rarity card of the opponent.
 
-      </p>-->
+      </p>
       
 
 
@@ -38,7 +38,7 @@
       <h3>Dagelijkse login:</h3>
       <p>
         In de laatste sectie kun je via de QR-code direct naar de login-pagina gaan, hiermee kun je makkelijk je dagelijkse beloning claimen.
-      </p>
+      </p>-->
 
 
 
