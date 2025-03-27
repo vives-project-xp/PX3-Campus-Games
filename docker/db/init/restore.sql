@@ -1,3 +1,6 @@
+GRANT ALL PRIVILEGES ON *.* TO 'webuser'@'127.%' IDENTIFIED BY 'SchoolOpdracht';
+FLUSH PRIVILEGES;
+
 -- Maak een nieuwe database aan als deze nog niet bestaat
 CREATE DATABASE IF NOT EXISTS kaartspel_db;
 USE kaartspel_db;
