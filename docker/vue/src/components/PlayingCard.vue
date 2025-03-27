@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :class="{ selected: isSelected }" @click="$emit('click')">
+  <div class="card" :class="{ selected: isSelected, grayscale: grayscale }" @click="$emit('click')">
     <img :src="cardImage" :alt="cardName" class="card-image" />
     <p class="card-name">{{ cardName }}</p>
   </div>
@@ -12,9 +12,10 @@ export default {
     cardName: { type: String, required: true },
     cardImage: { type: String, required: true },
     attack: { type: Number, required: false },
-    defense: { type: Number, required: false },
+    ability: { type: Number, required: false },
     health: { type: Number, required: false },
     isSelected: { type: Boolean, default: false },
+    grayscale: { type: Boolean, default: false },
   },
   mounted() {
     console.log('PlayingCard props:', {
@@ -24,6 +25,7 @@ export default {
       ability: this.ability,
       health: this.health,
       isSelected: this.isSelected,
+      grayscale: this.grayscale,
     });
   },
 };
@@ -69,5 +71,9 @@ export default {
   font-weight: bold;
   color: var(--secondary-color);
   text-align: center;
+}
+
+.card.grayscale {
+  filter: grayscale(100%);
 }
 </style>
