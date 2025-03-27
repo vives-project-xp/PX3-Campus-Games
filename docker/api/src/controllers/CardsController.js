@@ -201,36 +201,48 @@ const giveStarterPack = async (req, res) => {
 
 const giveGeneralPack = async (req, res) => {
     try {
-        const { user_id } = req.body;
+        const { userId } = req.body; // Use userId consistently
 
-        // Selecteer 3 random kaarten uit de database
+        // Validate userId
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Select 3 random cards from the database
         const [cards] = await db.execute('SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3');
 
-        // Voeg de kaarten toe aan de gebruiker
+        // Prepare results for response
+        const results = [];
+
+        // Add cards to the user
         for (const card of cards) {
-            // Controleer of de kaart al bestaat in het bezit van de speler
+            // Check if the card already exists for the user
             const [existingCard] = await db.execute(
                 'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
-                [user_id, card.card_id]
+                [userId, card.card_id]
             );
 
             if (existingCard.length > 0) {
-                // Update de hoeveelheid als de kaart al bestaat
+                // Update the quantity if the card already exists
                 await db.execute(
                     'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                    [1, user_id, card.card_id]
+                    [1, userId, card.card_id]
                 );
+                results.push({ card_id: card.card_id, action: 'updated' });
             } else {
-                // Voeg een nieuwe kaart toe aan de speler
+                // Insert a new card for the user
                 await db.execute(
                     'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
-                    [user_id, card.card_id, 1]
+                    [userId, card.card_id, 1]
                 );
+                results.push({ card_id: card.card_id, action: 'inserted' });
             }
         }
 
-        res.json({ message: 'Algemene pack ontvangen!' });
+        // Return success response with details
+        res.json({ message: 'Algemene pack ontvangen!', results });
     } catch (error) {
+        console.error('Error in giveGeneralPack:', error);
         res.status(500).json({ error: error.message });
     }
 };
