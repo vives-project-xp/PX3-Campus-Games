@@ -87,7 +87,7 @@
 </script>
 
 <style scoped>
-    .login-container {
+.login-container {
         display: flex;
         flex-direction: column;
         align-items: center;
