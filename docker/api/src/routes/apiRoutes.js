@@ -23,8 +23,6 @@ router.post('/tradeCards', CardController.tradeCards);
 router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
-router.post('/rewards/daily', CardController.getDailyReward);
-router.post('/rewards/select', CardController.selectDailyCard);
 
 // trading
 router.post("/startTrade", TradingController.startTrade);
