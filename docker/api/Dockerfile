@@ -2,7 +2,7 @@
 FROM node:23-alpine AS develop-stage
 WORKDIR /app
 COPY package*.json ./
-COPY ./Cards /app/Cards
+
 RUN npm install --legacy-peer-deps
 COPY . .
 EXPOSE 3000
