@@ -11,18 +11,17 @@
         Er is een ruilsysteem ontworpen om met andere studenten op de campus te communiceren.
         <br> Om de ruil te starten, kan één speler een QR-code genereren die door de andere speler kan worden gescand. Als beide spelers de ruil bevestigen, worden de kaarten overgedragen.
       </p>
-      <!--<h3>Vechten:</h3>
+      <h3>Game:</h3>
       <p>
-        Battles will be played in a 1v1 format, where each player can use 3 cards. The order in which the players start will be decided by a coin flip.
-        <br> The player that wins the coin flip will start the battle and can perform one of the three options: attack (deals damage to the other player's active card), use ability (uses the ability of the active card) and switch (gives you the option to switch your active card with an inactive one). After that each player can perform 2 actions per turn.
-        <br> If you can kill all the cards of your opponent, you win the battle and gain yourself the total amount of points of the cards you defeated. 
-        <br> The loser also gets some points, they get the amount of points from the lowest rarity card of the opponent.
-
+        Gevechten worden gespeeld in een 1v1-formaat, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door een muntje opgooien.
+        <br> De speler die de muntje opgooit, begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
+        <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
+        <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
       </p>
       
 
 
-      <h2>Scorebord</h2>
+      <!--<h2>Scorebord</h2>
       <p>
         Het scorebord zal opgedeeld worden in 3 secties: groepsscorebord, individueel scorebord en in de laatste sectie komt een QR-code.
       </p>
@@ -93,7 +92,7 @@
   
   <script>
   export default {
-    name: 'home-page'
+        name: 'home-page',
   };
   </script>
 
