@@ -52,7 +52,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
 import { API_URL } from '../config';
 
@@ -61,6 +61,7 @@ export default {
   components: { PlayingCard },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const cards = ref([]);
     const selectedCards = ref([]);
     const selectedRarities = ref([]);
@@ -115,6 +116,14 @@ export default {
       }
     };
 
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
+      }
+    };
+
     onMounted(() => {
       fetchUserCards();
       checkLoginStatus();
@@ -130,21 +139,6 @@ export default {
       clearSearch,
       toggleCardSelection,
     };
-  },
-  methods: {
-    checkLoginStatus() {
-      const token = localStorage.getItem('token');
-      if (token) {
-      } else {
-        this.$router.push('/login');
-      }
-    },
-    goToLogin() {
-      this.$router.push('/login');
-    },
-  },
-  beforeMount() {
-    this.checkLoginStatus();
   },
 };
 </script>

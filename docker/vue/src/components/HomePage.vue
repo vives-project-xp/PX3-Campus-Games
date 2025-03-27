@@ -6,6 +6,11 @@
         Elke gebruiker krijgt een pack met 9 kaarten als ze een account aanmaken. Daarna kun je dagelijks 3 kaarten claimen door simpelweg in te loggen.
         <br> Je kan ook kaarten upgraden naar een hogere zeldzaamheid, dit kan door 3 dezelfde kaarten te combineren, dit geeft je 1 kaart met een hogere zeldzaamheid.
       </p>
+      <h3>Codex:</h3>
+      <p>
+        In <b><a class="goToCodex" alt="Go to codex." @click="goToCodex">de codex</a></b> kun je alle kaarten bekijken die je hebt verzameld, alsook alle kaarten in het spel. Hier kun je ook de zeldzaamheid van de kaarten zien en de vaardigheden van de kaarten bekijken.
+        <br> Je kan ook de kaarten sorteren op zeldzaamheid, type en studiegebied.
+      </p>
       <h3>Ruilen:</h3>
       <p>
         Er is een ruilsysteem ontworpen om met andere studenten op de campus te communiceren.
@@ -13,8 +18,8 @@
       </p>
       <h3>Game:</h3>
       <p>
-        Gevechten worden gespeeld in een 1v1-formaat, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door een muntje opgooien.
-        <br> De speler die de muntje opgooit, begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
+        Games worden gespeeld in een 1v1-formaat, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
+        <br> De speler die kop of munt juist had begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
         <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
         <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
       </p>
@@ -93,6 +98,12 @@
   <script>
   export default {
         name: 'home-page',
+
+        methods: {
+          goToCodex() {
+            this.$router.push('/codex');
+          }
+        }
   };
   </script>
 
@@ -103,6 +114,12 @@
 
   p{
     font-size:20px;
+  }
+
+  .goToCodex {
+    color: var(--secondary-color);
+    cursor: pointer;
+    text-decoration: underline;
   }
 
   .default.list {
