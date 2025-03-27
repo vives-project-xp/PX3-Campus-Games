@@ -1,6 +1,7 @@
 import db from '../db.js';
 import { v4 as uuidv4 } from 'uuid'; // npm install uuid
 import axios from "axios";
+import { recalculateUserScore } from './ScoreUpdateController.js';
 
 const API_URL = "http://localhost:3000";
 
@@ -179,6 +180,10 @@ const tradeCards = async (tradeCode) => {
         [user2, user1, user1CardId]);
       await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
         [user1, user2, user2CardId]);
+
+        // Recalculate scores for both users
+        await recalculateUserScore(db, user1);
+        await recalculateUserScore(db, user2);
   
       // Mark trade as complete rather than deleting immediately
       trade.completed = true;
@@ -186,6 +191,8 @@ const tradeCards = async (tradeCode) => {
       notifyUserToUpdate(user2, tradeCode);
   
       console.log("Trade completed successfully");
+
+      
     } catch (error) {
       console.error("Error executing trade:", error);
     }
