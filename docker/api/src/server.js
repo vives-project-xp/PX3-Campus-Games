@@ -52,6 +52,8 @@ app.use((req, res) => {
   res.status(404).send('Route niet gevonden');
 });
 
+
+
 // Create an HTTP server using the Express app
 const server = http.createServer(app);
 

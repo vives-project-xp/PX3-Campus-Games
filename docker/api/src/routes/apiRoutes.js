@@ -3,7 +3,7 @@ const router = express.Router();
 import * as UserController from '../controllers/UserController.js';
 import * as CardController from '../controllers/CardsController.js';
 import * as LeaderboardController from '../controllers/LeaderboardController.js';
-import * as ScoreUpdateController from '../controllers/ScoreUpdateController.js';
+import * as DailyRewardController from '../controllers/DailyRewardController.js';
 import * as TradingController from "../controllers/TradingController.js";
 
 // users
@@ -16,7 +16,6 @@ router.delete('/deleteUser/:id', UserController.deleteUser);
 // leaderboards
 router.get('/getUserScoreById/:id', LeaderboardController.getUserScoreById);
 router.get('/getUsersScores', LeaderboardController.getUsersScores); //alle scores hoog naar laag per 10 users
-
 // cards
 router.post('/addCard', CardController.addCardToUser);   
 router.get('/userCards/:user_id', CardController.getUserCards);  
@@ -33,8 +32,10 @@ router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 router.post("/api/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 router.post("/acceptTrade", TradingController.acceptTrade);
 
-// score
-router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
+//Daily rewards
+router.post('/daily', DailyRewardController.claimDailyReward);
+router.post('/select', DailyRewardController.selectDailyCard);
+
 export default router;
 
 

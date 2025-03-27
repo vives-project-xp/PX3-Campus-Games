@@ -1,30 +1,49 @@
 import db from '../db.js';
-
+import { updateScoreOnCardChange } from './ScoreUpdateController.js';
 const activeTrades = {}; // Store active trade selections
+
+const getCardRarity = async (card_id) => {
+    const [card] = await db.execute(
+        'SELECT rarity FROM Cards_dex WHERE card_id = ?',
+        [card_id]
+    );
+    return card[0]?.rarity;
+};
 
 const addCardToUser = async (req, res) => {
     try {
-        const { user_id, card_id} = req.body;
+        const { user_id, card_id } = req.body;
 
-        // Controleer of de kaart al bestaat in het bezit van de speler
+        // Get card rarity first
+        const rarity = await getCardRarity(card_id);
+        if (!rarity) {
+            return res.status(400).json({ error: 'Ongeldige kaart ID' });
+        }
+
+        // Check if card already exists for user
         const [existingCard] = await db.execute(
             'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
             [user_id, card_id]
         );
 
         if (existingCard.length > 0) {
-            // Update de hoeveelheid als de kaart al bestaat
+            // Update quantity if card exists
             await db.execute(
-                'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                [1, user_id, card_id]
+                'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
+                [user_id, card_id]
             );
         } else {
-            // Voeg een nieuwe kaart toe aan de speler
+            // Add new card if not exists
             await db.execute(
-                'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
-                [user_id, card_id, 1]
+                'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)',
+                [user_id, card_id]
             );
         }
+
+        // Update user score
+        await updateScoreOnCardChange(user_id, [
+            { rarity, quantityChange: 1 }
+        ]);
 
         res.json({ message: 'Kaart toegevoegd aan gebruiker' });
     } catch (error) {
@@ -32,6 +51,7 @@ const addCardToUser = async (req, res) => {
         res.status(500).json({ error: 'Kan kaart niet toevoegen' });
     }
 };
+
 
 // 🔍 Haal alle kaarten van een speler op
  const getUserCards = async (req, res) => {
@@ -150,9 +170,9 @@ const tradeCards = async (req, res) => {
 
 const giveStarterPack = async (req, res) => {
     try {
-        const { userId } = req.body; // Correctly use userId from the request body
+        const { userId } = req.body;
 
-        // Haal de opleiding van de gebruiker op
+        // Get user's education
         const [user] = await db.execute(
             'SELECT opleiding FROM users WHERE id = ?',
             [userId]
@@ -164,85 +184,97 @@ const giveStarterPack = async (req, res) => {
 
         const opleiding = user[0].opleiding;
 
-        // Selecteer 3 random kaarten uit de database die specifiek zijn voor de opleiding
+        // Get 3 random cards for the education
         const [cards] = await db.execute(
             'SELECT card_id FROM Cards_dex WHERE opleiding = ? ORDER BY RAND() LIMIT 3',
             [opleiding]
         );
 
-        // Voeg de kaarten toe aan de gebruiker
+        // Prepare score updates
+        const scoreUpdates = [];
+
+        // Add cards to user
         for (const card of cards) {
-            // Controleer of de kaart al bestaat in het bezit van de speler
             const [existingCard] = await db.execute(
                 'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
                 [userId, card.card_id]
             );
 
+            const rarity = await getCardRarity(card.card_id);
+            
             if (existingCard.length > 0) {
-                // Update de hoeveelheid als de kaart al bestaat
                 await db.execute(
-                    'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                    [1, userId, card.card_id]
+                    'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
+                    [userId, card.card_id]
                 );
             } else {
-                // Voeg een nieuwe kaart toe aan de speler
                 await db.execute(
-                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
-                    [userId, card.card_id, 1]
+                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)',
+                    [userId, card.card_id]
                 );
             }
+
+            scoreUpdates.push({ rarity, quantityChange: 1 });
         }
 
-        res.json({ message: 'Starter pack ontvangen!' });
+        // Update user score for all cards
+        await updateScoreOnCardChange(userId, scoreUpdates);
+
+        res.json({ 
+            message: 'Starter pack ontvangen!',
+            cards: cards.map(c => c.card_id)
+        });
     } catch (error) {
+        console.error('Fout bij geven starter pack:', error);
         res.status(500).json({ error: error.message });
     }
 };
 
 const giveGeneralPack = async (req, res) => {
     try {
-        const { userId } = req.body; // Use userId consistently
+        const { userId } = req.body;
 
-        // Validate userId
-        if (!userId) {
-            return res.status(400).json({ error: 'userId is required' });
-        }
+        // Get 3 random cards
+        const [cards] = await db.execute(
+            'SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3'
+        );
 
-        // Select 3 random cards from the database
-        const [cards] = await db.execute('SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3');
+        // Prepare score updates
+        const scoreUpdates = [];
 
-        // Prepare results for response
-        const results = [];
-
-        // Add cards to the user
+        // Add cards to user
         for (const card of cards) {
-            // Check if the card already exists for the user
             const [existingCard] = await db.execute(
                 'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
                 [userId, card.card_id]
             );
 
+            const rarity = await getCardRarity(card.card_id);
+            
             if (existingCard.length > 0) {
-                // Update the quantity if the card already exists
                 await db.execute(
-                    'UPDATE user_cards SET quantity = quantity + ? WHERE user_id = ? AND card_id = ?',
-                    [1, userId, card.card_id]
+                    'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
+                    [userId, card.card_id]
                 );
-                results.push({ card_id: card.card_id, action: 'updated' });
             } else {
-                // Insert a new card for the user
                 await db.execute(
-                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, ?)',
-                    [userId, card.card_id, 1]
+                    'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)',
+                    [userId, card.card_id]
                 );
-                results.push({ card_id: card.card_id, action: 'inserted' });
             }
+
+            scoreUpdates.push({ rarity, quantityChange: 1 });
         }
 
-        // Return success response with details
-        res.json({ message: 'Algemene pack ontvangen!', results });
+        // Update user score for all cards
+        await updateScoreOnCardChange(userId, scoreUpdates);
+
+        res.json({ 
+            message: 'Algemene pack ontvangen!',
+            cards: cards.map(c => c.card_id)
+        });
     } catch (error) {
-        console.error('Error in giveGeneralPack:', error);
+        console.error('Fout bij geven algemene pack:', error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -257,6 +289,7 @@ const getCard_dex = async (req, res) => {
     }
 };
 
+
 export {
     addCardToUser,
     getUserCards,
@@ -264,4 +297,5 @@ export {
     giveStarterPack,
     giveGeneralPack,
     getCard_dex,
+    
 };
