@@ -318,10 +318,20 @@ export default {
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
+/* For phones in portrait mode */
+@media (max-aspect-ratio: 9/16) and (hover: none) {
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
-    max-height: calc(6 * (auto)); 
+    grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
+    gap: 2vmin; /* Viewport-relative gap */
+    max-height: 80vh; /* Use viewport height */
+    padding-bottom: env(safe-area-inset-bottom); /* Account for notches */
+  }
+}
+
+/* For phones in landscape mode */
+@media (min-aspect-ratio: 9/16) and (max-aspect-ratio: 1/1) and (hover: none) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
   }
 }
 
