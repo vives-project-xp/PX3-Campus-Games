@@ -115,7 +115,10 @@ export default {
       }
     };
 
-    onMounted(fetchUserCards);
+    onMounted(() => {
+      fetchUserCards();
+      checkLoginStatus();
+    });
 
     return {
       isCollectionRoute,
@@ -127,6 +130,21 @@ export default {
       clearSearch,
       toggleCardSelection,
     };
+  },
+  methods: {
+    checkLoginStatus() {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        this.$router.push('/login');
+      }
+    },
+    goToLogin() {
+      this.$router.push('/login');
+    },
+  },
+  beforeMount() {
+    this.checkLoginStatus();
   },
 };
 </script>

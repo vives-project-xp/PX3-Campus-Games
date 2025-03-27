@@ -90,55 +90,11 @@
     </div>
   </template>
   
-  <script>import { nextTick } from 'vue';
-
+  <script>
   export default {
-        data() {
-            return {
-              name: 'home-page',
-              errorMessage: '',
-              isLoggedIn: false,
-            };
-        },
-        mounted() {
-            this.checkLoginStatus();
-            if (!this.isLoggedIn) {
-              this.$router.push('/login');
-            }
-        },
-        methods: {
-            checkLoginStatus() {
-                const token = localStorage.getItem('token');
-                if (token) {
-                    this.isLoggedIn = true;
-                    try {
-                        const base64Url = token.split('.')[1];
-                        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                        const payload = JSON.parse(atob(base64));
-                        this.username = payload.username;
-                    } catch (error) {
-                        console.error('Error decoding token:', error);
-                        this.logout();
-                    }
-                } else {
-                    this.isLoggedIn = false;
-                }
-            },
-            goToLogin() {
-                this.$router.push('/login');
-            },
-          },
-            watch: {
-                isLoggedIn(newValue){
-                    if(!newValue){
-                        nextTick(() => {
-                            this.goToAcccount();
-                        });
-                    }
-                },
-            },
-        };
-</script>
+        name: 'home-page',
+  };
+  </script>
 
   <style scoped>
   h2 {
