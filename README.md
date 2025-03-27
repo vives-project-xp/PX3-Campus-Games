@@ -9,9 +9,9 @@
 - [npm versies](#npm-versies)
 - [Team](#Team)
 - [Hoe werkt het](#Hoe-werkt-het)
-  - [Backend](#Backend)
-    - [Database](#Database)
-  - [Frontend](#Frontend)
+  - [Collectie](#Collectie)
+  - [Ruilen](#Ruilen)
+  - [(Battle)](#(Battle))
 - [Artwork](#Artwork)
     - [Generatieproces](#Generatieproces)
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
@@ -46,14 +46,15 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 
 ## Hoe werkt het
 
-### Backend
+### Collectie
+Bij het aanmaken van een account krijgt de gebruiker een starterpack van 5 kaarten. 
 
-#### Database
+### Ruilen
+Voor een kaart te ruilen met een andere speler zullen ze beiden fysiek aanwezig moeten zijn bij elkaar. Hiervoor gaat de ene gebruiker een qr-code genereren die de andere dan moet scannen om een ruil te beginnen. De qr-code die gegenereerd word is een random string die word aangemaakt elke keer als de ruil pagina word open gedaan. Deze string word opgeslagen in de database. De andere gebruiker die de qr-code dan scanned zal de string lezen en zoeken aan welke gebruiker deze gekoppeld is. Als deze gevonden is zal er een connectie geopend worden tussen de 2 spelers en kunnen ze een kaart ruilen.
 
 
-
-### Frontend
-
+### (Battle)
+Voor de (Battle) volgt hetzelfde principe als het ruilen. Qr-code die gegenereert wordt en gescanned door de andere gebruiker. 
 
 ## Artwork
 
