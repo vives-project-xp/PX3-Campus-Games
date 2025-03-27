@@ -47,7 +47,7 @@
 
 <!-- Friend's Card -->
 <div class="card-box">
-  <h3>Keuze van andere speler</h3>
+  <h3>KAndere speler</h3>
   <PlayingCard
     v-if="friendCard"
     :cardName="friendCard.cardName"
@@ -68,7 +68,7 @@
       <!-- Accept Trade Button and Status -->
       <div class="accept-trade-container">
         <button class="btn" :disabled="hasAccepted" @click="acceptTrade">
-          {{ hasAccepted ? "Trade Accepted" : "Accept Trade" }}
+          {{ hasAccepted ? "Ge-accepteerd" : "Accepteer" }}
         </button>
         <p v-if="friendAccepted && hasAccepted">Beide spelers hebben ge-accepteerd!</p>
       </div>
