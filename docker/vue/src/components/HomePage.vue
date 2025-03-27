@@ -90,10 +90,7 @@
     </div>
   </template>
   
-  <script>
-  import axios from 'axios';
-  import { API_URL } from '../config';
-  import { nextTick } from 'vue';
+  <script>import { nextTick } from 'vue';
 
   export default {
         data() {
@@ -105,6 +102,9 @@
         },
         mounted() {
             this.checkLoginStatus();
+            if (!this.isLoggedIn) {
+              this.$router.push('/login');
+            }
         },
         methods: {
             checkLoginStatus() {
@@ -124,8 +124,8 @@
                     this.isLoggedIn = false;
                 }
             },
-            goToAcccount() {
-                this.$router.push('/account');
+            goToLogin() {
+                this.$router.push('/login');
             },
           },
             watch: {
