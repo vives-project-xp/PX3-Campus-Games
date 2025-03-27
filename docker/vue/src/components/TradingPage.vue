@@ -117,6 +117,8 @@ import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
+// A watcher to stop the scanner if the trade is joined
+import { watch } from 'vue';
 
 export default {
   components: { PlayingCard },
@@ -182,22 +184,34 @@ export default {
     };
 
     const startScanning = () => {
-      const videoElem = document.createElement('video');
-      document.body.appendChild(videoElem);
+  const videoElem = document.createElement('video');
+  document.body.appendChild(videoElem);
 
-      if (!scanner.value) {
-        scanner.value = new QrScanner(
-          videoElem,
-          (result) => {
-            console.log("Scanned Trade Code:", result.data);
-            joinTrade(result.data);
-            scanner.value.stop();
-          },
-          { returnDetailedScanResult: true }
-        );
-      }
-      scanner.value.start();
-    };
+  if (!scanner.value) {
+    scanner.value = new QrScanner(
+      videoElem,
+      (result) => {
+        console.log("Scanned Trade Code:", result.data);
+        joinTrade(result.data);
+        stopScanning(); // Stop and hide the scanner after scanning
+      },
+      { returnDetailedScanResult: true }
+    );
+  }
+  scanner.value.start();
+};
+
+// Function to stop scanning and hide the video element
+const stopScanning = () => {
+  if (scanner.value) {
+    scanner.value.stop();
+    scanner.value = null;
+  }
+  const videoElem = document.querySelector('video');
+  if (videoElem) {
+    videoElem.remove();
+  }
+};
 
     const joinTrade = async (code) => {
       try {
@@ -325,7 +339,7 @@ export default {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 3rem 1rem;
   gap: 2rem;
   text-align: center;
 }
