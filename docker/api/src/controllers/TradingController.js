@@ -1,8 +1,5 @@
 import db from '../db.js';
 import { v4 as uuidv4 } from 'uuid'; // npm install uuid
-import axios from "axios";
-const API_URL = "http://localhost:3000";
-
 import { io, userSockets } from '../server.js';
 
 const activeTrades = {};
