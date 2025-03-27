@@ -5,9 +5,6 @@ const API_URL = "http://localhost:3000";
 
 import { io, userSockets } from '../server.js';
 
-
-
-
 const activeTrades = {};
 
 // generate a unique trade code and store the trade session
@@ -19,8 +16,6 @@ export const startTrade = (req, res) => {
 };
 
 // join a trade once code has been scanned/created and return both users ID
-// join a trade once code has been scanned/created and return both users ID
-// Join a trade once the QR code is scanned
 export const joinTrade = (req, res) => {
     const { tradeCode, userId } = req.body;
     console.log("Received data:", { tradeCode, userId });
@@ -48,7 +43,7 @@ export const joinTrade = (req, res) => {
     console.log(`User 1: ${activeTrades[tradeCode].user1}`);
     console.log(`User 2: ${activeTrades[tradeCode].user2}`);
 
-    // ✅ Notify the first user to update their trade session
+    // Notify the first user to update their trade session
     if (otherUserId) {
         notifyUserToUpdate(otherUserId, tradeCode);
     }
@@ -72,7 +67,6 @@ const notifyUserToUpdate = async (userId, tradeCode) => {
         console.error("Error notifying user to update:", error);
     }
 };
-
 
 // Select a card for trading
 export const selectCard = (req, res) => {
@@ -100,8 +94,6 @@ export const selectCard = (req, res) => {
         tradeStatus: activeTrades[tradeCode] // Send the updated trade state
     });
 };
-
-
 
 // Get the current trade status (does it exist)
 export const getTradeStatus = (req, res) => {

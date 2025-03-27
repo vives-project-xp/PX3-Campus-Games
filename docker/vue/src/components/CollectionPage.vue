@@ -237,10 +237,12 @@ export default {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16%, 1fr));
+  grid-auto-rows: 1fr;
   gap: 0.4rem;
   justify-items: center;
-  padding-bottom: 2rem;
+  max-height: calc(6 * (auto)); /* 6 rows */
+  overflow-y: auto;
 }
 
 .no-cards {
@@ -252,7 +254,8 @@ export default {
 
 @media (max-width: 600px) {
   .card-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
+    max-height: calc(3 * (80px + 0.4rem)); 
   }
 }
 </style>
