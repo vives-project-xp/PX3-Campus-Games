@@ -1,18 +1,22 @@
 <template>
   <div class="codex">
-    <h2 v-if="isCollectionRoute" class="heading">Codex:</h2>
+    <h2 v-if="isCodexRoute" class="heading">Codex:</h2>
 
     <!-- Fixed Top Section -->
     <div class="fixed-container">
       <!-- Filter Buttons -->
-      <div class="filter-sort-container">
-        <div class="sort-box">
+      <div class="filter-box">
+        <div class="filter-row">
           <button @click="sortCards('cardName')">Naam</button>
           <button @click="sortCards('rarity')">Zeldzaamheid</button>
           <button @click="sortCards('type')">Type</button>
         </div>
+      </div>
+
+      <!-- Search and Total Cards -->
+      <div class="search-box">
         <div class="search-input">
-          <input type="text" v-model="searchQuery" placeholder="Kaarten zoeken..." />
+          <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
           <button @click="clearSearch">x</button>
         </div>
       </div>
@@ -20,7 +24,7 @@
 
     <!-- Scrollable Card Grid -->
     <div class="card-container">
-      <div class="card-grid" v-if="filteredCards.length > 0">
+      <div class="card-grid" v-if="filteredCards && filteredCards.length > 0">
         <PlayingCard
           v-for="card in filteredCards"
           :key="card.card_id"
@@ -76,6 +80,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
+import { useRoute } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import { API_URL } from '../config';
 
@@ -83,8 +88,9 @@ export default {
   name: 'CodexPage',
   components: { PlayingCard },
   setup() {
+    const route = useRoute();
     const allCards = ref([]);
-    const userCards = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]);
+    const userCards = ref([]);
     const searchQuery = ref('');
     const sortKey = ref(null);
     const sortDirection = ref(1); // 1 = ASC, -1 = DESC
@@ -92,6 +98,8 @@ export default {
     const showTopInfo = ref(false);
     const showAttack = ref(false);
     const showAbility = ref(false);
+
+    const isCodexRoute = computed(() => route.path === '/codex');
 
     const filteredCards = computed(() => {
       let filtered = allCards.value;
@@ -132,7 +140,7 @@ export default {
 
     const fetchAllCards = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/cards`);
+        const response = await fetch(`${API_URL}/api/getCard_dex`);
         const data = await response.json();
         allCards.value = data;
       } catch (error) {
@@ -183,6 +191,7 @@ export default {
     });
 
     return {
+      isCodexRoute,
       filteredCards,
       searchQuery,
       clearSearch,
@@ -222,19 +231,20 @@ export default {
 }
 
 /* Centered Filters */
-.filter-sort-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.filter-box {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 20rem;
 }
 
-.sort-box {
+.filter-row {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 
-.sort-row button {
+.filter-row button {
   padding: 0.5rem 0.5rem;
   margin: 0.5rem 0rem;
   cursor: pointer;
@@ -246,7 +256,7 @@ export default {
   font-size: 1rem;
 }
 
-.sort-row button.active {
+.filter-row button.active {
   background-color: red;
   color: white;
 }
@@ -260,18 +270,6 @@ export default {
   justify-content: center;
   width: 100%;
   max-width: 25rem;
-}
-
-.total-cards {
-  display: flex;
-  align-items: center;
-  margin-right: 0.5rem;
-}
-
-.icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 0.3rem;
 }
 
 .search-input {
@@ -305,10 +303,12 @@ export default {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16%, 1fr));
+  grid-auto-rows: 1fr;
   gap: 0.4rem;
   justify-items: center;
-  padding-bottom: 2rem;
+  max-height: calc(6 * (auto)); /* 6 rows */
+  overflow-y: auto;
 }
 
 .no-cards {
@@ -318,15 +318,10 @@ export default {
   font-weight: bold;
 }
 
-@media (min-width: 600px) {
-  .card-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
 @media (max-width: 600px) {
   .card-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
+    max-height: calc(3 * (80px + 0.4rem)); 
   }
 }
 
