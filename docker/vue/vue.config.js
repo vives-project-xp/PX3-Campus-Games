@@ -7,6 +7,7 @@ module.exports = defineConfig({
     // List any dependencies you want to transpile here
     // For example, if you have a dependency called 'some-library':
     // 'some-library'
+    
   ],
   devServer: {
     port: process.env.PORT || 8080, // start frontend on the port from .env or default to 8080
@@ -18,4 +19,5 @@ module.exports = defineConfig({
       },
     },
   },
+  lintOnSave: false
 });

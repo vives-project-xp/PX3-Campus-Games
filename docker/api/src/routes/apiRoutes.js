@@ -4,6 +4,7 @@ import * as UserController from '../controllers/UserController.js';
 import * as CardController from '../controllers/CardsController.js';
 import * as LeaderboardController from '../controllers/LeaderboardController.js';
 import * as ScoreUpdateController from '../controllers/ScoreUpdateController.js';
+import * as TradingController from "../controllers/TradingController.js";
 
 // users
 router.post('/register', UserController.registerUser); 
@@ -23,6 +24,14 @@ router.post('/tradeCards', CardController.tradeCards);
 router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
+
+// trading
+router.post("/startTrade", TradingController.startTrade);
+router.post("/joinTrade", TradingController.joinTrade);
+router.post("/selectCard", TradingController.selectCard);
+router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
+router.post("/api/fetchTradeUpdates", TradingController.fetchTradeUpdates);
+router.post("/acceptTrade", TradingController.acceptTrade);
 
 // score
 router.patch('/addPoints/:id', ScoreUpdateController.addPoints);
