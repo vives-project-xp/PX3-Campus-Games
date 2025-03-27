@@ -48,23 +48,18 @@ export default {
       if (confirm('Ben je zeker dat je dit account permanent wil verwijderen?')) {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
-
-        if (!token || !userId) {
-          alert('Not logged in.');
-          return;
-        }
-
+        
         try {
           await axios.delete(`${API_URL}/api/deleteUser/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          alert('Account deleted successfully.');
+          alert('Account succesvol verwijderd.');
           this.logout();
         } catch (error) {
           console.error('Error deleting account:', error);
-          alert('Failed to delete account.');
+          alert('Er is een error opgetreden tijdens het verwijderen van het account.');
         }
       }
     },

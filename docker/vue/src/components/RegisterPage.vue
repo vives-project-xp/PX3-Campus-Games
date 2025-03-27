@@ -67,7 +67,7 @@ export default {
                 this.$router.push('/starter-pack');
             } catch (error) {
                 console.error('Registration error:', error); // debugging
-                this.errorMessage = error.response?.data?.error || 'An error occurred during registration.';
+                this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het registreren.';
             }
         },
         
