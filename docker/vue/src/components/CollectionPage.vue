@@ -12,7 +12,7 @@
           <button :class="{ active: selectedRarities.includes('Rare') }" @click="toggleFilter('Rare')">Rare</button>
         </div>
         <div class="filter-row">
-          <button :class="{ active: selectedRarities.includes('UltraRare') }" @click="toggleFilter('UltraRare')">Ultra Rare</button>
+          <button :class="{ active: selectedRarities.includes('Ultra Rare') }" @click="toggleFilter('Ultra Rare')">Ultra Rare</button>
           <button :class="{ active: selectedRarities.includes('Legendary') }" @click="toggleFilter('Legendary')">Legendary</button>
         </div>
       </div>
