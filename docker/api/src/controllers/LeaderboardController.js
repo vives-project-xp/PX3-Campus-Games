@@ -39,4 +39,5 @@ const getUsersScores = async (req, res) => {
 export { 
     getUserScoreById,
     getUsersScores
+    
 };

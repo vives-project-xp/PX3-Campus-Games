@@ -7,13 +7,13 @@
       <!-- Filter Buttons -->
       <div class="filter-box">
         <div class="filter-row">
-          <button :class="{ active: selectedRarities.includes('Common') }" @click="toggleFilter('Common')">Common</button>
-          <button :class="{ active: selectedRarities.includes('Uncommon') }" @click="toggleFilter('Uncommon')">Uncommon</button>
-          <button :class="{ active: selectedRarities.includes('Rare') }" @click="toggleFilter('Rare')">Rare</button>
+          <button :class="{ active: selectedRarities.includes('Common') }" @click="toggleFilter('Common')">Gewoon</button>
+          <button :class="{ active: selectedRarities.includes('Uncommon') }" @click="toggleFilter('Uncommon')">Ongewoon</button>
+          <button :class="{ active: selectedRarities.includes('Rare') }" @click="toggleFilter('Rare')">Zeldzaam</button>
         </div>
         <div class="filter-row">
-          <button :class="{ active: selectedRarities.includes('UltraRare') }" @click="toggleFilter('UltraRare')">Ultra Rare</button>
-          <button :class="{ active: selectedRarities.includes('Legendary') }" @click="toggleFilter('Legendary')">Legendary</button>
+          <button :class="{ active: selectedRarities.includes('UltraRare') }" @click="toggleFilter('UltraRare')">Zeer Zeldzaam</button>
+          <button :class="{ active: selectedRarities.includes('Legendary') }" @click="toggleFilter('Legendary')">Legendarisch</button>
         </div>
       </div>
 
