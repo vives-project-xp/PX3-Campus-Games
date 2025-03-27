@@ -267,7 +267,7 @@ export default {
 @media (max-width: 600px) {
   .card-grid {
     grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
-    max-height: calc(3 * (80px + 0.4rem)); 
+    max-height: calc(6 * (auto)); 
   }
 }
 </style>

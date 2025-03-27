@@ -1,6 +1,7 @@
 import db from '../db.js';
 import { v4 as uuidv4 } from 'uuid'; // npm install uuid
 import axios from "axios";
+import { recalculateUserScore,updateScoreOnCardChange } from './ScoreUpdateController.js';
 const API_URL = "http://localhost:3000";
 
 import { io, userSockets } from '../server.js';
@@ -167,25 +168,63 @@ export const acceptTrade = async (req, res) => {
 // The tradeCards function will handle the actual trade logic
 const tradeCards = async (tradeCode) => {
     try {
-      const trade = activeTrades[tradeCode];
-      const user1 = trade.user1;
-      const user2 = trade.user2;
-  
-      const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
-      const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
-  
-      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
-        [user2, user1, user1CardId]);
-      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
-        [user1, user2, user2CardId]);
-  
-      // Mark trade as complete rather than deleting immediately
-      trade.completed = true;
-      notifyUserToUpdate(user1, tradeCode);
-      notifyUserToUpdate(user2, tradeCode);
-  
-      console.log("Trade completed successfully");
+        const trade = activeTrades[tradeCode];
+        const user1 = trade.user1;
+        const user2 = trade.user2;
+
+        const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
+        const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
+
+        // Get card details for score calculation
+        const [user1Card] = await db.execute(
+            "SELECT rarity FROM Cards_dex WHERE card_id = ?",
+            [user1CardId]
+        );
+        const [user2Card] = await db.execute(
+            "SELECT rarity FROM Cards_dex WHERE card_id = ?",
+            [user2CardId]
+        );
+
+        // Start transaction
+        await db.beginTransaction();
+
+        try {
+            // Update user_cards table
+            await db.execute(
+                "UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+                [user2, user1, user1CardId]
+            );
+            await db.execute(
+                "UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+                [user1, user2, user2CardId]
+            );
+
+            // Update scores for both users
+            await updateScoreOnCardChange(db, user1, [
+                { rarity: user1Card[0].rarity, quantityChange: -1 },
+                { rarity: user2Card[0].rarity, quantityChange: 1 }
+            ]);
+
+            await updateScoreOnCardChange(db, user2, [
+                { rarity: user2Card[0].rarity, quantityChange: -1 },
+                { rarity: user1Card[0].rarity, quantityChange: 1 }
+            ]);
+
+            // Commit transaction
+            await db.commit();
+
+            // Mark trade as complete rather than deleting immediately
+            trade.completed = true;
+            notifyUserToUpdate(user1, tradeCode);
+            notifyUserToUpdate(user2, tradeCode);
+
+            console.log("Trade completed successfully");
+        } catch (error) {
+            // Rollback transaction if any error occurs
+            await db.rollback();
+            throw error;
+        }
     } catch (error) {
-      console.error("Error executing trade:", error);
+        console.error("Error executing trade:", error);
     }
-  };  
+};

@@ -29,7 +29,7 @@ router.post("/startTrade", TradingController.startTrade);
 router.post("/joinTrade", TradingController.joinTrade);
 router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
-router.post("/api/fetchTradeUpdates", TradingController.fetchTradeUpdates);
+router.post("/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 router.post("/acceptTrade", TradingController.acceptTrade);
 
 //Daily rewards
