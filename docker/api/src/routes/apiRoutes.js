@@ -34,6 +34,7 @@ router.post("/acceptTrade", TradingController.acceptTrade);
 
 //Daily rewards
 router.post('/daily', DailyRewardController.claimDailyReward);
+router.post('/daily/select', DailyRewardController.confirmCardSelection);
 
 
 export default router;

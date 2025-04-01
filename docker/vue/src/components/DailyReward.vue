@@ -10,7 +10,6 @@
       <span v-else>Claim Dagelijkse Beloning</span>
     </button>
 
-    <!-- Reward Cards Selection -->
     <div v-if="showCards" class="card-selection">
       <h3>Kies je dagelijkse beloning:</h3>
       <div class="cards-grid">
@@ -38,12 +37,11 @@
           class="confirm-button"
         >
           <span v-if="isSelecting">Bezig...</span>
-          <span v-else>Ontvang beloning</span>
+          <span v-else>Bevestig selectie</span>
         </button>
       </div>
     </div>
 
-    <!-- Feedback Messages -->
     <div v-if="message" class="feedback" :class="{ error: isError }">
       {{ message }}
     </div>
@@ -53,6 +51,7 @@
 <script>
 import PlayingCard from './PlayingCard.vue';
 import { ref } from 'vue';
+import { API_URL } from '../config';
 
 export default {
   components: { PlayingCard },
@@ -77,28 +76,42 @@ export default {
       isError.value = false;
       
       try {
-        const response = await fetch('/api/rewards/daily', {
+        const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
+        if (!userIdToSend) throw new Error('Gebruiker niet ingelogd');
+
+        const response = await fetch(`${API_URL}/api/daily`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: props.userId })
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ userId: userIdToSend })
         });
 
         const data = await response.json();
+        console.log('API Response:', data);
 
-        if (data.success) {
-          // Haal volledige kaartdetails op voor de geselecteerde kaart-ID's
-          const cardsResponse = await fetch(`/api/cards/details?ids=${data.cards.join(',')}`);
-          const cardsData = await cardsResponse.json();
-          
-          rewardCards.value = cardsData;
-          showCards.value = true;
-        } else {
-          isError.value = true;
-          message.value = data.message || 'Kon beloning niet ophalen';
+        if (!response.ok) {
+          throw new Error(data.message || data.error || 'Server error');
         }
+
+        if (!data.cards || data.cards.length === 0) {
+          throw new Error('Geen kaarten ontvangen van server');
+        }
+
+        rewardCards.value = data.cards.map(card => {
+          const imagePath = card.artwork_path || 'default_card.png';
+          return {
+            ...card,
+            artwork_path: require(`@/assets/Cards/${imagePath}`)
+          };
+        });
+        
+        showCards.value = true;
+
       } catch (error) {
         isError.value = true;
-        message.value = 'Fout bij verbinden met server';
+        message.value = error.message;
         console.error('Claim error:', error);
       } finally {
         isLoading.value = false;
@@ -117,30 +130,33 @@ export default {
       isError.value = false;
 
       try {
-        const response = await fetch('/api/rewards/select', {
+        const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
+        const response = await fetch(`${API_URL}/api/daily/select`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
           body: JSON.stringify({ 
-            userId: props.userId,
+            userId: userIdToSend,
             cardId: selectedCard.value.card_id
           })
         });
 
         const data = await response.json();
 
-        if (data.success) {
-          message.value = 'Beloning ontvangen!';
-          showCards.value = false;
-          selectedCard.value = null;
-          // Emit event to parent to refresh collection
-          emit('reward-collected', data.cardId);
-        } else {
-          isError.value = true;
-          message.value = data.error || 'Fout bij selecteren kaart';
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || data.message || 'Fout bij bevestigen');
         }
+
+        message.value = data.message || 'Beloning ontvangen!';
+        showCards.value = false;
+        selectedCard.value = null;
+        emit('reward-collected');
+
       } catch (error) {
         isError.value = true;
-        message.value = 'Fout bij verbinden met server';
+        message.value = error.message;
         console.error('Selection error:', error);
       } finally {
         isSelecting.value = false;

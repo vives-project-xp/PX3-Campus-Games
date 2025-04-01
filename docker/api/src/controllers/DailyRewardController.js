@@ -1,92 +1,114 @@
-// DailyRewardController.js
 import db from '../db.js';
 import { updateScoreOnCardChange } from './ScoreUpdateController.js';
 
-const getCardRarity = async (card_id) => {
-    const [card] = await db.execute(
-        'SELECT rarity FROM Cards_dex WHERE card_id = ?',
-        [card_id]
+export const claimDailyReward = async (req, res) => {
+  const connection = await db.getConnection();
+  try {
+    const userId = Number(req.body.userId);
+    if (!userId || isNaN(userId)) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Ongeldige userId' 
+      });
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const [claimed] = await connection.execute(
+      'SELECT 1 FROM users WHERE id = ? AND DATE(last_reward_claimed) = ?',
+      [userId, today]
     );
-    return card[0]?.rarity;
+
+    if (claimed.length > 0) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Je hebt vandaag al een beloning geclaimd' 
+      });
+    }
+
+    const [cards] = await connection.execute(
+      `SELECT card_id, cardName, artwork_path, attack, ability, health, rarity 
+       FROM Cards_dex 
+       ORDER BY RAND() 
+       LIMIT 3`
+    );
+
+    if (cards.length === 0) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'Geen kaarten beschikbaar' 
+      });
+    }
+
+    res.json({
+      success: true,
+      cards: cards.map(card => ({
+        ...card,
+        artwork_path: card.artwork_path.split('/').pop()
+      }))
+    });
+
+  } catch (error) {
+    console.error('Daily reward error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Interne serverfout',
+      details: error.message
+    });
+  } finally {
+    if (connection) connection.release();
+  }
 };
 
-export const claimDailyReward = async (req, res) => {
-    const db = await db.getdb();
-    try {
-        const { userId } = req.body;
-        const today = new Date().toISOString().split('T')[0];
-
-        await db.beginTransaction();
-
-        // Check if already claimed today
-        const [claimed] = await db.execute(
-            'SELECT 1 FROM users WHERE id = ? AND last_reward_claim = ?',
-            [userId, today]
-        );
-
-        if (claimed.length > 0) {
-            await db.rollback();
-            return res.status(400).json({ 
-                success: false,
-                message: 'Je hebt vandaag al een beloning geclaimd' 
-            });
-        }
-
-        // Get 1 random card (vereenvoudigd van 3 naar 1)
-        const [cards] = await db.execute(
-            'SELECT card_id, rarity FROM Cards_dex ORDER BY RAND() LIMIT 1'
-        );
-
-        if (cards.length === 0) {
-            await db.rollback();
-            return res.status(404).json({ error: 'Geen kaarten beschikbaar' });
-        }
-
-        const card = cards[0];
-        
-        // Add card to collection
-        const [existing] = await db.execute(
-            'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
-            [userId, card.card_id]
-        );
-
-        if (existing.length > 0) {
-            await db.execute(
-                'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
-                [userId, card.card_id]
-            );
-        } else {
-            await db.execute(
-                'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)',
-                [userId, card.card_id]
-            );
-        }
-
-        // Update score
-        await updateScoreOnCardChange(db, userId, [
-            { rarity: card.rarity, quantityChange: 1 }
-        ]);
-
-        // Update last claim date
-        await db.execute(
-            'UPDATE users SET last_reward_claim = ? WHERE id = ?',
-            [today, userId]
-        );
-
-        await db.commit();
-        res.json({
-            success: true,
-            message: 'Dagelijkse beloning ontvangen!',
-            cardId: card.card_id
-        });
-    } catch (error) {
-        await db.rollback();
-        console.error('Daily reward error:', error);
-        res.status(500).json({ 
-            success: false,
-            error: 'Fout bij claimen dagelijkse beloning' 
-        });
-    } finally {
-        db.release();
+export const confirmCardSelection = async (req, res) => {
+  const connection = await db.getConnection();
+  try {
+    const { userId, cardId } = req.body;
+    
+    if (!userId || !cardId) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Ontbrekende userId of cardId' 
+      });
     }
+
+    // Voeg kaart toe aan gebruiker
+    await connection.execute(
+      `INSERT INTO user_cards (user_id, card_id, quantity) 
+       VALUES (?, ?, 1)
+       ON DUPLICATE KEY UPDATE quantity = quantity + 1`,
+      [userId, cardId]
+    );
+
+    // Update score
+    const [card] = await connection.execute(
+      'SELECT rarity FROM Cards_dex WHERE card_id = ?',
+      [cardId]
+    );
+    
+    if (card.length > 0) {
+      await updateScoreOnCardChange(connection, userId, [
+        { rarity: card[0].rarity, quantityChange: 1 }
+      ]);
+    }
+
+    // Update claim datum
+    await connection.execute(
+      'UPDATE users SET last_reward_claimed = NOW() WHERE id = ?',
+      [userId]
+    );
+
+    res.json({ 
+      success: true,
+      message: 'Kaart succesvol toegevoegd aan je collectie!'
+    });
+
+  } catch (error) {
+    console.error('Card selection error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Databasefout bij toevoegen kaart'
+    });
+  } finally {
+    if (connection) connection.release();
+  }
 };
