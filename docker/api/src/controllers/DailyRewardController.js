@@ -1,6 +1,6 @@
+// DailyRewardController.js
 import db from '../db.js';
 import { updateScoreOnCardChange } from './ScoreUpdateController.js';
-import { io, userSockets } from '../server.js';
 
 const getCardRarity = async (card_id) => {
     const [card] = await db.execute(
@@ -11,101 +11,82 @@ const getCardRarity = async (card_id) => {
 };
 
 export const claimDailyReward = async (req, res) => {
+    const db = await db.getdb();
     try {
         const { userId } = req.body;
         const today = new Date().toISOString().split('T')[0];
 
+        await db.beginTransaction();
+
         // Check if already claimed today
-        const [user] = await db.execute(
-            'SELECT last_login FROM users WHERE id = ? AND last_login = ?',
+        const [claimed] = await db.execute(
+            'SELECT 1 FROM users WHERE id = ? AND last_reward_claim = ?',
             [userId, today]
         );
 
-        if (user.length > 0) {
+        if (claimed.length > 0) {
+            await db.rollback();
             return res.status(400).json({ 
                 success: false,
                 message: 'Je hebt vandaag al een beloning geclaimd' 
             });
         }
 
-        // Update last login date
-        await db.execute(
-            'UPDATE users SET last_login = ? WHERE id = ?',
-            [today, userId]
-        );
-
-        // Get 3 random cards
+        // Get 1 random card (vereenvoudigd van 3 naar 1)
         const [cards] = await db.execute(
-            'SELECT card_id FROM Cards_dex ORDER BY RAND() LIMIT 3'
+            'SELECT card_id, rarity FROM Cards_dex ORDER BY RAND() LIMIT 1'
         );
 
-        // Notify client via Socket.IO if connected
-        if (userSockets[userId]) {
-            io.to(userSockets[userId]).emit('rewardAvailable', {
-                cards: cards.map(c => c.card_id)
-            });
+        if (cards.length === 0) {
+            await db.rollback();
+            return res.status(404).json({ error: 'Geen kaarten beschikbaar' });
         }
 
-        res.json({
-            success: true,
-            cards: cards.map(c => c.card_id),
-            message: 'Kies 1 kaart als beloning'
-        });
-    } catch (error) {
-        console.error('Daily reward error:', error);
-        res.status(500).json({ 
-            success: false,
-            error: 'Fout bij ophalen dagelijkse beloning' 
-        });
-    }
-};
-
-export const selectDailyCard = async (req, res) => {
-    try {
-        const { userId, cardId } = req.body;
+        const card = cards[0];
         
         // Add card to collection
         const [existing] = await db.execute(
             'SELECT * FROM user_cards WHERE user_id = ? AND card_id = ?',
-            [userId, cardId]
+            [userId, card.card_id]
         );
 
         if (existing.length > 0) {
             await db.execute(
                 'UPDATE user_cards SET quantity = quantity + 1 WHERE user_id = ? AND card_id = ?',
-                [userId, cardId]
+                [userId, card.card_id]
             );
         } else {
             await db.execute(
                 'INSERT INTO user_cards (user_id, card_id, quantity) VALUES (?, ?, 1)',
-                [userId, cardId]
+                [userId, card.card_id]
             );
         }
 
         // Update score
-        const rarity = await getCardRarity(cardId);
-        await updateScoreOnCardChange(userId, [
-            { rarity, quantityChange: 1 }
+        await updateScoreOnCardChange(db, userId, [
+            { rarity: card.rarity, quantityChange: 1 }
         ]);
 
-        // Notify client of successful selection
-        if (userSockets[userId]) {
-            io.to(userSockets[userId]).emit('rewardClaimed', {
-                cardId,
-                success: true
-            });
-        }
+        // Update last claim date
+        await db.execute(
+            'UPDATE users SET last_reward_claim = ? WHERE id = ?',
+            [today, userId]
+        );
 
-        res.json({ 
+        await db.commit();
+        res.json({
             success: true,
-            message: 'Beloning ontvangen!',
-            cardId
+            message: 'Dagelijkse beloning ontvangen!',
+            cardId: card.card_id
         });
     } catch (error) {
-        console.error('Error selecting daily card:', error);
+        await db.rollback();
+        console.error('Daily reward error:', error);
         res.status(500).json({ 
             success: false,
-            error: 'Fout bij toevoegen beloning' 
+            error: 'Fout bij claimen dagelijkse beloning' 
         });
+    } finally {
+        db.release();
     }
 };
