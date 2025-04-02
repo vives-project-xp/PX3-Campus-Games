@@ -23,26 +23,10 @@
         <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
         <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
       </p>
-      
-
-
-      <!--<h2>Scorebord</h2>
+      <h3>Scorebord</h3>
       <p>
-        Het scorebord zal opgedeeld worden in 3 secties: groepsscorebord, individueel scorebord en in de laatste sectie komt een QR-code.
+        <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
       </p>
-      <h3>Groepsscorebord:</h3>
-      <p>
-        Het groepsscorebord zal weergeven hoeveel punten alle studenten van een specifiek studiegebied gescoord hebben. 
-        <br>(Bijvoorbeeld: Technology - 3000ptn, Handel & Business - 2500ptn, ...)
-      </p>
-      <h3>Individueel scorebord:</h3>
-      <p>
-        Het individuele scorebord zal de ranking van alle individuele spelers tonen.
-      </p>
-      <h3>Dagelijkse login:</h3>
-      <p>
-        In de laatste sectie kun je via de QR-code direct naar de login-pagina gaan, hiermee kun je makkelijk je dagelijkse beloning claimen.
-      </p>-->
 
 
 
@@ -77,20 +61,25 @@
 
       <h2>Over ons</h2>
       <p>
-        Ons doel is om een leuke game te ontwikkelen voor de studenten van Vives. Het doel van het spel is om studenten van verschillende studiegebieden te verenigen en interactie te creëren.
-        <br> Om dit doel te verwezenlijken maken we een digitaal kaartspel waarin spelers kunnen verzamelen, ruilen en tegen elkaar strijden. Als de spelers strijden tegen elkaar kunnen ze nieuwe kaarten verdienen, alsook punten voor de rankings.
+        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
+        <br>
+        <br>
+        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
+        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
       </p>
       <h3>Ons team:</h3>
       <ul class ="default list">
-        <li>Verstraete Domien: Front/Back-end ontwikkelaar</li>
-        <li>Meuleman Joshua: Back-end/database ontwikkelaar, 3D designer (indien nodig)</li>
-        <li>Brassaert Arthur: Frontend ontwikkelaar</li>
-        <li>Pladijs Tom: Front-end ontwikkelaar, kaart ontwerper</li>
+        <li>Verstraete Domien: Front- en back-end developer</li>
+        <li>Meuleman Joshua: Back-end/database developer, 3D designer (indien nodig)</li>
+        <li>Brassaert Arthur: Front-end developer</li>
+        <li>Pladijs Tom: Front-end developer, kaart ontwerper</li>
         <li>Oyen Quentin: Spelregels en concept uitwerken</li>
-        <li>Declerq Jules: Grafisch ontwerper, sociale media beheren</li>
-        <li>De Smet Xander: Grafisch ontwerper</li>
-        <li>Degeest Bram: Robotics</li>
+        <li>Declerq Jules: Graphics designer, sociale media beheren</li>
+        <li>De Smet Xander: Front-end developer/ graphics designer</li>
+        <li>Degeest Bram: Robotics/ back-end developer</li>
       </ul>
+      <h3>Documentatie:</h3>
+      <p>Alle documentatie is terug te vinden in onze <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
 
     </div>
   </template>
@@ -114,6 +103,10 @@
 
           goToCollectionPage() {
             this.$router.push('/collection');
+          },
+
+          goToLeaderboardPage() {
+            this.$router.push('/leaderboard');
           },
         }
   };
