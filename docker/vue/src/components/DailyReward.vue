@@ -12,12 +12,12 @@
 
     <div v-if="showCards" class="card-selection">
       <h3>Kies je dagelijkse beloning:</h3>
-      <div class="cards-grid">
+      <div class="cards-container">
         <div 
           v-for="card in rewardCards"
           :key="card.card_id"
           @click="selectCard(card)"
-          class="card-wrapper"
+          class="card-item"
           :class="{ selected: selectedCard?.card_id === card.card_id }"
         >
           <PlayingCard
@@ -181,11 +181,13 @@ export default {
 
 <style scoped>
 .daily-reward {
-  margin: 20px 0;
+  margin: 20px auto;
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 10px;
   text-align: center;
+  max-width: 1200px;
+  width: 95%;
 }
 
 .reward-button {
@@ -197,15 +199,7 @@ export default {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-.reward-button:hover {
-  background-color: #45a049;
-}
-
-.reward-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+  margin-bottom: 20px;
 }
 
 .card-selection {
@@ -213,26 +207,45 @@ export default {
 }
 
 .cards-grid {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   margin: 20px 0;
-  flex-wrap: wrap;
 }
 
-.card-wrapper {
+.card-item {
+  width: 100%;
   cursor: pointer;
   transition: transform 0.2s;
-  padding: 10px;
-  border-radius: 8px;
 }
 
-.card-wrapper:hover {
+.card-item:hover {
   transform: scale(1.05);
 }
 
-.card-wrapper.selected {
+.card-item.selected {
   box-shadow: 0 0 0 3px #2196F3;
+  border-radius: 8px;
+}
+
+/* Aanpassingen voor PlayingCard zonder de component te wijzigen */
+.card-item :deep(.card) {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-item :deep(.card-image) {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.card-item :deep(.card-name) {
+  font-size: 0.9em;
+  padding: 8px;
 }
 
 .actions {
@@ -249,28 +262,22 @@ export default {
   cursor: pointer;
 }
 
-.confirm-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.feedback {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #dff0d8;
-  color: #3c763d;
-}
-
-.feedback.error {
-  background-color: #f2dede;
-  color: #a94442;
-}
-
-@media (max-width: 600px) {
+/* Responsive aanpassingen */
+@media (max-width: 1000px) {
   .cards-grid {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
