@@ -17,6 +17,7 @@
       <router-link to="/shop" @click="closeMenu">Winkel</router-link>
       <router-link to="/account" @click="closeMenu">Account</router-link>
       <router-link to="/daily" @click="closeMenu">Dagelijkse Beloning</router-link>
+      <router-link to="/leaderboard" @click="closeMenu">Scorebord</router-link>
     </nav>
   </div>
 </template>

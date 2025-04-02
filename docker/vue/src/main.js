@@ -12,6 +12,7 @@ import LoginPage from './components/LoginPage.vue';
 import RegisterPage from './components/RegisterPage.vue';
 import StarterPackPage from './components/StarterPackPage.vue';
 import DailyReward from './components/DailyReward.vue';
+import LeaderBoard from './components/LeaderBoard.vue';
 
 
 const routes = [
@@ -25,7 +26,8 @@ const routes = [
   { path: '/login', component: LoginPage },
   { path: '/register', component: RegisterPage},
   { path: '/starter-pack', component: StarterPackPage },
-  {path: '/daily', component: DailyReward},
+  { path: '/daily', component: DailyReward},
+  { path: '/leaderboard', component: LeaderBoard},
 ];
 
 const router = createRouter({
