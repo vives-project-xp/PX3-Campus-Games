@@ -117,6 +117,7 @@ import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
+import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
@@ -133,6 +134,7 @@ export default {
     const searchQuery = ref('');
     const hasAccepted = ref(false);
     const friendAccepted = ref(false);
+    const router = useRouter();
 
     const socket = io(API_URL);
 
@@ -150,6 +152,14 @@ export default {
     artwork_path: getImage(card.artwork_path),
   }));
 });
+
+const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
+      }
+    };
 
   // Function to correctly resolve image paths
   const getImage = (fileName) => {
@@ -286,6 +296,7 @@ export default {
     };
 
     onMounted(() => {
+      checkLoginStatus();
       socket.emit('register', userId);
       loadUserCards();
       fetchTradeUpdates();

@@ -3,22 +3,22 @@
       <h2>Hoe te spelen</h2>
       <h3>Verzamelen:</h3>
       <p>
-        Elke gebruiker krijgt een pack met 9 kaarten als ze een account aanmaken. Daarna kun je dagelijks 3 kaarten claimen door simpelweg in te loggen.
-        <br> Je kan ook kaarten upgraden naar een hogere zeldzaamheid, dit kan door 3 dezelfde kaarten te combineren, dit geeft je 1 kaart met een hogere zeldzaamheid.
+        Elke gebruiker krijgt een pack met 3 kaarten als ze een account aanmaken. Daarna kun je dagelijks een kaart claimen door simpelweg in te loggen, je krijgt dan de optie om te kiezen tussen 3 kaarten.
+        <br> Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je eigen kaarten bekijken. Er zijn ook snelle filters die je kunt gebruiken om te filteren per type en om specifieke kaarten te vinden is er ook de zoekbalk.
       </p>
       <h3>Codex:</h3>
       <p>
-        In <b><a class="goToCodex" alt="Go to codex." @click="goToCodex">de codex</a></b> kun je alle kaarten bekijken die je hebt verzameld, alsook alle kaarten in het spel. Hier kun je ook de zeldzaamheid van de kaarten zien en de vaardigheden van de kaarten bekijken.
-        <br> Je kan ook de kaarten sorteren op zeldzaamheid, type en studiegebied.
+        In <b><a class="pageLink" @click="goToCodex">de codex</a></b> kun je alle kaarten bekijken die je hebt verzameld, alsook alle kaarten in het spel. Hier zijn dezelfde filters en zoekbalk beschikbaar als op de collectiepagina.
+        <br> Om de details van een kaart te zien kun je op de kaart klikken, deze zal dan uitvergroot worden en linksboven zie je dan alle info van de kaart.
       </p>
       <h3>Ruilen:</h3>
       <p>
-        Er is een ruilsysteem ontworpen om met andere studenten op de campus te communiceren.
-        <br> Om de ruil te starten, kan één speler een QR-code genereren die door de andere speler kan worden gescand. Als beide spelers de ruil bevestigen, worden de kaarten overgedragen.
+        Het is mogelijk om met andere studenten  te ruilen, dit kan door naar <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b> te gaan. Hier kun je een QR-code aanmaken, of die van je medestudent scannen, als dit gebeurt is kun je de kaart(en) selecteren die je wilt ruilen.
+        <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar heet account van de juiste speler overgezet.
       </p>
       <h3>Game:</h3>
       <p>
-        Games worden gespeeld in een 1v1-formaat, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
+        Op <b><a class="pageLink" @click="goToGamePage">de gamepagina</a></b> kunnen er games tussen 2 spelers gespeeld worden, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
         <br> De speler die kop of munt juist had begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
         <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
         <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
@@ -102,7 +102,19 @@
         methods: {
           goToCodex() {
             this.$router.push('/codex');
-          }
+          },
+
+          goToTradingPage() {
+            this.$router.push('/trading');
+          },
+
+          goToGamePage() {
+            this.$router.push('/game');
+          },
+
+          goToCollectionPage() {
+            this.$router.push('/collection');
+          },
         }
   };
   </script>
@@ -116,7 +128,7 @@
     font-size:20px;
   }
 
-  .goToCodex {
+  .pageLink {
     color: var(--secondary-color);
     cursor: pointer;
     text-decoration: underline;
