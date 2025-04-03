@@ -29,6 +29,12 @@
     <!-- Scrollable Card Grid -->
     <div class="card-container">
       <div class="card-grid" v-if="filteredCards && filteredCards.length > 0">
+        <div 
+          v-for="card in filteredCards"
+          :key="card.card_id"
+          class="card-wrapper"
+          :data-quantity="card.quantity || 1"
+        ></div>
         <PlayingCard
           v-for="card in filteredCards"
           :key="card.card_id"
@@ -282,6 +288,32 @@ export default {
   width: 100%;
   flex-grow: 1;
 }
+.card-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.card-wrapper::after {
+  content: attr(data-quantity);
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  background-color: #2196F3;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border: 2px solid white;
+  margin-top:0.4rem;
+}
+
 
 .card-grid {
   display: grid;
