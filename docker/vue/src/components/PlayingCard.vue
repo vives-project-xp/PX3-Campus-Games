@@ -78,7 +78,7 @@ export default {
 }
 
 .card-image.blurred {
-  filter: blur(10px);
+  filter: blur(5px);
   mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
 }
 </style>
