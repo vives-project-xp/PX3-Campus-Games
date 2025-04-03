@@ -15,10 +15,12 @@ router.delete('/deleteUser/:id', UserController.deleteUser);
 
 // leaderboards
 router.get('/getUserScoreById/:id', LeaderboardController.getUserScoreById);
+router.get('/getScoreByEducation/:opleiding', LeaderboardController.getScoreByEducation);
 router.get('/getUsersScores', LeaderboardController.getUsersScores); //alle scores hoog naar laag per 10 users
 // cards
 router.post('/addCard', CardController.addCardToUser);   
 router.get('/userCards/:user_id', CardController.getUserCards);  
+// router.post('/tradeCards', CardController.tradeCards);  
 router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
@@ -30,6 +32,7 @@ router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 router.post("/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 router.post("/acceptTrade", TradingController.acceptTrade);
+router.post("/tradeCards", TradingController.tradeCards);
 
 //Daily rewards
 router.post('/daily', DailyRewardController.claimDailyReward);

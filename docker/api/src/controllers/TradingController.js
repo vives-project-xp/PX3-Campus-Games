@@ -183,7 +183,7 @@ export const acceptTrade = async (req, res) => {
 
 
 // The tradeCards function will handle the actual trade logic
-const tradeCards = async (tradeCode) => {
+export const tradeCards = async (tradeCode) => {
     try {
       const trade = activeTrades[tradeCode];
       const user1 = trade.user1;
