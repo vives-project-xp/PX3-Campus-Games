@@ -132,7 +132,6 @@ import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
-import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
