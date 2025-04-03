@@ -237,3 +237,66 @@ export const tradeCards = async (tradeCode) => {
         console.error("Error executing trade:", error);
     }
   };  
+
+
+/////////////////////////////////////////////////////////////////////////////////
+// WORKING CODE, DO NOT CHANGE, THIS IS A SIMPLE BACK UP FOR TESTING THE NEW CODE
+
+// The tradeCards function will handle the actual trade logic
+// export const tradeCards = async (tradeCode) => {
+//     try {
+//       const trade = activeTrades[tradeCode];
+//       const user1 = trade.user1;
+//       const user2 = trade.user2;
+  
+//       const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
+//       const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
+  
+//       await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+//         [user2, user1, user1CardId]);
+//       await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
+//         [user1, user2, user2CardId]);
+
+//         console.log("TradingController.js 2");
+//         // Recalculate scores for both users
+//         await recalculateUserScore(db, user1);
+//         await recalculateUserScore(db, user2);
+        
+//         // Add trade point to users
+//         await addTradePoint(user1); 
+//         await addTradePoint(user2); 
+
+//        io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
+//         tradeCode,
+//         receivedCard: trade.user2Card 
+//       });
+//       io.to(userSockets[trade.user2]).emit("tradeCompleted", { 
+//         tradeCode,
+//         receivedCard: trade.user1Card 
+//       });
+  
+//       console.log("TradingController.js 3");
+//       console.log("Trade completed successfully");
+
+//         // Mark trade as complete
+//         trade.completed = true;
+
+//         // Notify users about the completed trade
+//         io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
+//             tradeCode,
+//             receivedCard: trade.user2Card 
+//         });
+//         io.to(userSockets[trade.user2]).emit("tradeCompleted", { 
+//             tradeCode,
+//             receivedCard: trade.user1Card 
+//         });
+
+//         console.log("Trade completed successfully");
+//     } catch (error) {
+//         console.error("Error executing trade:", error);
+//     }
+//   };  
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
