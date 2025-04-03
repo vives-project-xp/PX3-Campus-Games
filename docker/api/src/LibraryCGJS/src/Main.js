@@ -1,16 +1,17 @@
 function setupGame() {
-    const allCards = [
+  // tempcards  
+  const allCards = [
       new Card("WarriorFS", 160, 140, "free_switch"),
-      new Card("WarriorDM", 220, 100, "damage_multiplier"),
+      new Card("WarriorDM", 220, 100, "extra_action"),
       new Card("KnightB", 260, 80, "block"),
       new Card("PriestFS", 180, 120, "free_switch"),
-      new Card("BerserkerDM", 270, 80, "damage_multiplier"),
+      new Card("BerserkerDM", 270, 80, "extra_action"),
       new Card("PaladinB", 300, 60, "block"),
       new Card("PriestH", 220, 100, "heal"),
       new Card("HealerH", 300, 80, "heal"),
       new Card("HealerH", 250, 80, "heal"),
       new Card("KnightB", 220, 100, "block"),
-      new Card("BerserkerDM", 200, 120, "damage_multiplier"),
+      new Card("BerserkerDM", 200, 120, "extra_action"),
       new Card("PaladinFS", 200, 100, "free_switch")
     ];
   
