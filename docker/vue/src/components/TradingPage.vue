@@ -10,14 +10,20 @@
           <p>QR Code</p>
         </div>
       </div>
+
+      <div class="scanner-section">
+  <div class="video-container">
+    <video ref="videoElement" class="video" autoplay playsinline style="display: none;"></video>
+    <div v-if="!isScanning" class="video-placeholder">
+      <p>klik op "scan een qrcode" om te scannen</p>
+    </div>
+  </div>
+</div>
+
       <!-- Buttons arranged vertically and centered -->
       <div class="buttons-container">
         <button class="btn" @click="generateQRCode">Maak een QR Code aan</button>
         <button class="btn" @click="startScanning">Scan QR Code</button>
-      </div>
-      <!-- Hidden video element used for scanning -->
-      <div class="scanner-section">
-        <video ref="videoElement" class="video"></video>
       </div>
     </div>
 
@@ -25,47 +31,38 @@
     <div v-if="tradeJoined" class="trade-area">
       <div class="cards-container">
         <!-- Your Card Selection -->
-    <!-- Trading Interface -->
-    <div v-if="tradeJoined" class="trade-area">
-      <div class="cards-container">
-<!-- Your Card Selection -->
-<div class="card-box" @click="openCardSelection">
-  <h3>Jouw keuze</h3>
-  <PlayingCard
-    v-if="selectedCard"
-    :cardName="selectedCard.cardName"
-    :cardImage="selectedCard.artwork_path"
-    :attack="selectedCard.attack"
-    :ability="selectedCard.ability"
-    :health="selectedCard.health"
-    :isSelected="true"
-  />
-  <div v-else class="card-placeholder">
-    <p>Geen kaart geselecteerd</p>
-  </div>
-</div>
+        <div class="card-box" @click="openCardSelection">
+          <h3>Jouw keuze</h3>
+          <PlayingCard
+            v-if="selectedCard"
+            :cardName="selectedCard.cardName"
+            :cardImage="selectedCard.artwork_path"
+            :attack="selectedCard.attack"
+            :ability="selectedCard.ability"
+            :health="selectedCard.health"
+            :isSelected="true"
+          />
+          <div v-else class="card-placeholder">
+            <p>Geen kaart geselecteerd</p>
+          </div>
+        </div>
 
-<!-- Friend's Card -->
-<div class="card-box">
-  <h3>KAndere speler</h3>
-  <PlayingCard
-    v-if="friendCard"
-    :cardName="friendCard.cardName"
-    :cardImage="friendCard.artwork_path"
-    :attack="friendCard.attack"
-    :ability="friendCard.ability"
-    :health="friendCard.health"
-    :isSelected="false"
-  />
-  <p v-else>wachten op een keuze...</p>
-</div>
-
+        <!-- Friend's Card -->
+        <div class="card-box">
+          <h3>Andere speler</h3>
+          <PlayingCard
+            v-if="friendCard"
+            :cardName="friendCard.cardName"
+            :cardImage="friendCard.artwork_path"
+            :attack="friendCard.attack"
+            :ability="friendCard.ability"
+            :health="friendCard.health"
+            :isSelected="false"
+          />
+          <p v-else>wachten op een keuze...</p>
+        </div>
       </div>
       <!-- Rest of your trading interface -->
-    </div>
-      </div>
-
-      <!-- Accept Trade Button and Status -->
       <div class="accept-trade-container">
         <button class="btn" :disabled="hasAccepted" @click="acceptTrade">
           {{ hasAccepted ? "Ge-accepteerd" : "Accepteer" }}
@@ -78,13 +75,11 @@
     <div v-if="showCardSelection" class="modal">
       <div class="modal-content">
         <h2>Selecteer een kaart</h2>
-
         <!-- Search Input -->
         <div class="search-input">
           <input type="text" v-model="searchQuery" placeholder="Search cards..." />
           <button @click="clearSearch">x</button>
         </div>
-
         <!-- Scrollable Card Grid -->
         <div class="card-container">
           <div class="card-grid">
@@ -102,8 +97,27 @@
           </div>
           <div class="no-cards" v-if="filteredCards.length === 0">Geen kaarten gevonden.</div>
         </div>
-
         <button class="btn close-btn" @click="showCardSelection = false">Sluit</button>
+      </div>
+    </div>
+
+    <!-- New Card Popup -->
+    <div v-if="showNewCardPopup" class="new-card-popup modal">
+      <div class="modal-content">
+        <h2>nieuwe kaart:</h2>
+        <PlayingCard
+          v-if="receivedCard"
+          :cardName="receivedCard.cardName"
+          :cardImage="receivedCard.artwork_path"
+          :attack="receivedCard.attack"
+          :ability="receivedCard.ability"
+          :health="receivedCard.health"
+          :isSelected="false"
+        />
+        <div class="popup-buttons">
+          <button class="btn" @click="closePopup">Sluit</button>
+          <button class="btn" @click="viewCollection">Bekijk in je collectie!</button>
+        </div>
       </div>
     </div>
   </div>
@@ -112,11 +126,13 @@
 <script>
 import PlayingCard from './PlayingCard.vue';
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from "axios";
 import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
+import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
@@ -124,6 +140,7 @@ export default {
     const tradeCode = ref(null);
     const qrCodeUrl = ref(null);
     const scanner = ref(null);
+    const isScanning = ref(false);
     const tradeJoined = ref(false);
     const userId = localStorage.getItem('userId');
     const userCards = ref([]);
@@ -133,33 +150,44 @@ export default {
     const searchQuery = ref('');
     const hasAccepted = ref(false);
     const friendAccepted = ref(false);
-
+    
+    // New reactive properties for the received card popup
+    const showNewCardPopup = ref(false);
+    const receivedCard = ref(null);
+    
+    const router = useRouter();
     const socket = io(API_URL);
 
     const filteredCards = computed(() => {
       let filtered = userCards.value;
-  
       if (searchQuery.value) {
         filtered = filtered.filter(card =>
           card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase())
         );
       }
+      return filtered.map((card) => ({
+        ...card,
+        artwork_path: getImage(card.artwork_path),
+      }));
+    });
 
-  return filtered.map((card) => ({
-    ...card,
-    artwork_path: getImage(card.artwork_path),
-  }));
-});
+    // Function to correctly resolve image paths
+    const getImage = (fileName) => {
+      try {
+        return require(`@/assets/Cards/${fileName.split('/').pop()}`);
+      } catch (error) {
+        console.error("Image not found:", fileName);
+        return "";
+      }
+    };
 
-  // Function to correctly resolve image paths
-  const getImage = (fileName) => {
-    try {
-      return require(`@/assets/Cards/${fileName.split('/').pop()}`);
-    } catch (error) {
-      console.error("Image not found:", fileName);
-      return "";
-    }
-  };
+const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
+      }
+    };
 
     const clearSearch = () => {
       searchQuery.value = '';
@@ -182,22 +210,38 @@ export default {
     };
 
     const startScanning = () => {
-      const videoElem = document.createElement('video');
-      document.body.appendChild(videoElem);
+  const videoElem = document.querySelector('.video'); // Use existing video element
+  const videoContainer = document.querySelector('.video-container');
+  
+  isScanning.value = true;
 
-      if (!scanner.value) {
-        scanner.value = new QrScanner(
-          videoElem,
-          (result) => {
-            console.log("Scanned Trade Code:", result.data);
-            joinTrade(result.data);
-            scanner.value.stop();
-          },
-          { returnDetailedScanResult: true }
-        );
+  // Style the video to fill the container while maintaining aspect ratio
+  videoElem.style.objectFit = 'cover';
+  videoElem.style.width = '100%';
+  videoElem.style.height = '100%';
+  
+  if (!scanner.value) {
+    scanner.value = new QrScanner(
+      videoElem,
+      (result) => {
+        console.log("Scanned Trade Code:", result.data);
+        joinTrade(result.data);
+        scanner.value.stop();
+        isScanning.value = false; // Reset scanning state
+      },
+      { 
+        returnDetailedScanResult: true,
+        preferredCamera: 'environment', // Use rear camera if available
+        highlightScanRegion: true, // Visual feedback for scanning
+        highlightCodeOutline: true, // Highlight detected QR codes
       }
-      scanner.value.start();
-    };
+    );
+  }
+  
+  // Make sure video is visible
+  videoElem.style.display = 'block';
+  scanner.value.start();
+};
 
     const joinTrade = async (code) => {
       try {
@@ -244,57 +288,106 @@ export default {
     };
 
     const acceptTrade = async () => {
-      try {
-        const response = await axios.post(`${API_URL}/api/acceptTrade`, {
-          tradeCode: tradeCode.value,
-          userId
-        });
-        hasAccepted.value = true;
-        if (response.data.tradeStatus.user1Accepted && response.data.tradeStatus.user2Accepted) {
-          console.log("Both users have accepted the trade.");
-        }
-        if (response.data.tradeStatus.user1 === userId) {
-          friendAccepted.value = response.data.tradeStatus.user2Accepted;
-        } else {
-          friendAccepted.value = response.data.tradeStatus.user1Accepted;
-        }
-        console.log(response.data.message);
-      } catch (error) {
-        console.error("Error accepting trade:", error);
+  try {
+    const response = await axios.post(`${API_URL}/api/acceptTrade`, {
+      tradeCode: tradeCode.value,
+      userId
+    });
+    hasAccepted.value = true;
+
+    // Immediately check if both accepted from the response
+    if (response.data.tradeStatus.user1Accepted && response.data.tradeStatus.user2Accepted) {
+      if (response.data.tradeStatus.user1 === userId) {
+        receivedCard.value = response.data.tradeStatus.user2Card;
+      } else {
+        receivedCard.value = response.data.tradeStatus.user1Card;
       }
+      showNewCardPopup.value = true;
+    } else {
+      // Update friend's acceptance status
+      if (response.data.tradeStatus.user1 === userId) {
+        friendAccepted.value = response.data.tradeStatus.user2Accepted;
+      } else {
+        friendAccepted.value = response.data.tradeStatus.user1Accepted;
+      }
+    }
+
+    // Force a fresh status check after accepting
+    await fetchTradeUpdates();
+
+  } catch (error) {
+    console.error("Error accepting trade:", error);
+  }
+};
+
+const fetchTradeUpdates = async () => {
+    if (!tradeCode.value) return;
+    try {
+        console.log("Fetching trade updates...");
+        const response = await axios.get(`${API_URL}/api/getTradeStatus/${tradeCode.value}`);
+        
+        // Update trade joined status
+        if (response.data.user1 && response.data.user2) {
+            tradeJoined.value = true;
+        }
+
+        // Update acceptance status
+        if (response.data.user1 === userId) {
+            friendAccepted.value = response.data.user2Accepted;
+        } else {
+            friendAccepted.value = response.data.user1Accepted;
+        }
+
+        // Update card displays
+        if (response.data.user1 === userId) {
+            friendCard.value = response.data.user2Card;
+        } else {
+            friendCard.value = response.data.user1Card;
+        }
+
+        // Check for completed trade
+        if (response.data.user1Accepted && response.data.user2Accepted) {
+            if (response.data.user1 === userId) {
+                receivedCard.value = response.data.user2Card;
+            } else {
+                receivedCard.value = response.data.user1Card;
+            }
+            showNewCardPopup.value = true;
+        }
+    } catch (error) {
+        console.error("Error fetching trade updates:", error);
+    }
+};
+
+
+    // Popup functionality: refresh the page or navigate to collection
+    const closePopup = () => {
+      window.location.reload();
     };
 
-    const fetchTradeUpdates = async () => {
-      if (!tradeCode.value) return;
-      try {
-        const response = await axios.get(`${API_URL}/api/getTradeStatus/${tradeCode.value}`);
-        if (response.data.user1 && response.data.user2) {
-          tradeJoined.value = true;
-        }
-        if (response.data.notifyUser === userId) {
-          console.log("Notified to update trade status!");
-          tradeJoined.value = true;
-        }
-        if (response.data.user1 === userId) {
-          friendCard.value = response.data.user2Card;
-        } else {
-          friendCard.value = response.data.user1Card;
-        }
-      } catch (error) {
-        console.error("Error fetching trade updates:", error);
-      }
+    const viewCollection = () => {
+      router.push('/collection');
     };
 
     onMounted(() => {
+      checkLoginStatus();
       socket.emit('register', userId);
       loadUserCards();
       fetchTradeUpdates();
+
       socket.on('tradeUpdated', (data) => {
-        if (data.tradeCode === tradeCode.value) {
-          console.log("Received real-time trade update!");
-          fetchTradeUpdates();
-        }
-      });
+    if (data.tradeCode === tradeCode.value) {
+        console.log("Received update [ fetchTradeUpdates() ] - Forced:", data.forceUpdate);
+        fetchTradeUpdates();
+    }
+});
+
+      socket.on('tradeCompleted', (data) => {
+      if (data.tradeCode === tradeCode.value) {
+        receivedCard.value = data.receivedCard;
+        showNewCardPopup.value = true;
+      }
+});
     });
 
     return {
@@ -313,6 +406,10 @@ export default {
       openCardSelection,
       selectCard,
       acceptTrade,
+      showNewCardPopup,
+      receivedCard,
+      closePopup,
+      viewCollection
     };
   }
 };
@@ -325,8 +422,7 @@ export default {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 1rem;
-  gap: 2rem;
+  padding: 3rem 0rem 0rem 0rem;
   text-align: center;
 }
 
@@ -339,7 +435,7 @@ export default {
 }
 
 .qr-display {
-  width: 12.5rem; /* fixed size: 200px/16 */
+  width: 12.5rem;
   height: 12.5rem;
 }
 
@@ -427,25 +523,47 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 90%;
-  height: 90%;
-  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* black half transparent */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 1000;
 }
 
+/* Modal Content for New Card Popup */
 .modal-content {
   background: #fff;
-  padding: 2rem;
   border-radius: 0.75rem;
-  width: 90%;
+  width: 90%;  /* default for smaller screens */
+  max-width: 400px; /* ensures proper scaling on mobile devices */
+  padding: 1rem;
+  margin: auto;
   max-height: 90%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Ensure the card image stays nicely inside the modal content */
+.card-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* New Card Popup specific styles */
+.new-card-popup .modal-content {
+  text-align: center;
+}
+
+.popup-buttons {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 1rem;
-  position: relative;
+  margin-top: 1rem;
 }
 
 /* Search Input */
@@ -468,7 +586,7 @@ export default {
 }
 
 .playing-card img {
-  width: 4rem; /* Set a smaller width */
+  width: 4rem;
   height: auto;
   max-width: 100%;
 }
@@ -496,6 +614,48 @@ export default {
   bottom: 0;
   align-self: center;
   margin-top: 1rem;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  width: 12.5rem;
+  height: 12.5rem;
+  margin: 0rem 0rem 1.5rem 0rem;
+  background-color: black;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This ensures the video fills the container while maintaining aspect ratio */
+}
+
+.video-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .modal-content[data-v-6b7e1cb6] {
+    width: 30%; /* adjust width for laptops/desktops */
+    max-width: none;
+  }
 }
 
 /* Responsive adjustments */

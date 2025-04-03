@@ -12,7 +12,7 @@ CREATE TABLE users (
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
     userPassword VARCHAR(255) NOT NULL,
     user_score INT DEFAULT 0,
-    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_reward_claimed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -186,3 +186,4 @@ VALUES
 (2, 3, 1), 
 (2, 4, 1), 
 (2, 5, 1);
+
