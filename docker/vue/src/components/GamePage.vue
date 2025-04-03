@@ -7,7 +7,7 @@
   
   <script>
   export default {
-    name: 'battle-page'
+    name: 'game-page'
   };
   </script>
 
