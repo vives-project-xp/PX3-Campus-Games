@@ -168,13 +168,14 @@ export const acceptTrade = async (req, res) => {
         return res.status(400).json({ error: "User not part of this trade" });
     }
 
-    // Notify both users immediately when someone accepts
-    notifyUserToUpdate(trade.user1, tradeCode);
-    notifyUserToUpdate(trade.user2, tradeCode);
-
     // Check if both users have accepted
     if (trade.user1Accepted && trade.user2Accepted) {
-        await tradeCards(tradeCode);
+        console.log("tradeCards(tradeCode);");
+        await tradeCards(tradeCode); // Call the trade logic to exchange the cards
+    } else {
+        // Notify both users to update their trade session
+        notifyUserToUpdate(trade.user1, tradeCode);
+        notifyUserToUpdate(trade.user2, tradeCode);
     }
 
     res.json({ message: "Trade accepted", tradeStatus: trade });
