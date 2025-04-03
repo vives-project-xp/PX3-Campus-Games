@@ -303,6 +303,7 @@ export default {
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   border: 2px solid white;
+  margin-top:0.4rem ;
 }
 
 .no-cards {
