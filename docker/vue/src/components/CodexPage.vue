@@ -323,7 +323,7 @@ export default {
   .card-grid {
     grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
     gap: 2vmin; /* Viewport-relative gap */
-    max-height: 80vh; /* Use viewport height */
+    max-height: 20%; /* Use viewport height */
     padding-bottom: env(safe-area-inset-bottom); /* Account for notches */
   }
 }
