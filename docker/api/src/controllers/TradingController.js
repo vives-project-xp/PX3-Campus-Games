@@ -1,7 +1,7 @@
 import db from '../db.js';
 import { v4 as uuidv4 } from 'uuid'; // npm install uuid
 import axios from "axios";
-import { recalculateUserScore } from './ScoreUpdateController.js';
+import { addTradePoint, recalculateUserScore } from './ScoreUpdateController.js';
 
 const API_URL = "http://localhost:3000";
 
@@ -174,7 +174,12 @@ export const acceptTrade = async (req, res) => {
 
     // Check if both users have accepted
     if (trade.user1Accepted && trade.user2Accepted) {
-        await tradeCards(tradeCode);
+        try {
+            await tradeCards(tradeCode);
+        } catch (error) {
+            console.error("Error completing trade:", error);
+            return res.status(500).json({ error: "Failed to complete trade" });
+        }
     }
 
     res.json({ message: "Trade accepted", tradeStatus: trade });
@@ -184,40 +189,40 @@ export const acceptTrade = async (req, res) => {
 // The tradeCards function will handle the actual trade logic
 const tradeCards = async (tradeCode) => {
     try {
-      const trade = activeTrades[tradeCode];
-      const user1 = trade.user1;
-      const user2 = trade.user2;
-  
-      const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
-      const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
-  
-      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
-        [user2, user1, user1CardId]);
-      await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
-        [user1, user2, user2CardId]);
+        const trade = activeTrades[tradeCode];
+        const user1 = trade.user1;
+        const user2 = trade.user2;
+
+        const user1CardId = trade.user1Card && trade.user1Card.card_id ? trade.user1Card.card_id : trade.user1Card;
+        const user2CardId = trade.user2Card && trade.user2Card.card_id ? trade.user2Card.card_id : trade.user2Card;
+
+        // Swap cards between users
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", [user2, user1, user1CardId]);
+        await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?", [user1, user2, user2CardId]);
 
         // Recalculate scores for both users
         await recalculateUserScore(db, user1);
         await recalculateUserScore(db, user2);
-  
-       // Mark trade as complete rather than deleting immediately
-       trade.completed = true;
-       //notifyUserToUpdate(user1, tradeCode);
-       //notifyUserToUpdate(user2, tradeCode);
 
-       io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
-        tradeCode,
-        receivedCard: trade.user2Card 
-      });
-      io.to(userSockets[trade.user2]).emit("tradeCompleted", { 
-        tradeCode,
-        receivedCard: trade.user1Card 
-      });
-  
-      console.log("Trade completed successfully");
+        // Add trade points for both users
+        await addTradePoint(user1);
+        await addTradePoint(user2);
 
-      
+        // Mark trade as complete
+        trade.completed = true;
+
+        // Notify users about the completed trade
+        io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
+            tradeCode,
+            receivedCard: trade.user2Card 
+        });
+        io.to(userSockets[trade.user2]).emit("tradeCompleted", { 
+            tradeCode,
+            receivedCard: trade.user1Card 
+        });
+
+        console.log("Trade completed successfully");
     } catch (error) {
-      console.error("Error executing trade:", error);
+        console.error("Error executing trade:", error);
     }
-  };  
+};
