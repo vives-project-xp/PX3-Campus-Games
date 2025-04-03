@@ -147,6 +147,7 @@ export const fetchTradeUpdates = async () => {
     }
   };
 
+
 // When a user accepts the trade
 export const acceptTrade = async (req, res) => {
     const { tradeCode, userId } = req.body;
@@ -185,6 +186,7 @@ export const acceptTrade = async (req, res) => {
 // The tradeCards function will handle the actual trade logic
 export const tradeCards = async (tradeCode) => {
     try {
+        console.log("TradingController.js 1");
       const trade = activeTrades[tradeCode];
       const user1 = trade.user1;
       const user2 = trade.user2;
@@ -197,6 +199,7 @@ export const tradeCards = async (tradeCode) => {
       await db.execute("UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?",
         [user1, user2, user2CardId]);
 
+        console.log("TradingController.js 2");
         // Recalculate scores for both users
         await recalculateUserScore(db, user1);
         await recalculateUserScore(db, user2);
@@ -215,6 +218,7 @@ export const tradeCards = async (tradeCode) => {
         receivedCard: trade.user1Card 
       });
   
+      console.log("TradingController.js 3");
       console.log("Trade completed successfully");
 
       

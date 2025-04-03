@@ -1,7 +1,7 @@
 import db from '../db.js';
 import { updateScoreOnCardChange, recalculateUserScore } from './ScoreUpdateController.js';
 
-const activeTrades = {}; // Store active trade sessions
+// const activeTrades = {}; // Store active trade sessions
 
 // Helper function to get card rarity and details
 const getCardDetails = async (card_id) => {
@@ -85,138 +85,6 @@ const getUserCards = async (req, res) => {
         res.status(500).json({ error: 'Kon kaarten niet ophalen' });
     }
 };
-
-
-// Handle card trading between users
-const tradeCards = async (req, res) => {
-    const connection = await db.getConnection();
-    try {
-        const { tradeCode, userId, cardId } = req.body;
-
-        await connection.beginTransaction();
-
-        // 1. Start or join trade
-        if (!activeTrades[tradeCode]) {
-            activeTrades[tradeCode] = { 
-                user1: { id: userId, card: cardId }, 
-                user2: null 
-            };
-            await connection.commit();
-            return res.json({ message: "Trade gestart, wacht op tweede speler" });
-        }
-
-        // 2. Join existing trade
-        if (!activeTrades[tradeCode].user2) {
-            activeTrades[tradeCode].user2 = { id: userId, card: cardId };
-        } else {
-            await connection.rollback();
-            return res.status(400).json({ error: "Trade is al vol" });
-        }
-
-        // 3. Verify both players and cards
-        const { user1, user2 } = activeTrades[tradeCode];
-        
-        // Check if users own their cards
-        const [user1Card] = await connection.execute(
-            'SELECT 1 FROM user_cards WHERE user_id = ? AND card_id = ?',
-            [user1.id, user1.card]
-        );
-        const [user2Card] = await connection.execute(
-            'SELECT 1 FROM user_cards WHERE user_id = ? AND card_id = ?',
-            [user2.id, user2.card]
-        );
-
-        if (!user1Card.length || !user2Card.length) {
-            await connection.rollback();
-            return res.status(400).json({ error: "Een of beide spelers hebben de kaart niet" });
-        }
-
-        // 4. Execute the trade
-        await connection.execute(
-            'UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?',
-            [user2.id, user1.id, user1.card]
-        );
-        await connection.execute(
-            'UPDATE user_cards SET user_id = ? WHERE user_id = ? AND card_id = ?',
-            [user1.id, user2.id, user2.card]
-        );
-
-        // 5. Update scores for both users
-        await recalculateUserScore(connection, user1.id);
-        await recalculateUserScore(connection, user2.id);
-
-        // 6. Get updated scores for response
-        const [user1Data] = await connection.execute(
-            'SELECT user_score FROM users WHERE id = ?',
-            [user1.id]
-        );
-        const [user2Data] = await connection.execute(
-            'SELECT user_score FROM users WHERE id = ?',
-            [user2.id]
-        );
-
-        delete activeTrades[tradeCode];
-        await connection.commit();
-
-        res.json({ 
-            message: "Trade succesvol",
-            scores: {
-                user1: { id: user1.id, newScore: user1Data[0].user_score },
-                user2: { id: user2.id, newScore: user2Data[0].user_score }
-            }
-        });
-
-    } catch (error) {
-        await connection.rollback();
-        console.error('Trade error:', error);
-        res.status(500).json({ 
-            error: 'Trade mislukt',
-            details: error.message 
-        });
-    } finally {
-        connection.release();
-    }
-};
-
-// // API to update selected card for trading
-// const updateTradeSelection = async (req, res) => {
-//     try {
-//         const { tradeCode, cardId } = req.body;
-
-//         if (!activeTrades[tradeCode]) {
-//             activeTrades[tradeCode] = { user1Card: null, user2Card: null };
-//         }
-
-//         if (!activeTrades[tradeCode].user1Card) {
-//             activeTrades[tradeCode].user1Card = cardId;
-//         } else {
-//             activeTrades[tradeCode].user2Card = cardId;
-//         }
-
-//         res.json({ message: 'Trade selection updated', tradeData: activeTrades[tradeCode] });
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-// // als QR code gescanned is, zorg ervoor om de trade te joinen
-// export const joinTrade = (req, res) => {
-//     const { tradeCode } = req.body;
-
-//     if (!activeTrades[tradeCode]) {
-//         return res.status(400).json({ error: "Invalid trade code" });
-//     }
-
-//     if (!activeTrades[tradeCode].user1) {
-//         activeTrades[tradeCode].user1 = req.body.userId;
-//     } else if (!activeTrades[tradeCode].user2) {
-//         activeTrades[tradeCode].user2 = req.body.userId;
-//     } else {
-//         return res.status(400).json({ error: "Trade is already full" });
-//     }
-
-//     res.json({ message: "Joined trade successfully", tradeCode });
-// };
 
 // Give starter pack based on user's education
 const giveStarterPack = async (req, res) => {
@@ -379,7 +247,7 @@ const getCard_dex = async (req, res) => {
 export {
     addCardToUser,
     getUserCards,
-    tradeCards,
+    //tradeCards,
     giveStarterPack,
     giveGeneralPack,
     getCard_dex
