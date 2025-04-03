@@ -301,10 +301,10 @@ export default {
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5em) { /* 600px ÷ 16px (default font size) = 37.5em */
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
-    max-height: calc(3 * (80px + 0.4rem)); 
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    max-height: calc(6 * (auto));
   }
 }
 
