@@ -1,5 +1,5 @@
 import db from '../db.js';
-import { updateScoreOnCardChange } from './ScoreUpdateController.js';
+import { updateScoreOnAddingCard } from './ScoreUpdateController.js';
 
 export const claimDailyReward = async (req, res) => {
   const connection = await db.getConnection();
@@ -86,7 +86,7 @@ export const confirmCardSelection = async (req, res) => {
     );
     
     if (card.length > 0) {
-      await updateScoreOnCardChange(connection, userId, [
+      await updateScoreOnAddingCard(connection, userId, [
         { rarity: card[0].rarity, quantityChange: 1 }
       ]);
     }

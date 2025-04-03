@@ -8,7 +8,7 @@ const rarityValues = {
   'Legendary': 50
 };
 
-export const updateScoreOnCardChange = async (connection, userId, cardChanges) => {
+export const updateScoreOnAddingCard = async (connection, userId, cardChanges) => {
   try {
       // Calculate total points change
       const pointsDifference = cardChanges.reduce((total, change) => {

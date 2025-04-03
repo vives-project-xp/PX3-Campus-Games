@@ -1,5 +1,5 @@
 import db from '../db.js';
-import { updateScoreOnCardChange, recalculateUserScore } from './ScoreUpdateController.js';
+import { updateScoreOnAddingCard, recalculateUserScore } from './ScoreUpdateController.js';
 
 // const activeTrades = {}; // Store active trade sessions
 
@@ -46,7 +46,7 @@ const addCardToUser = async (req, res) => {
         }
 
         // 3. Update user score
-        await updateScoreOnCardChange(connection, user_id, [
+        await updateScoreOnAddingCard(connection, user_id, [
             { rarity: card.rarity, quantityChange: 1 }
         ]);
 
@@ -149,7 +149,7 @@ const giveStarterPack = async (req, res) => {
         }
 
         // 4. Update user score based on card rarities
-        await updateScoreOnCardChange(connection, userId, scoreUpdates);
+        await updateScoreOnAddingCard(connection, userId, scoreUpdates);
 
         await connection.commit();
         
@@ -214,7 +214,7 @@ const giveGeneralPack = async (req, res) => {
         }
 
         // 3. Update score
-        await updateScoreOnCardChange(connection, userId, scoreUpdates);
+        await updateScoreOnAddingCard(connection, userId, scoreUpdates);
 
         await connection.commit();
         res.json({ 
