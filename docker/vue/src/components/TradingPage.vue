@@ -4,7 +4,7 @@
     <div v-if="!tradeJoined" class="qr-scan-section">
       <div class="qr-display">
         <div v-if="qrCodeUrl" class="qr-section">
-          <img :src="qrCodeUrl" alt="Scan this QR code to join the trade">
+          <img :src="qrCodeUrl" alt="Scan deze qr code om een sessie te starten">
         </div>
         <div v-else class="qr-section placeholder">
           <p>QR Code</p>
@@ -12,7 +12,7 @@
       </div>
       <!-- Buttons arranged vertically and centered -->
       <div class="buttons-container">
-        <button class="btn" @click="generateQRCode">Generate QR Code</button>
+        <button class="btn" @click="generateQRCode">Maak een QR Code aan</button>
         <button class="btn" @click="startScanning">Scan QR Code</button>
       </div>
       <!-- Hidden video element used for scanning -->
@@ -30,7 +30,7 @@
       <div class="cards-container">
 <!-- Your Card Selection -->
 <div class="card-box" @click="openCardSelection">
-  <h3>Your Selection</h3>
+  <h3>Jouw keuze</h3>
   <PlayingCard
     v-if="selectedCard"
     :cardName="selectedCard.cardName"
@@ -41,13 +41,13 @@
     :isSelected="true"
   />
   <div v-else class="card-placeholder">
-    <p>No Card Selected</p>
+    <p>Geen kaart geselecteerd</p>
   </div>
 </div>
 
 <!-- Friend's Card -->
 <div class="card-box">
-  <h3>Friend's Selection</h3>
+  <h3>KAndere speler</h3>
   <PlayingCard
     v-if="friendCard"
     :cardName="friendCard.cardName"
@@ -57,7 +57,7 @@
     :health="friendCard.health"
     :isSelected="false"
   />
-  <p v-else>Waiting for selection...</p>
+  <p v-else>wachten op een keuze...</p>
 </div>
 
       </div>
@@ -68,16 +68,16 @@
       <!-- Accept Trade Button and Status -->
       <div class="accept-trade-container">
         <button class="btn" :disabled="hasAccepted" @click="acceptTrade">
-          {{ hasAccepted ? "Trade Accepted" : "Accept Trade" }}
+          {{ hasAccepted ? "Ge-accepteerd" : "Accepteer" }}
         </button>
-        <p v-if="friendAccepted && hasAccepted">Both players have accepted the trade!</p>
+        <p v-if="friendAccepted && hasAccepted">Beide spelers hebben ge-accepteerd!</p>
       </div>
     </div>
 
     <!-- Card Selection Modal -->
     <div v-if="showCardSelection" class="modal">
       <div class="modal-content">
-        <h2>Select a Card</h2>
+        <h2>Selecteer een kaart</h2>
 
         <!-- Search Input -->
         <div class="search-input">
@@ -100,10 +100,10 @@
               @click="selectCard(card)"
             />
           </div>
-          <div class="no-cards" v-if="filteredCards.length === 0">No cards found.</div>
+          <div class="no-cards" v-if="filteredCards.length === 0">Geen kaarten gevonden.</div>
         </div>
 
-        <button class="btn close-btn" @click="showCardSelection = false">Close</button>
+        <button class="btn close-btn" @click="showCardSelection = false">Sluit</button>
       </div>
     </div>
   </div>
@@ -117,6 +117,7 @@ import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
+import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
@@ -133,76 +134,46 @@ export default {
     const searchQuery = ref('');
     const hasAccepted = ref(false);
     const friendAccepted = ref(false);
+    const router = useRouter();
 
     const socket = io(API_URL);
 
     const filteredCards = computed(() => {
-  let filtered = userCards.value;
+      let filtered = userCards.value;
   
-  if (searchQuery.value) {
-    filtered = filtered.filter(card =>
-      card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  }
+      if (searchQuery.value) {
+        filtered = filtered.filter(card =>
+          card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+      }
 
   return filtered.map((card) => ({
     ...card,
-    artwork_path: getImage(card.artwork_path), // Ensure the correct path is set
+    artwork_path: getImage(card.artwork_path),
   }));
 });
 
-// Function to correctly resolve image paths
-const getImage = (fileName) => {
-  try {
-    return require(`@/assets/Cards/${fileName.split('/').pop()}`);
-  } catch (error) {
-    console.error("Image not found:", fileName);
-    return "";
-  }
-};
+const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
+      }
+    };
 
-// const selectedCardImage = computed(() => {
-//   return selectedCard.value
-//     ? getImage(selectedCard.value.artwork_path)
-//     : "";
-// });
-
-// const friendCardImage = computed(() => {
-//   return friendCard.value
-//     ? getImage(friendCard.value.artwork_path)
-//     : "";
-// });
-
-  //   const selectedCardImage = computed(() => {
-  //   return selectedCard.value
-  //     ? require(`@/assets/Cards/${selectedCard.value.artwork_path.split('/').pop()}`)
-  //     : '';
-  // });
-
-  // const friendCardImage = computed(() => {
-  //   return friendCard.value
-  //     ? require(`@/assets/Cards/${friendCard.value.artwork_path.split('/').pop()}`)
-  //     : '';
-  // });
+  // Function to correctly resolve image paths
+  const getImage = (fileName) => {
+    try {
+      return require(`@/assets/Cards/${fileName.split('/').pop()}`);
+    } catch (error) {
+      console.error("Image not found:", fileName);
+      return "";
+    }
+  };
 
     const clearSearch = () => {
       searchQuery.value = '';
     };
-
-    // // Helper to update image paths from "/Cards" to "/img"
-    // const replacePath = (path) => {
-    //   return path.replace('/Cards', '/img');
-    // };
-
-    // const getImage = (fileName) => {
-    //   try {
-    //     // fileName is expected to be something like "Softwaredev_Tech.png"
-    //     return require(`@/Cards/${fileName}`);
-    //   } catch (error) {
-    //     console.error("Image not found:", fileName);
-    //     return "";
-    //   }
-    // };
 
     const generateQRCode = async () => {
       try {
@@ -325,6 +296,7 @@ const getImage = (fileName) => {
     };
 
     onMounted(() => {
+      checkLoginStatus();
       socket.emit('register', userId);
       loadUserCards();
       fetchTradeUpdates();
@@ -352,8 +324,6 @@ const getImage = (fileName) => {
       openCardSelection,
       selectCard,
       acceptTrade,
-      //selectedCardImage,
-      //friendCardImage // Return it so it's available in the template
     };
   }
 };

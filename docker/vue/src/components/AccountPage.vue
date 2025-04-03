@@ -3,10 +3,14 @@
     <h1>Account Details</h1>
     <p>Gebruikersnaam: {{ username }}</p>
     <button class="logout-button" @click="logout">Uitloggen</button>
+    <button class="delete-account" @click="deleteAccount">Account verwijderen</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import { API_URL } from '../config';
+
 export default {
   data() {
     return {
@@ -39,6 +43,26 @@ export default {
       this.username = '';
       this.$router.push('/login');
     },
+
+    async deleteAccount() {
+      if (confirm('Ben je zeker dat je dit account permanent wil verwijderen?')) {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        
+        try {
+          await axios.delete(`${API_URL}/api/deleteUser/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          alert('Account succesvol verwijderd.');
+          this.logout();
+        } catch (error) {
+          console.error('Error deleting account:', error);
+          alert('Er is een error opgetreden tijdens het verwijderen van het account.');
+        }
+      }
+    },
   },
 };
 </script>
@@ -61,5 +85,16 @@ export default {
   padding: 10px 20px;
   border: none;
   font-size: 15px;
+}
+
+.delete-account {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    font-size: 15px;
+    margin-left: 10px;
 }
 </style>

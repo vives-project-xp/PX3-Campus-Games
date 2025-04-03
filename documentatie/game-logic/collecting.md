@@ -10,8 +10,8 @@ Per drie cards, zijn twee cards common en is één kaart van rarity.
 Common 		    10			    25/55 of 45%
 Uncommon	 	20			    16/55 of 29%
 Rare			30			     9/55 of 16%
-Very rare	 	40			     4/55 of  7%
-Ultra rare		50			     1/55 of  2%
+Ultra Rare	 	40			     4/55 of  7%
+Legendary		50			     1/55 of  2%
 
 Een unieke set van subtypes krijgt 50% bonus points.
 

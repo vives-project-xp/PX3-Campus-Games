@@ -16,7 +16,7 @@ export default {
   props:{
       backToTopColor: {
           type: String,
-          default: '#e60000'
+          /*default: '#FF0000'*/
       }
   },
   setup() {
@@ -52,22 +52,22 @@ export default {
   position: fixed;
   bottom: 70px;
   right: 20px;
-  /* background-color: var(--secondary-color); Use dynamic backgroundColor */
+  background-color: var(--secondary-color);
   color: white;
   border: none;
-  padding: 0;        /*  <-- REMOVE padding (we'll control size with width/height) */
-  width: 40px;      /*  <-- Set a fixed width */
-  height: 40px;     /*  <-- Set a fixed height (same as width for a circle) */
-  border-radius: 50%; /*  <-- Makes it perfectly round */
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
-  z-index: 998;   /*  <--  Slightly lower z-index than the menu */
+  z-index: 998;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  opacity: 0.8;
   transition: opacity 0.3s ease;
 }
 
 .back-to-top-button:hover {
-  opacity: 1;
+  background-color: white;
+  color: var(--secondary-color);
 }
 </style>

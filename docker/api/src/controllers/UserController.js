@@ -48,7 +48,7 @@ const deleteUser = async (req, res) => {
         const [result] = await db.execute('DELETE FROM users WHERE id = ?', [id]);
 
         // Stuur de verwijderde gebruikersinformatie terug
-        res.json({ message: 'User deleted', oldUser: oldUser[0] });
+        res.json({ message: 'Account verwijderd', oldUser: oldUser[0] });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -76,7 +76,7 @@ const registerUser = async (req, res) => {
             [username, opleiding, hashedPassword]
         );
 
-        res.status(201).json({ message: 'User aangemaakt', userId: result.insertId });
+        res.status(201).json({ message: 'Account aangemaakt', userId: result.insertId });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -89,7 +89,7 @@ const loginUser = async (req, res) => {
         // Zoek de gebruiker
         const [users] = await db.execute('SELECT id, userPassword FROM users WHERE userName = ?', [username]);
         if (users.length === 0) {
-            return res.status(401).json({ error: 'Ongeldige username' });
+            return res.status(401).json({ error: 'Ongeldige gebruikersnaam' });
         }
 
         const user = users[0];

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>Uitdaging</h2>
+      <h2>Game</h2>
       <p>Onder constructie.</p>
     </div>
   </template>

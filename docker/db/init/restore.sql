@@ -1,3 +1,6 @@
+GRANT ALL PRIVILEGES ON *.* TO 'webuser'@'127.%' IDENTIFIED BY 'SchoolOpdracht';
+FLUSH PRIVILEGES;
+
 -- Maak een nieuwe database aan als deze nog niet bestaat
 CREATE DATABASE IF NOT EXISTS kaartspel_db;
 USE kaartspel_db;
@@ -9,6 +12,7 @@ CREATE TABLE users (
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
     userPassword VARCHAR(255) NOT NULL,
     user_score INT DEFAULT 0,
+    last_reward_claimed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -182,3 +186,4 @@ VALUES
 (2, 3, 1), 
 (2, 4, 1), 
 (2, 5, 1);
+

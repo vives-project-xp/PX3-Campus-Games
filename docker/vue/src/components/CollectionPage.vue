@@ -1,23 +1,15 @@
 <template>
   <div class="card-collection">
     <h2 v-if="isCollectionRoute" class="heading">Eigen kaarten:</h2>
-
-    <!-- Fixed Top Section -->
-    <div class="fixed-container">
-      <!-- Filter Buttons -->
-      <div class="filter-box">
+    
+    <div class="filter-box">
         <div class="filter-row">
-          <button :class="{ active: selectedRarities.includes('Common') }" @click="toggleFilter('Common')">Common</button>
-          <button :class="{ active: selectedRarities.includes('Uncommon') }" @click="toggleFilter('Uncommon')">Uncommon</button>
-          <button :class="{ active: selectedRarities.includes('Rare') }" @click="toggleFilter('Rare')">Rare</button>
-        </div>
-        <div class="filter-row">
-          <button :class="{ active: selectedRarities.includes('UltraRare') }" @click="toggleFilter('UltraRare')">Ultra Rare</button>
-          <button :class="{ active: selectedRarities.includes('Legendary') }" @click="toggleFilter('Legendary')">Legendary</button>
+          <button @click="sortCards('cardName')">Naam</button>
+          <button @click="sortCards('rarity')">Zeldzaamheid</button>
+          <button @click="sortCards('type')">Type</button>
         </div>
       </div>
 
-      <!-- Search and Total Cards -->
       <div class="search-box">
         <div class="total-cards">
           <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
@@ -27,10 +19,8 @@
           <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
           <button @click="clearSearch">x</button>
         </div>
-      </div>
     </div>
 
-    <!-- Scrollable Card Grid -->
     <div class="card-container">
       <div class="card-grid" v-if="filteredCards.length > 0">
         <PlayingCard
@@ -52,7 +42,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, onMounted } from 'vue';
 import { API_URL } from '../config';
 
@@ -61,10 +51,13 @@ export default {
   components: { PlayingCard },
   setup() {
     const route = useRoute();
+    const router = useRouter(); // Get the router instance
     const cards = ref([]);
     const selectedCards = ref([]);
     const selectedRarities = ref([]);
     const searchQuery = ref('');
+    const sortKey = ref(null); // Add sortKey ref
+    const sortDirection = ref(1); // Add sortDirection ref (1 = ASC, -1 = DESC)
 
     const isCollectionRoute = computed(() => route.path === '/collection');
 
@@ -82,14 +75,28 @@ export default {
 
     const filteredCards = computed(() => {
       let filtered = cards.value;
+
       if (selectedRarities.value.length > 0) {
-        filtered = filtered.filter((card) => selectedRarities.value.includes(card.rarity));
+        filtered = filtered.filter((card) =>
+          selectedRarities.value.includes(card.rarity)
+        );
       }
+
       if (searchQuery.value) {
         filtered = filtered.filter((card) =>
           card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase())
         );
       }
+
+      if (sortKey.value) {
+        filtered.sort((a, b) => {
+          let comparison = 0;
+          if (a[sortKey.value] > b[sortKey.value]) comparison = 1;
+          if (a[sortKey.value] < b[sortKey.value]) comparison = -1;
+          return comparison * sortDirection.value;
+        });
+      }
+
       return filtered.map((card) => ({
         ...card,
         artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
@@ -115,7 +122,28 @@ export default {
       }
     };
 
-    onMounted(fetchUserCards);
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
+      }
+    };
+
+    onMounted(() => {
+      fetchUserCards();
+      checkLoginStatus();
+    });
+
+    // Add sortCards function
+    const sortCards = (key) => {
+      if (sortKey.value === key) {
+        sortDirection.value *= -1; // Sort DESC
+      } else {
+        sortKey.value = key;
+        sortDirection.value = 1; // Reset ASC
+      }
+    };
 
     return {
       isCollectionRoute,
@@ -126,6 +154,7 @@ export default {
       searchQuery,
       clearSearch,
       toggleCardSelection,
+      sortCards, // Return sortCards
     };
   },
 };
@@ -237,10 +266,12 @@ export default {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16%, 1fr));
+  grid-auto-rows: 1fr;
   gap: 0.4rem;
   justify-items: center;
-  padding-bottom: 2rem;
+  max-height: calc(6 * (auto)); /* 6 rows */
+  overflow-y: auto;
 }
 
 .no-cards {
@@ -252,7 +283,8 @@ export default {
 
 @media (max-width: 600px) {
   .card-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
+    max-height: calc(6 * (auto)); 
   }
 }
 </style>
