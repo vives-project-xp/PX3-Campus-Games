@@ -340,7 +340,7 @@ export default {
 
 .card-detail-image.grayscale {
   filter: grayscale(100%) blur(10px);
-  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%);
 }
 
 .card-info-box {

@@ -167,23 +167,5 @@ VALUES
 'De hotelmanager houdt alles draaiende in een hotel. Van gastvrijheid tot logistiek, hij zorgt ervoor dat elke gast een perfecte ervaring heeft.', 
 'handel&business', '/Cards/Hotelmanager_HnBd.png');
 
--- Voeg een paar gebruikers toe
-INSERT INTO users (userName, opleiding, userPassword)
-VALUES 
-('admin1', 'technology&bio', 'admin1'),
-('admin2', 'technology&bio', 'admin2');
 
--- Voeg kaarten toe aan gebruikers
-INSERT INTO user_cards (user_id, card_id, quantity)
-VALUES 
-(1, 1, 1), 
-(1, 2, 1), 
-(1, 3, 1), 
-(1, 4, 1), 
-(1, 5, 1),
-(2, 1, 1), 
-(2, 2, 1), 
-(2, 3, 1), 
-(2, 4, 1), 
-(2, 5, 1);
 

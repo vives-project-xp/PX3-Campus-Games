@@ -79,8 +79,8 @@
         <li>Degeest Bram: Robotics/ back-end developer</li>
       </ul>
       <h3>Documentatie:</h3>
-      <p>Alle documentatie is terug te vinden in onze <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
-
+      <p>Alle documentatie is terug te vinden in onze 
+        <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
     </div>
   </template>
   

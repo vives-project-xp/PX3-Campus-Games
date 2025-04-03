@@ -42,7 +42,7 @@ export const claimDailyReward = async (req, res) => {
     res.json({
       success: true,
       cards: cards.map(card => ({
-        ...card,
+              ...card,
         artwork_path: card.artwork_path.split('/').pop()
       }))
     });
