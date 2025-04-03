@@ -1,3 +1,6 @@
+// Heal taget kiesbaar maken
+// 4de ability bedenken
+
 class Card {
     constructor(name, health, damage, ability) {
       this.name = name;
@@ -43,6 +46,9 @@ class Card {
       } else if (this.ability === "free_switch") {
         player.switchCard(true);
         return `${player.name} switches cards for free!`;
+      } else if (this.ability === "extra_action"){
+        currentPlayer.ap + 2;
+        return `${player.name} gains 1 ap!`;
       }
       return "Invalid ability";
     }

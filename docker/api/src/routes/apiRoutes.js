@@ -20,7 +20,6 @@ router.get('/getUsersScores', LeaderboardController.getUsersScores); //alle scor
 // cards
 router.post('/addCard', CardController.addCardToUser);   
 router.get('/userCards/:user_id', CardController.getUserCards);  
-// router.post('/tradeCards', CardController.tradeCards);  
 router.post('/starter-pack', CardController.giveStarterPack);
 router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
@@ -32,13 +31,12 @@ router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 router.post("/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 router.post("/acceptTrade", TradingController.acceptTrade);
-router.post("/tradeCards", TradingController.tradeCards);
+//router.post("/tradeCards", TradingController.tradeCards); (this is called in "acceptTrade" function)
 
 //Daily rewards
 router.post('/daily', DailyRewardController.claimDailyReward);
 router.post('/daily/select', DailyRewardController.confirmCardSelection);
+router.get('/daily/check',DailyRewardController.checkDailyReward);
 
 
 export default router;
-
-

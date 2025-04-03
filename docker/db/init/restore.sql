@@ -134,6 +134,7 @@ VALUES
 'gezondheidszorg', '/Cards/Virus_Vplg.png');
 
 -- Onderwijs & Sociaal
+-- nieuwe ability
 INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
 ('Kleuterjuf', 260, 80, 'damage_multiplier', 'Common', 

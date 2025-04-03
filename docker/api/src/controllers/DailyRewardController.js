@@ -1,5 +1,5 @@
 import db from '../db.js';
-import { updateScoreOnCardChange } from './ScoreUpdateController.js';
+import { updateScoreOnAddingCard } from './ScoreUpdateController.js';
 
 export const claimDailyReward = async (req, res) => {
   const connection = await db.getConnection();
@@ -12,10 +12,10 @@ export const claimDailyReward = async (req, res) => {
       });
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    // Gebruik server tijd voor de check
     const [claimed] = await connection.execute(
-      'SELECT 1 FROM users WHERE id = ? AND DATE(last_reward_claimed) = ?',
-      [userId, today]
+      'SELECT 1 FROM users WHERE id = ? AND last_reward_claimed >= CURDATE()',
+      [userId]
     );
 
     if (claimed.length > 0) {
@@ -86,12 +86,12 @@ export const confirmCardSelection = async (req, res) => {
     );
     
     if (card.length > 0) {
-      await updateScoreOnCardChange(connection, userId, [
+      await updateScoreOnAddingCard(connection, userId, [
         { rarity: card[0].rarity, quantityChange: 1 }
       ]);
     }
 
-    // Update claim datum
+    // Update claim datum met server tijd
     await connection.execute(
       'UPDATE users SET last_reward_claimed = NOW() WHERE id = ?',
       [userId]
@@ -108,6 +108,32 @@ export const confirmCardSelection = async (req, res) => {
       success: false,
       error: 'Databasefout bij toevoegen kaart'
     });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+
+export const checkDailyReward = async (req, res) => {
+  const connection = await db.getConnection();
+  try {
+    const userId = Number(req.user?.id || req.query.userId);
+    if (!userId) {
+      return res.status(401).json({ hasReward: false });
+    }
+
+    const [claimed] = await connection.execute(
+      'SELECT 1 FROM users WHERE id = ? AND last_reward_claimed >= CURDATE()',
+      [userId]
+    );
+
+    res.json({ 
+      hasReward: claimed.length === 0,
+      lastClaimed: claimed[0]?.last_reward_claimed 
+    });
+  } catch (error) {
+    console.error('Check daily reward error:', error);
+    res.status(500).json({ hasReward: false });
   } finally {
     if (connection) connection.release();
   }

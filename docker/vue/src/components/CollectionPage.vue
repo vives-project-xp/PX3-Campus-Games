@@ -1,15 +1,19 @@
 <template>
-  <div class="card-collection">
-    <h2 v-if="isCollectionRoute" class="heading">Eigen kaarten:</h2>
-    
-    <div class="filter-box">
+  <div class="collection-page">
+    <h2 v-if="isCollectionRoute" class="heading">Eigen Kaarten:</h2>
+
+    <!-- Fixed Top Section -->
+    <div class="fixed-container">
+      <!-- Filter Buttons -->
+      <div class="filter-box">
         <div class="filter-row">
           <button @click="sortCards('cardName')">Naam</button>
           <button @click="sortCards('rarity')">Zeldzaamheid</button>
-          <button @click="sortCards('type')">Type</button>
+          <button @click="sortCards('opleiding')">Opleiding</button>
         </div>
       </div>
 
+      <!-- Search and Total Cards -->
       <div class="search-box">
         <div class="total-cards">
           <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
@@ -19,36 +23,40 @@
           <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
           <button @click="clearSearch">x</button>
         </div>
+      </div>
     </div>
 
+    <!-- Scrollable Card Grid -->
     <div class="card-container">
-      <div class="card-grid" v-if="filteredCards.length > 0">
-        <div 
+      <div class="card-grid" v-if="filteredCards && filteredCards.length > 0">
+        <PlayingCard
           v-for="card in filteredCards"
           :key="card.card_id"
-          class="card-wrapper"
-          :data-quantity="card.quantity || 1"
-        >
-          <PlayingCard
-            :cardName="card.cardName"
-            :cardImage="card.artwork_path"
-            :attack="card.attack"
-            :ability="card.ability"
-            :health="card.health"
-            :isSelected="selectedCards.includes(card.card_id)"
-            @click="toggleCardSelection(card.card_id)"
-          />
-        </div>
+          :cardName="card.cardName"
+          :cardImage="card.artwork_path"
+          @click="showCardDetails(card)"
+        />
       </div>
       <div v-else class="no-cards">Geen kaarten gevonden.</div>
+    </div>
+
+    <!-- Card Details -->
+    <div v-if="selectedCard" class="card-detail-overlay" @click="closeCardDetails">
+      <div class="card-detail">
+        <img
+          :src="selectedCard.artwork_path"
+          :alt="selectedCard.cardName"
+          class="card-detail-image"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
 import { API_URL } from '../config';
 
 export default {
@@ -56,36 +64,18 @@ export default {
   components: { PlayingCard },
   setup() {
     const route = useRoute();
-    const router = useRouter();
-    const cards = ref([]);
-    const selectedCards = ref([]);
-    const selectedRarities = ref([]);
+    const allCards = ref([]);
+    const userCards = ref([]);
     const searchQuery = ref('');
     const sortKey = ref(null);
-    const sortDirection = ref(1);
+    const sortDirection = ref(1); // 1 = ASC, -1 = DESC
+    const selectedCard = ref(null);
 
     const isCollectionRoute = computed(() => route.path === '/collection');
-
-    const toggleFilter = (rarity) => {
-      if (selectedRarities.value.includes(rarity)) {
-        selectedRarities.value = selectedRarities.value.filter((r) => r !== rarity);
-      } else {
-        selectedRarities.value.push(rarity);
-      }
-    };
-
-    const clearSearch = () => {
-      searchQuery.value = '';
-    };
+    const rarityOrder = ['common', 'uncommon', 'rare', 'ultra rare', 'legendary'];
 
     const filteredCards = computed(() => {
-      let filtered = cards.value;
-
-      if (selectedRarities.value.length > 0) {
-        filtered = filtered.filter((card) =>
-          selectedRarities.value.includes(card.rarity)
-        );
-      }
+      let filtered = allCards.value;
 
       if (searchQuery.value) {
         filtered = filtered.filter((card) =>
@@ -94,26 +84,51 @@ export default {
       }
 
       if (sortKey.value) {
-        filtered.sort((a, b) => {
-          let comparison = 0;
-          if (a[sortKey.value] > b[sortKey.value]) comparison = 1;
-          if (a[sortKey.value] < b[sortKey.value]) comparison = -1;
-          return comparison * sortDirection.value;
-        });
+        if (sortKey.value === 'rarity') {
+          filtered.sort((a, b) => {
+            const rarityA = a.rarity.toLowerCase();
+            const rarityB = b.rarity.toLowerCase();
+            const indexA = rarityOrder.indexOf(rarityA);
+            const indexB = rarityOrder.indexOf(rarityB);
+            return (indexA - indexB) * sortDirection.value;
+          });
+        } else {
+          filtered.sort((a, b) => {
+            let comparison = 0;
+            if (a[sortKey.value] > b[sortKey.value]) comparison = 1;
+            if (a[sortKey.value] < b[sortKey.value]) comparison = -1;
+            return comparison * sortDirection.value;
+          });
+        }
       }
 
       return filtered.map((card) => ({
         ...card,
-        quantity: card.quantity || 1, // Zorg voor default quantity
         artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
       }));
     });
 
-    const toggleCardSelection = (cardId) => {
-      if (selectedCards.value.includes(cardId)) {
-        selectedCards.value = selectedCards.value.filter((id) => id !== cardId);
+    const sortCards = (key) => {
+      if (sortKey.value === key) {
+        sortDirection.value *= -1; // Sort DESC
       } else {
-        selectedCards.value.push(cardId);
+        sortKey.value = key;
+        sortDirection.value = 1; // Reset ASC
+      }
+    };
+
+    const clearSearch = () => {
+      searchQuery.value = '';
+    };
+
+    const fetchAllCards = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(`${API_URL}/api/userCards/${userId}`);
+        const data = await response.json();
+        allCards.value = data;
+      } catch (error) {
+        console.error('Error fetching all cards:', error);
       }
     };
 
@@ -122,50 +137,50 @@ export default {
         const userId = localStorage.getItem('userId');
         const response = await fetch(`${API_URL}/api/userCards/${userId}`);
         const data = await response.json();
-        cards.value = data;
+        userCards.value = data.map((card) => card.card_id); // Only card IDs
       } catch (error) {
         console.error('Error fetching user cards:', error);
       }
     };
 
+    const showCardDetails = (card) => {
+      selectedCard.value = card;
+    };
+
+    const closeCardDetails = () => {
+      selectedCard.value = null;
+    };
+
     const checkLoginStatus = () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/login');
+        route.push('/login');
       }
     };
 
-    onMounted(() => {
-      fetchUserCards();
+    onMounted(async () => {
       checkLoginStatus();
+      await fetchAllCards();
+      await fetchUserCards();
     });
-
-    const sortCards = (key) => {
-      if (sortKey.value === key) {
-        sortDirection.value *= -1;
-      } else {
-        sortKey.value = key;
-        sortDirection.value = 1;
-      }
-    };
-
+    
     return {
       isCollectionRoute,
       filteredCards,
-      selectedCards,
-      toggleFilter,
-      selectedRarities,
       searchQuery,
       clearSearch,
-      toggleCardSelection,
       sortCards,
+      userCards,
+      showCardDetails,
+      selectedCard,
+      closeCardDetails,
     };
   },
 };
 </script>
 
 <style scoped>
-.card-collection {
+.collection-page {
   padding: 0.3rem;
   display: flex;
   flex-direction: column;
@@ -216,17 +231,6 @@ export default {
   color: white;
 }
 
-/* Search Box */
-.search-box {
-  margin-top: 0.3rem;
-  margin-bottom: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 25rem;
-}
-
 .total-cards {
   display: flex;
   align-items: center;
@@ -237,6 +241,17 @@ export default {
   width: 20px;
   height: 20px;
   margin-right: 0.3rem;
+}
+
+/* Search Box */
+.search-box {
+  margin-top: 0.3rem;
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 25rem;
 }
 
 .search-input {
@@ -266,7 +281,6 @@ export default {
   overflow-y: auto;
   width: 100%;
   flex-grow: 1;
-  overflow-x: hidden;
 }
 
 .card-grid {
@@ -275,34 +289,8 @@ export default {
   grid-auto-rows: 1fr;
   gap: 0.4rem;
   justify-items: center;
-  max-height: calc(6 * (auto));
-  overflow-y: hidden;
-}
-
-/* NIEUW: Card wrapper met quantity indicator */
-.card-wrapper {
-  position: relative;
-  width: 90%;
-}
-
-.card-wrapper::after {
-  content: attr(data-quantity);
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 28px;
-  height: 28px;
-  background-color: #2196F3;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.9rem;
-  z-index: 10;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  border: 2px solid white;
+  max-height: calc(6 * (auto)); /* 6 rows */
+  overflow-y: auto;
 }
 
 .no-cards {
@@ -317,13 +305,52 @@ export default {
     grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
     max-height: calc(6 * (auto));
   }
-  
-  .card-wrapper::after {
-    width: 24px;
-    height: 24px;
-    font-size: 0.8rem;
-    top: -6px;
-    right: -6px;
-  }
+}
+
+/* Card Details */
+.card-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.card-detail {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  max-width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.card-detail-image {
+  max-width: 100%;
+  max-height: 90vh;
+  height: auto;
+  background-color: black;
+}
+
+.card-info-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  z-index: 1001;
+  text-align: center;
+  font-size: 3vh;
+  width: 52vh;
+  height: 86vh;
+  overflow: hidden;
 }
 </style>
