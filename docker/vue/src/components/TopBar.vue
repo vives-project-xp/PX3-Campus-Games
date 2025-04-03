@@ -1,16 +1,38 @@
 <template>
-    <div class="top-bar">
-      <router-link to="/" class="logo-link">
-        <h1>Vives Collectica</h1>
-      </router-link>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'TopBar',
-  };
-  </script>
+  <div class="top-bar">
+    <a href="#" class="logo-link" @click.prevent="handleClick">
+      <h1>Vives Collectica</h1>
+    </a>
+  </div>
+</template>
+
+<script>
+import { useRoute, useRouter } from 'vue-router';
+
+export default {
+  name: 'TopBar',
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
+
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
+    const handleClick = () => {
+      if (route.path === '/') {
+        scrollToTop();
+      } else {
+        router.push('/');
+      }
+    };
+    return { handleClick };
+  }
+};
+</script>
   
   <style scoped>
   .top-bar {
