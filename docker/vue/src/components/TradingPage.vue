@@ -62,11 +62,15 @@
           <p v-else>wachten op een keuze...</p>
         </div>
       </div>
+
       <!-- Rest of your trading interface -->
       <div class="accept-trade-container">
+
         <button class="btn" :disabled="hasAccepted" @click="acceptTrade">
           {{ hasAccepted ? "Ge-accepteerd" : "Accepteer" }}
         </button>
+        <p v-if="showSelectCardMessage">Selecteer eerst een kaart</p>
+
         <p v-if="friendAccepted && hasAccepted">Beide spelers hebben ge-accepteerd!</p>
       </div>
     </div>
@@ -144,6 +148,7 @@ export default {
     const userId = localStorage.getItem('userId');
     const userCards = ref([]);
     const selectedCard = ref(null);
+    const showSelectCardMessage = ref(false);
     const friendCard = ref(null);
     const showCardSelection = ref(false);
     const searchQuery = ref('');
@@ -287,6 +292,20 @@ const checkLoginStatus = () => {
     };
 
     const acceptTrade = async () => {
+  // Add this validation check FIRST
+  if (!selectedCard.value) {
+    showSelectCardMessage.value = true; // Show message
+    console.log("show no card selected");
+    setTimeout(() => {
+      showSelectCardMessage.value = false; // Hide after 5 sec
+      console.log("hide no card selected");
+    }, 5000);
+    return; // Exit early
+  }
+
+  console.log("continuing accept trade");
+
+  // Then proceed with the existing trade logic
   try {
     const response = await axios.post(`${API_URL}/api/acceptTrade`, {
       tradeCode: tradeCode.value,
@@ -294,7 +313,7 @@ const checkLoginStatus = () => {
     });
     hasAccepted.value = true;
 
-    // Immediately check if both accepted from the response
+    // Rest of your existing code...
     if (response.data.tradeStatus.user1Accepted && response.data.tradeStatus.user2Accepted) {
       if (response.data.tradeStatus.user1 === userId) {
         receivedCard.value = response.data.tradeStatus.user2Card;
@@ -303,7 +322,6 @@ const checkLoginStatus = () => {
       }
       showNewCardPopup.value = true;
     } else {
-      // Update friend's acceptance status
       if (response.data.tradeStatus.user1 === userId) {
         friendAccepted.value = response.data.tradeStatus.user2Accepted;
       } else {
@@ -311,7 +329,6 @@ const checkLoginStatus = () => {
       }
     }
 
-    // Force a fresh status check after accepting
     await fetchTradeUpdates();
 
   } catch (error) {
@@ -396,6 +413,7 @@ const fetchTradeUpdates = async () => {
       userCards,
       selectedCard,
       friendCard,
+      showSelectCardMessage,
       showCardSelection,
       searchQuery,
       filteredCards,
@@ -408,7 +426,9 @@ const fetchTradeUpdates = async () => {
       showNewCardPopup,
       receivedCard,
       closePopup,
-      viewCollection
+      viewCollection,
+      friendAccepted,
+      hasAccepted
     };
   }
 };
@@ -565,6 +585,12 @@ const fetchTradeUpdates = async () => {
   margin-top: 1rem;
 }
 
+.accept-trade-container p {
+    height: 2rem;
+    color: red;
+    text-align: center;
+}
+
 /* Search Input */
 .search-input {
   display: flex;
@@ -649,6 +675,12 @@ const fetchTradeUpdates = async () => {
   padding: 1rem;
   box-sizing: border-box;
 }
+
+/* ////////////////////////////////////////////////////////////////// */
+
+
+
+/* ////////////////////////////////////////////////////////////////// */
 
 @media (min-width: 768px) {
   .modal-content[data-v-6b7e1cb6] {
