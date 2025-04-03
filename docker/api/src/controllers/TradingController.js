@@ -202,6 +202,10 @@ export const tradeCards = async (tradeCode) => {
         // Recalculate scores for both users
         await recalculateUserScore(db, user1);
         await recalculateUserScore(db, user2);
+        
+        // Add trade point to users
+        await addTradePoint(user1); 
+        await addTradePoint(user2); 
 
        io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
         tradeCode,
