@@ -63,8 +63,7 @@ Een belangrijk onderdeel van de kaarten is het artwork, dat een herkenbare en aa
 ### Kaart template
 we maken gebruik van een template voor de kaarten zodat we enkel de kleur, attack, abilitie en levens moeten aanpassen en de afbeelding er in plaatsen.
 
-<img src="![make_a_card_new](https://github.com/user-attachments/assets/9a12f915-8ce8-4f75-9b07-1f745147d5a2)
-" width="200" height="300">
+<img src="https://github.com/user-attachments/assets/9a12f915-8ce8-4f75-9b07-1f745147d5a2" width="200" height="300">
 
 ### Generatieproces
 De afbeeldingen voor de kaarten worden gegenereerd met behulp van AI. Vervolgens passen we handmatige nabewerking toe om:
