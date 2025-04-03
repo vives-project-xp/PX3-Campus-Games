@@ -23,17 +23,22 @@
 
     <div class="card-container">
       <div class="card-grid" v-if="filteredCards.length > 0">
-        <PlayingCard
+        <div 
           v-for="card in filteredCards"
           :key="card.card_id"
-          :cardName="card.cardName"
-          :cardImage="card.artwork_path"
-          :attack="card.attack"
-          :ability="card.ability"
-          :health="card.health"
-          :isSelected="selectedCards.includes(card.card_id)"
-          @click="toggleCardSelection(card.card_id)"
-        />
+          class="card-wrapper"
+          :data-quantity="card.quantity || 1"
+        >
+          <PlayingCard
+            :cardName="card.cardName"
+            :cardImage="card.artwork_path"
+            :attack="card.attack"
+            :ability="card.ability"
+            :health="card.health"
+            :isSelected="selectedCards.includes(card.card_id)"
+            @click="toggleCardSelection(card.card_id)"
+          />
+        </div>
       </div>
       <div v-else class="no-cards">Geen kaarten gevonden.</div>
     </div>
@@ -51,13 +56,13 @@ export default {
   components: { PlayingCard },
   setup() {
     const route = useRoute();
-    const router = useRouter(); // Get the router instance
+    const router = useRouter();
     const cards = ref([]);
     const selectedCards = ref([]);
     const selectedRarities = ref([]);
     const searchQuery = ref('');
-    const sortKey = ref(null); // Add sortKey ref
-    const sortDirection = ref(1); // Add sortDirection ref (1 = ASC, -1 = DESC)
+    const sortKey = ref(null);
+    const sortDirection = ref(1);
 
     const isCollectionRoute = computed(() => route.path === '/collection');
 
@@ -99,6 +104,7 @@ export default {
 
       return filtered.map((card) => ({
         ...card,
+        quantity: card.quantity || 1, // Zorg voor default quantity
         artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
       }));
     });
@@ -124,8 +130,7 @@ export default {
 
     const checkLoginStatus = () => {
       const token = localStorage.getItem('token');
-      if (token) {
-      } else {
+      if (!token) {
         router.push('/login');
       }
     };
@@ -135,13 +140,12 @@ export default {
       checkLoginStatus();
     });
 
-    // Add sortCards function
     const sortCards = (key) => {
       if (sortKey.value === key) {
-        sortDirection.value *= -1; // Sort DESC
+        sortDirection.value *= -1;
       } else {
         sortKey.value = key;
-        sortDirection.value = 1; // Reset ASC
+        sortDirection.value = 1;
       }
     };
 
@@ -154,7 +158,7 @@ export default {
       searchQuery,
       clearSearch,
       toggleCardSelection,
-      sortCards, // Return sortCards
+      sortCards,
     };
   },
 };
@@ -262,6 +266,7 @@ export default {
   overflow-y: auto;
   width: 100%;
   flex-grow: 1;
+  overflow-x: hidden;
 }
 
 .card-grid {
@@ -270,8 +275,35 @@ export default {
   grid-auto-rows: 1fr;
   gap: 0.4rem;
   justify-items: center;
-  max-height: calc(6 * (auto)); /* 6 rows */
-  overflow-y: auto;
+  max-height: calc(6 * (auto));
+  overflow-y: hidden;
+}
+
+/* NIEUW: Card wrapper met quantity indicator */
+.card-wrapper {
+  position: relative;
+  width: 90%;
+}
+
+.card-wrapper::after {
+  content: attr(data-quantity);
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  background-color: #2196F3;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border: 2px solid white;
+  margin-top:0.4rem ;
 }
 
 .no-cards {
@@ -281,10 +313,18 @@ export default {
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5em) { /* 600px ÷ 16px (default font size) = 37.5em */
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
-    max-height: calc(6 * (auto)); 
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    max-height: calc(6 * (auto));
+  }
+  
+  .card-wrapper::after {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    top: -6px;
+    right: -6px;
   }
 }
 </style>

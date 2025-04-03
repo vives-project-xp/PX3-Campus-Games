@@ -18,6 +18,31 @@ const getUserScoreById = async (req, res) => {
     }
 };
 
+const getScoreByEducation = async (req, res) => {
+    try {
+        const { opleiding } = req.params;
+        const query = `SELECT user_score FROM users WHERE opleiding = ?`;
+        const [rows] = await db.execute(query, [opleiding]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Opleiding niet gevonden of geen gebruikers met deze opleiding." });
+        }
+
+        let totalScore = 0;
+        for (const row of rows) {
+            totalScore += row.user_score;
+        }
+
+        res.json({
+            opleiding: opleiding,
+            total_score: totalScore,
+        });
+    } catch (error) {
+        console.error("Fout bij ophalen van totale score:", error);
+        res.status(500).json({ error: "Kan totale score niet ophalen" });
+    }
+};
+
 const getUsersScores = async (req, res) => {
     try {
         const query = `SELECT id, user_score FROM users ORDER BY user_score DESC limit 10`;
@@ -38,6 +63,7 @@ const getUsersScores = async (req, res) => {
 
 export { 
     getUserScoreById,
+    getScoreByEducation,
     getUsersScores
     
 };
