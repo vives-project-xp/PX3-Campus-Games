@@ -86,6 +86,7 @@ const getUserCards = async (req, res) => {
     }
 };
 
+
 // Give starter pack based on user's education
 const giveStarterPack = async (req, res) => {
     const connection = await db.getConnection();
@@ -247,7 +248,6 @@ const getCard_dex = async (req, res) => {
 export {
     addCardToUser,
     getUserCards,
-    tradeCards,
     giveStarterPack,
     giveGeneralPack,
     getCard_dex
