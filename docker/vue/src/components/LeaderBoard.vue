@@ -1,40 +1,38 @@
 <template>
-    <div class="leaderboard-container">
-      <h1 class="heading">Scorebord</h1>
-  
-      <div class="leaderboard-content">
-        <div v-if="loading" class="loading">
-          Aan het laden...
-        </div>
-        <div v-else-if="error" class="error">
-          {{ error }}
-        </div>
-        <div v-else-if="leaderboard.length > 0" class="leaderboard-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Gebruikersnaam</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(user, index) in leaderboard" :key="user.id" :class="{ 'top-user': index === 0 }">
-                <td>{{ index + 1 }}</td>
-                <td>{{ usernameMap.get(user.id) }}</td>
-                <td>{{ user.user_score }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else class="no-data">
-          Geen scorebord data beschikbaar.
-        </div>
+  <div class="leaderboard-container">
+    <h1 class="heading">Scorebord</h1>
+
+    <div class="leaderboard-content">
+      <div v-if="loading" class="loading">
+        Aan het laden...
+      </div>
+      <div v-else-if="error" class="error">
+        {{ error }}
+      </div>
+      <table v-else-if="leaderboard.length > 0" class="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Gebruikersnaam</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(user, index) in leaderboard" :key="user.id" :class="{ 'top-user': index === 0 }">
+            <td>{{ index + 1 }}</td>
+            <td>{{ usernameMap.get(user.id) }}</td>
+            <td>{{ user.user_score }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div v-else class="no-data">
+        Geen scorebord data beschikbaar.
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
+<script>
   import { ref, onMounted, computed } from 'vue';
   import { API_URL } from '../config';
   import axios from 'axios';
@@ -88,36 +86,38 @@
       };
     },
   };
-  </script>
-  
-  <style scoped>
+</script>
+
+<style scoped>
 .leaderboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  width: 85%; /* 85% width */
-  max-width: 800px; /* Optional: Keep a maximum width */
-  margin: auto; /* Center horizontally */
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .heading {
   margin-bottom: 20px;
   font-size: 2rem;
-  text-align: center; /* Center the heading */
+  text-align: center;
 }
 
 .leaderboard-content {
   width: 100%;
-  display: flex; /* Use flexbox for centering */
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .leaderboard-table th,
@@ -140,9 +140,9 @@
   color: #555;
 }
 
-/* Style for the top user */
 .top-user {
+  color: red;
+  font-weight: bold;
   border: 2px solid red;
-  /* Add any other styling you want for the top user row */
 }
 </style>
