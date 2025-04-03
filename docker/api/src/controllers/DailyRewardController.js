@@ -14,10 +14,9 @@ export const claimDailyReward = async (req, res) => {
 
     // Gebruik server tijd voor de check
     const [claimed] = await connection.execute(
-      'SELECT 1 FROM users WHERE id = ? AND last_reward_claimed >= CURDATE()',
+      'SELECT 1 FROM users WHERE id = ? AND (last_reward_claimed IS NULL OR last_reward_claimed >= CURDATE())',
       [userId]
     );
-
     if (claimed.length > 0) {
       return res.status(400).json({ 
         success: false,
