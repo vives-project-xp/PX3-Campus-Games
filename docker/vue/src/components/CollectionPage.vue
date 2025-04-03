@@ -29,18 +29,14 @@
     <!-- Scrollable Card Grid -->
     <div class="card-container">
       <div class="card-grid" v-if="filteredCards && filteredCards.length > 0">
-        <div 
-          v-for="card in filteredCards"
-          :key="card.card_id"
-          class="card-wrapper"
-          :data-quantity="card.quantity || 1"
-        ></div>
         <PlayingCard
           v-for="card in filteredCards"
           :key="card.card_id"
           :cardName="card.cardName"
           :cardImage="card.artwork_path"
           @click="showCardDetails(card)"
+          class="card-wrapper"
+          :data-quantity="card.quantity || 1"
         />
       </div>
       <div v-else class="no-cards">Geen kaarten gevonden.</div>
