@@ -47,7 +47,7 @@ Alle documentatie, zoals foto's, video's en documenten, wordt gedeeld in de map 
 ## Hoe werkt het
 
 ### Collectie
-Bij het aanmaken van een account krijgt de gebruiker een starterpack van 3 kaarten. 
+Bij het aanmaken van een account krijgt de gebruiker een starterpack van 3 kaarten. Verder krijgt de gebruiker elke dag een keuze tussen 3 kaarten. Om je collectie ui te breiden kan je ruilen met andere spelers, games winnen en elke dag spelen. Er zijn verschillende zeldzaamheden dat de kaarten kunnen hebben. Hoe zeldzamer je kaart, hoe meer punten deze waard is voor je score.
 
 ### Ruilen
 Voor een kaart te ruilen met een andere speler zullen ze beiden fysiek aanwezig moeten zijn bij elkaar. Hiervoor gaat de ene gebruiker een qr-code genereren die de andere dan moet scannen om een ruil te beginnen. De qr-code die gegenereerd word is een random string die word aangemaakt elke keer als de ruil pagina word open gedaan. Deze string word opgeslagen in de database. De andere gebruiker die de qr-code dan scanned zal de string lezen en zoeken aan welke gebruiker deze gekoppeld is. Als deze gevonden is zal er een connectie geopend worden tussen de 2 spelers en kunnen ze een kaart ruilen.
@@ -63,7 +63,8 @@ Een belangrijk onderdeel van de kaarten is het artwork, dat een herkenbare en aa
 ### Kaart template
 we maken gebruik van een template voor de kaarten zodat we enkel de kleur, attack, abilitie en levens moeten aanpassen en de afbeelding er in plaatsen.
 
-<img src="https://github.com/user-attachments/assets/e76e9065-ee1f-4336-87df-db3b6f5fb4fe" width="200" height="300">
+<img src="![make_a_card_new](https://github.com/user-attachments/assets/9a12f915-8ce8-4f75-9b07-1f745147d5a2)
+" width="200" height="300">
 
 ### Generatieproces
 De afbeeldingen voor de kaarten worden gegenereerd met behulp van AI. Vervolgens passen we handmatige nabewerking toe om:
