@@ -15,6 +15,10 @@
 
       <!-- Search and Total Cards -->
       <div class="search-box">
+        <div class="total-cards">
+          <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
+          <span>{{ filteredCards.length }}</span>
+        </div>
         <div class="search-input">
           <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
           <button @click="clearSearch">x</button>
@@ -42,7 +46,7 @@
 
     <!-- Card Details -->
     <div v-if="selectedCard" class="card-detail-overlay" @click="closeCardDetails">
-      <div class="card-detail" @click.stop="toggleInfo">
+      <div class="card-detail">
         <img
           :src="selectedCard.artwork_path"
           :alt="selectedCard.cardName"
@@ -53,10 +57,10 @@
         <div v-if="showInfo" class="card-info-box">
           <p><strong>Naam:</strong> {{ selectedCard.cardName }}</p>
           <p><strong>Opleiding:</strong> {{ selectedCard.opleiding.charAt(0).toUpperCase() + selectedCard.opleiding.slice(1).replace(/&/g, ' & ') }}</p>
-          <p><strong>Zeldzaamheid:</strong> {{ selectedCard.rarity }}</p>
-          <p><strong>Health:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.health }}</p>
-          <p><strong>Attack:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.attack }}</p>
-          <p><strong>Ability:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.ability.charAt(0).toUpperCase() + selectedCard.ability.slice(1).replace(/_/g, ' ') }}</p>
+          <p><strong>Zeldzaamheid:</strong> {{ {'Common': 'Gewoon', 'Uncommon': 'Ongewoon', 'Rare': 'Zeldzaam', 'Ultra Rare': 'Uiterst Zeldzaam', 'Legendary': 'Legendarisch'}[selectedCard.rarity] }}</p>
+          <p><strong>Levenspunten:</strong> {{ selectedCard.health }}</p>
+          <p><strong>Vaardigheid:</strong> {{ selectedCard.attack }}</p>
+          <p><strong>Kracht:</strong> {{ selectedCard.ability.charAt(0).toUpperCase() + selectedCard.ability.slice(1).replace(/_/g, ' ') }}</p>
           <p><strong>Info:</strong> {{ selectedCard.info }}</p>
         </div>
       </div>
@@ -154,15 +158,12 @@ export default {
       }
     };
 
-    const toggleInfo = () => {
-        showInfo.value = !showInfo.value;
-    };
-
     const showCardDetails = (card) => {
       selectedCard.value = {
         ...card,
         grayscale: !userCards.value.includes(card.card_id),
       };
+      showInfo.value = true;
     };
 
     const closeCardDetails = () => {
@@ -186,7 +187,6 @@ export default {
       selectedCard,
       closeCardDetails,
       showInfo,
-      toggleInfo,
     };
   },
 };
@@ -242,6 +242,18 @@ export default {
 .filter-row button.active {
   background-color: red;
   color: white;
+}
+
+.total-cards {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.3rem;
 }
 
 /* Search Box */
@@ -339,7 +351,7 @@ export default {
 }
 
 .card-detail-image.grayscale {
-  filter: grayscale(100%) blur(10px);
+  filter: grayscale(100%) blur(5px);
   mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 50%);
 }
 

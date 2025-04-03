@@ -1,5 +1,5 @@
 import db from '../db.js';
-import { updateScoreOnCardChange } from './ScoreUpdateController.js';
+import { updateScoreOnAddingCard } from './ScoreUpdateController.js';
 
 export const claimDailyReward = async (req, res) => {
   const connection = await db.getConnection();
@@ -14,10 +14,9 @@ export const claimDailyReward = async (req, res) => {
 
     // Gebruik server tijd voor de check
     const [claimed] = await connection.execute(
-      'SELECT 1 FROM users WHERE id = ? AND last_reward_claimed >= CURDATE()',
+      'SELECT 1 FROM users WHERE id = ? AND (last_reward_claimed IS NULL OR last_reward_claimed >= CURDATE())',
       [userId]
     );
-
     if (claimed.length > 0) {
       return res.status(400).json({ 
         success: false,
@@ -86,7 +85,7 @@ export const confirmCardSelection = async (req, res) => {
     );
     
     if (card.length > 0) {
-      await updateScoreOnCardChange(connection, userId, [
+      await updateScoreOnAddingCard(connection, userId, [
         { rarity: card[0].rarity, quantityChange: 1 }
       ]);
     }
