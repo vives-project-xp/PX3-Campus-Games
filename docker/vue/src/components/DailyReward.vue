@@ -50,8 +50,9 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { API_URL } from '../config';
+import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
@@ -69,6 +70,7 @@ export default {
     const isSelecting = ref(false);
     const message = ref('');
     const isError = ref(false);
+    const route = useRouter();
 
     const claimReward = async () => {
       isLoading.value = true;
@@ -162,6 +164,17 @@ export default {
         isSelecting.value = false;
       }
     };
+
+    const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        route.push('/login');
+      }
+    };
+
+    onMounted(() => {
+      checkLoginStatus();
+    });
 
     return {
       rewardCards,

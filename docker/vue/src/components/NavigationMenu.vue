@@ -10,13 +10,14 @@
 
     <nav v-if="isMenuOpen" class="menu">
       <router-link to="/" @click="closeMenu">Home</router-link>
+      <router-link to="/leaderboard" @click="closeMenu">Scorebord</router-link>
       <router-link to="/collection" @click="closeMenu">Collectie</router-link>
       <router-link to="/codex" @click="closeMenu">Codex</router-link>
       <router-link to="/trading" @click="closeMenu">Ruilen</router-link>
-      <router-link to="/battle" @click="closeMenu">Game</router-link>
-      <router-link to="/shop" @click="closeMenu">Winkel</router-link>
-      <router-link to="/account" @click="closeMenu">Account</router-link>
+      <router-link to="/game" @click="closeMenu">Game</router-link>
+      <!--<router-link to="/shop" @click="closeMenu">Winkel</router-link>-->
       <router-link to="/daily" @click="closeMenu">Dagelijkse Beloning</router-link>
+      <router-link to="/account" @click="closeMenu">Account</router-link>
     </nav>
   </div>
 </template>

@@ -132,6 +132,7 @@ import QRCode from "qrcode";
 import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
+import { useRouter } from 'vue-router';
 
 export default {
   components: { PlayingCard },
@@ -177,6 +178,14 @@ export default {
       } catch (error) {
         console.error("Image not found:", fileName);
         return "";
+      }
+    };
+
+const checkLoginStatus = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+      } else {
+        router.push('/login');
       }
     };
 
@@ -361,6 +370,7 @@ const fetchTradeUpdates = async () => {
     };
 
     onMounted(() => {
+      checkLoginStatus();
       socket.emit('register', userId);
       loadUserCards();
       fetchTradeUpdates();
