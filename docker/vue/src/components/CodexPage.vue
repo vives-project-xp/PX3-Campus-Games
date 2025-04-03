@@ -9,7 +9,7 @@
         <div class="filter-row">
           <button @click="sortCards('cardName')">Naam</button>
           <button @click="sortCards('rarity')">Zeldzaamheid</button>
-          <button @click="sortCards('type')">Type</button>
+          <button @click="sortCards('opleiding')">Opleiding</button>
         </div>
       </div>
 
@@ -42,36 +42,22 @@
 
     <!-- Card Details -->
     <div v-if="selectedCard" class="card-detail-overlay" @click="closeCardDetails">
-      <div class="card-detail">
+      <div class="card-detail" @click.stop="toggleInfo">
         <img
           :src="selectedCard.artwork_path"
           :alt="selectedCard.cardName"
           class="card-detail-image"
-          @mousemove="handleMouseMove"
+          :class="{ grayscale: selectedCard.grayscale }"
         />
 
-        <div
-          v-if="showTopInfo"
-          class="card-info-box top-info"
-        >
-          <p><strong>Name:</strong> {{ selectedCard.cardName }}</p>
-          <p><strong>Type:</strong> {{ selectedCard.type }}</p>
-          <p><strong>Rarity:</strong> {{ selectedCard.rarity }}</p>
-          <p><strong>Description:</strong> {{ selectedCard.description }}</p>
-        </div>
-
-        <div
-          v-if="showAttack"
-          class="card-info-box attack-info"
-        >
-          <p><strong>Attack:</strong> {{ selectedCard.attack }}</p>
-        </div>
-
-        <div
-          v-if="showAbility"
-          class="card-info-box ability-info"
-        >
-          <p><strong>Ability:</strong> {{ selectedCard.ability }}</p>
+        <div v-if="showInfo" class="card-info-box">
+          <p><strong>Naam:</strong> {{ selectedCard.cardName }}</p>
+          <p><strong>Opleiding:</strong> {{ selectedCard.opleiding.charAt(0).toUpperCase() + selectedCard.opleiding.slice(1).replace(/&/g, ' & ') }}</p>
+          <p><strong>Zeldzaamheid:</strong> {{ selectedCard.rarity }}</p>
+          <p><strong>Health:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.health }}</p>
+          <p><strong>Attack:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.attack }}</p>
+          <p><strong>Ability:</strong> {{ selectedCard.grayscale ? '???' : selectedCard.ability.charAt(0).toUpperCase() + selectedCard.ability.slice(1).replace(/_/g, ' ') }}</p>
+          <p><strong>Info:</strong> {{ selectedCard.info }}</p>
         </div>
       </div>
     </div>
@@ -95,11 +81,10 @@ export default {
     const sortKey = ref(null);
     const sortDirection = ref(1); // 1 = ASC, -1 = DESC
     const selectedCard = ref(null);
-    const showTopInfo = ref(false);
-    const showAttack = ref(false);
-    const showAbility = ref(false);
+    const showInfo = ref(false);
 
     const isCodexRoute = computed(() => route.path === '/codex');
+    const rarityOrder = ['common', 'uncommon', 'rare', 'ultra rare', 'legendary'];
 
     const filteredCards = computed(() => {
       let filtered = allCards.value;
@@ -111,12 +96,22 @@ export default {
       }
 
       if (sortKey.value) {
-        filtered.sort((a, b) => {
-          let comparison = 0;
-          if (a[sortKey.value] > b[sortKey.value]) comparison = 1;
-          if (a[sortKey.value] < b[sortKey.value]) comparison = -1;
-          return comparison * sortDirection.value;
-        });
+        if (sortKey.value === 'rarity') {
+          filtered.sort((a, b) => {
+            const rarityA = a.rarity.toLowerCase();
+            const rarityB = b.rarity.toLowerCase();
+            const indexA = rarityOrder.indexOf(rarityA);
+            const indexB = rarityOrder.indexOf(rarityB);
+            return (indexA - indexB) * sortDirection.value;
+          });
+        } else {
+          filtered.sort((a, b) => {
+            let comparison = 0;
+            if (a[sortKey.value] > b[sortKey.value]) comparison = 1;
+            if (a[sortKey.value] < b[sortKey.value]) comparison = -1;
+            return comparison * sortDirection.value;
+          });
+        }
       }
 
       return filtered.map((card) => ({
@@ -159,30 +154,20 @@ export default {
       }
     };
 
+    const toggleInfo = () => {
+        showInfo.value = !showInfo.value;
+    };
+
     const showCardDetails = (card) => {
-      selectedCard.value = card;
+      selectedCard.value = {
+        ...card,
+        grayscale: !userCards.value.includes(card.card_id),
+      };
     };
 
     const closeCardDetails = () => {
       selectedCard.value = null;
-      showTopInfo.value = false;
-      showAttack.value = false;
-      showAbility.value = false;
-    };
-
-    const handleMouseMove = (event) => {
-      if (!selectedCard.value) return;
-
-      const cardRect = event.target.getBoundingClientRect();
-      const mouseX = event.clientX - cardRect.left;
-      const mouseY = event.clientY - cardRect.top;
-
-      const cardWidth = cardRect.width;
-      const cardHeight = cardRect.height;
-
-      showTopInfo.value = mouseY < cardHeight / 2;
-      showAttack.value = mouseY >= cardHeight / 2 && mouseX < cardWidth / 2;
-      showAbility.value = mouseY >= cardHeight / 2 && mouseX >= cardWidth / 2;
+      showInfo.value = false;
     };
 
     onMounted(async () => {
@@ -200,10 +185,8 @@ export default {
       showCardDetails,
       selectedCard,
       closeCardDetails,
-      showTopInfo,
-      showAttack,
-      showAbility,
-      handleMouseMove,
+      showInfo,
+      toggleInfo,
     };
   },
 };
@@ -318,20 +301,10 @@ export default {
   font-weight: bold;
 }
 
-/* For phones in portrait mode */
-@media (max-aspect-ratio: 9/16) and (hover: none) {
+@media (max-width: 600px) {
   .card-grid {
-    grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
-    gap: 2vmin; /* Viewport-relative gap */
-    max-height: 80vh; /* Use viewport height */
-    padding-bottom: env(safe-area-inset-bottom); /* Account for notches */
-  }
-}
-
-/* For phones in landscape mode */
-@media (min-aspect-ratio: 9/16) and (max-aspect-ratio: 1/1) and (hover: none) {
-  .card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); 
+    max-height: calc(3 * (80px + 0.4rem)); 
   }
 }
 
@@ -351,45 +324,39 @@ export default {
 
 .card-detail {
   background-color: var(--primary-color);
-  padding: 20px;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  max-width: 80%;
-  max-height: 80%;
-  overflow: auto;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: inline-block;
 }
 
 .card-detail-image {
   max-width: 100%;
+  max-height: 90vh;
   height: auto;
+  background-color: black;
 }
 
-.card-detail-name {
-  text-align: center;
-  margin-top: 10px;
+.card-detail-image.grayscale {
+  filter: grayscale(100%) blur(10px);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
 }
 
 .card-info-box {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 10px;
+  padding: 1rem;
   border-radius: var(--border-radius);
   z-index: 1001;
-}
-
-.top-info {
-  top: 10px;
-  left: 10px;
-}
-
-.attack-info {
-  bottom: 10px;
-  left: 10px;
-}
-
-.ability-info {
-  bottom: 10px;
-  right: 10px;
+  text-align: center;
+  font-size: 3vh;
+  width: 52vh;
+  height: 86vh;
+  overflow: hidden;
 }
 </style>
