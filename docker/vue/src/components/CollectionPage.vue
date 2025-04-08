@@ -196,7 +196,7 @@ export default {
 
 .fixed-container {
   margin-top: 0rem;
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
