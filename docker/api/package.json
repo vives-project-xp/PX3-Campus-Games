@@ -19,12 +19,14 @@
     "express": "^4.17.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.16.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ws": "^8.18.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
-    
   }
 }

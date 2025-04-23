@@ -5,6 +5,7 @@ import apiRoutes from './routes/apiRoutes.js';
 import pool from './db.js';  // Importeer database connectie
 import path from 'path';
 import { fileURLToPath } from 'url';
+import swaggerDocs from './utils/swagger.js';
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -58,4 +59,7 @@ app.use((req, res) => {
 
 app.listen(port, () => {
   console.log(`🚀 vives-card-game-backend draait op http://localhost:${port}`);
+
+  swaggerDocs(app, port); // Genereer Swagger documentatie
+  console.log(`Swagger(API) documentatie beschikbaar op http://localhost:${port}/docs`);
 });
