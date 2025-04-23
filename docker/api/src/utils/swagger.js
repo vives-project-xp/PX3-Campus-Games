@@ -1,8 +1,7 @@
-import {Express, Request, Response} from 'express';
- import swaggerUi from 'swagger-ui-express';
+ import swaggerUi from 'swagger-ui';
  import swaggerJsDoc from 'swagger-jsdoc';
  import {version} from '../../package.json'
- import log from './logger';
+//  import log from './logger';
  
  const options = {
      definitions: {
