@@ -1,32 +1,21 @@
  import swaggerUi from 'swagger-ui';
  import swaggerJsDoc from 'swagger-jsdoc';
- import {version} from '../../package.json'
 //  import log from './logger';
  
  const options = {
-     definitions: {
+     definition: {
          openapi: "3.0.0",
          info: {
              title: "API Documentation",
-             version
          },
-         components: {
-             securitySchemes: {
-                 bearerAuth: {
-                     type: "http",
-                     scheme: "bearer",
-                     bearerFormat: "JWT"
-                 },
-             },
-         },
-         security: [
-             {
-                 bearerAuth: []
-             }
-         ],
+            servers: [
+                {
+                    url: "http://localhost:4000",
+                },
+            ],
      },
      apis: [
-         "./src/routes.js",
+         "./src/routes/apiRoutes.js",
          "./src/schema/*.js",
      ],
  };

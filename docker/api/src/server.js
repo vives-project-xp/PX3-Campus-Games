@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import swaggerDocs from './utils/swagger.js';
+// import swaggerUI from 'swagger-ui-express';
 
 dotenv.config(); // Load environment variables from .env file
 
