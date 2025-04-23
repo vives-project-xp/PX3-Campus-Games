@@ -1,58 +1,66 @@
 <template>
-  <div class="leaderboard-container">
+    <div class="leaderboard-container">
       <h1 class="heading">Scoreborden</h1>
-
+  
       <div class="leaderboards-wrapper">
-          <div class="leaderboard-section">
-              <h2>Gebruikers Scorebord</h2>
-              <div class="leaderboard-content">
-                  <div v-if="userLoading" class="loading">Aan het laden...</div>
-                  <div v-else-if="userError" class="error">{{ userError }}</div>
-                  <table v-else-if="userLeaderboard.length > 0" class="leaderboard-table">
-                      <thead>
-                          <tr>
-                              <th>Rank</th>
-                              <th>Gebruikersnaam</th>
-                              <th>Score</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr v-for="(user, index) in userLeaderboard" :key="user.id" :class="{ 'leader': index === 0 }">
-                              <td>{{ index + 1 }}</td>
-                              <td>{{ usernameMap.get(user.id) }}</td>
-                              <td>{{ user.user_score }}</td>
-                          </tr>
-                      </tbody>
-                  </table>
-                  <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
-              </div>
+        <div class="leaderboard-section">
+          <h2>Individueel scorebord</h2>
+          <div class="leaderboard-content">
+            <div v-if="userLoading" class="loading">Aan het laden...</div>
+            <div v-else-if="userError" class="error">{{ userError }}</div>
+            <table v-else-if="userLeaderboard.length > 0" class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Gebruikersnaam</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(user, index) in userLeaderboard" :key="user.id" :class="{ 'first': index === 0, 'second': index === 1, 'third': index === 2 }">
+                  <td>
+                    <span v-if="index === 0" class="rank-emoji">🥇</span>
+                    <span v-else-if="index === 1" class="rank-emoji">🥈</span>
+                    <span v-else-if="index === 2" class="rank-emoji">🥉</span>
+                    <span v-else>{{ index + 1 }}</span>
+                  </td>
+                  <td>{{ usernameMap.get(user.id) }}</td>
+                  <td>{{ user.user_score }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
           </div>
-
-          <div class="leaderboard-section">
-              <h2>Opleiding Scorebord</h2>
-              <div class="leaderboard-content">
-                  <div v-if="educationLoading" class="loading">Aan het laden...</div>
-                  <div v-else-if="educationError" class="error">{{ educationError }}</div>
-                  <table v-else-if="educationLeaderboard.length > 0" class="leaderboard-table">
-                      <thead>
-                          <tr>
-                              <th>Opleiding</th>
-                              <th>Totale Score</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr v-for="education in educationLeaderboard" :key="education.opleiding" :class="{ 'leader': education.opleiding === topEducation }">
-                              <td>{{ education.opleiding }}</td>
-                              <td>{{ education.total_score }}</td>
-                          </tr>
-                      </tbody>
-                  </table>
-                  <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
-              </div>
+        </div>
+  
+        <div class="leaderboard-section">
+          <h2>Scorebord per studiegebied</h2>
+          <div class="leaderboard-content">
+            <div v-if="educationLoading" class="loading">Aan het laden...</div>
+            <div v-else-if="educationError" class="error">{{ educationError }}</div>
+            <table v-else-if="educationLeaderboard.length > 0" class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Opleiding</th>
+                  <th>Totale Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="education in educationLeaderboard" :key="education.opleiding" :class="{ 'leader': education.opleiding === topEducation }">
+                  <td>
+                    <span v-if="education.opleiding === topEducation" class="leader">🏆 {{ education.opleiding.replace('&', ' & ') }}</span>
+                    <span v-else>{{ education.opleiding.replace('&', ' & ') }}</span>
+                  </td>
+                  <td>{{ education.total_score }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
           </div>
+        </div>
       </div>
-  </div>
-</template>
+    </div>
+  </template>
   
 <script>
 import { ref, onMounted, computed } from 'vue';
@@ -203,7 +211,8 @@ export default {
 .leaderboard-table td {
     padding: 10px;
     border: 1px solid #ddd;
-    text-align: left;
+    /*text-align: left;*/
+    text-align: center;
 }
 
 .leaderboard-table th {
@@ -219,9 +228,39 @@ export default {
     color: #555;
 }
 
-.leader {
-    color: red;
+.first {
+    color: gold;
     font-weight: bold;
-    border: 2px solid red;
+    /*border: 2px solid gold;*/
+}
+
+.second {
+    color: silver;
+    font-weight: bold;
+    /*border: 2px solid silver;*/
+}
+
+.third {
+    color: #cd7f32;
+    font-weight: bold;
+    /*border: 2px solid #cd7f32;*/
+}
+
+.leader {
+    color: gold;
+    font-weight: bold;
+    /*border: 2px solid gold;*/
+}
+
+@media (max-width: 800px) {
+  .leaderboards-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leaderboard-section {
+    width: 95%;
+    margin: 15px 0;
+  }
 }
 </style>
