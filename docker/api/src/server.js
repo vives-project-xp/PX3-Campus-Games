@@ -59,7 +59,4 @@ app.use((req, res) => {
 
 app.listen(port, () => {
   console.log(`🚀 vives-card-game-backend draait op http://localhost:${port}`);
-
-  swaggerDocs(app, port); // Genereer Swagger documentatie
-  console.log(`Swagger(API) documentatie beschikbaar op http://localhost:${port}/docs`);
 });
