@@ -37,10 +37,8 @@ export default {
 }
 
 html, body {
-  margin: 0;
-  padding: 5px;
-  height: 100%;
-  margin-top: 10px;
+  padding: 0rem 1rem 0rem 1rem;
+  margin-top: 1rem;
 }
 
 #app {
@@ -50,16 +48,11 @@ html, body {
   text-align: left;
   color: var(--text-color);
   background-color: var(--background-color);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 main {
-  /*
-  padding: 1rem;
-  max-width: 1200px;
-  */
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;
