@@ -64,7 +64,7 @@ VALUES
 
 ('C-Talen', 300, 60, 'block', 'Ultra Rare', 
 'C-talen zijn programmeertalen gebaseerd op C, zoals C++, C# en Objective-C. Ze worden gebruikt voor systeembouw, softwareontwikkeling en high-performance applicaties.', 
-'technology&bio', '/Cards/CCsCPP_Tech.png'),
+'technology&bio', '/Cards/CCsCpp_Tech.png'),
 
 ('Python', 200, 100, 'block', 'Uncommon', 
 'Python is een krachtige en gebruiksvriendelijke programmeertaal, populair voor data-analyse, AI, webontwikkeling en automatisering.', 
