@@ -7,7 +7,64 @@ import * as DailyRewardController from '../controllers/DailyRewardController.js'
 import * as TradingController from "../controllers/TradingController.js";
 
 // users
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 example: JohnDoe
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *       400:
+ *         description: Bad request
+ */
+router.post('/register', UserController.registerUser);
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login a user
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 example: JohnDoe
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       401:
+ *         description: Unauthorized
+ */
 router.post('/register', UserController.registerUser); 
+
+
 router.post('/login', UserController.loginUser);
 router.get('/getAllUsers', UserController.getAllUsers);
 router.get('/getUserBy/:param/:value', UserController.getUserBy); // param = column name, value = value to search for
