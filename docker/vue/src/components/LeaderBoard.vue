@@ -1,6 +1,7 @@
 <template>
   <div class="leaderboard-container">
     <h1 class="heading">Scoreborden</h1>
+
     <div class="search-bar-container">
           <input
             type="text"
@@ -9,7 +10,8 @@
             class="search-input"
           />
           <button class="clearButton" @click="clearSearch">✖</button>
-        </div>
+    </div>
+
     <div class="leaderboards-wrapper">
       <div class="leaderboard-section">
         <h2>Individueel scorebord</h2>
@@ -75,9 +77,8 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue';
-import { API_URL } from '../config'; // Zorg dat dit pad correct is
+import { API_URL } from '../config';
 import axios from 'axios';
-// import { useRoute } from 'vue-router'; // Importeer useRoute indien nodig (was in originele code)
 
 export default {
   name: 'Leaderboard',
@@ -92,36 +93,25 @@ export default {
     const educationError = ref(null);
     const topEducation = ref(null);
 
-    // Nieuwe ref voor de zoekterm
     const searchQuery = ref('');
-
-    // const route = useRoute(); // Haal route op indien nodig
 
     const fetchUserLeaderboard = async () => {
       userLoading.value = true;
       userError.value = null;
-      usernameMap.value.clear(); // Leeg de map bij opnieuw ophalen
+      usernameMap.value.clear();
       try {
         const response = await axios.get(`${API_URL}/api/getUsersScores`);
-        // Sorteer meteen op score (hoog naar laag) als de API dat nog niet doet
         userLeaderboard.value = response.data.sort((a, b) => b.user_score - a.user_score);
 
-        // Haal alle usernames tegelijk op (efficiënter)
         const userIds = userLeaderboard.value.map(user => user.id);
         if (userIds.length > 0) {
-           // Aanname: je hebt een API endpoint dat meerdere usernames kan ophalen
-           // Als dat niet zo is, gebruik de oude for-loop
-           // Voorbeeld: const usernamesResponse = await axios.post(`${API_URL}/api/getUsernamesByIds`, { ids: userIds });
-           // Pas de code hieronder aan op basis van de response van je API
-
-           // Oude manier (minder efficiënt, maar werkt met je huidige getUserScoreById):
           await Promise.all(userLeaderboard.value.map(async (user) => {
             try {
               const userResponse = await axios.get(`${API_URL}/api/getUserScoreById/${user.id}`);
               usernameMap.value.set(user.id, userResponse.data.username);
             } catch (userFetchError) {
               console.error(`Error fetching username for user ${user.id}:`, userFetchError);
-              usernameMap.value.set(user.id, 'Onbekende Gebruiker'); // Geef een fallback naam
+              usernameMap.value.set(user.id, 'Gebruiker niet gevonden');
             }
           }));
         }
@@ -138,14 +128,12 @@ export default {
         educationError.value = null;
         try {
             const response = await axios.get(`${API_URL}/api/getScoreByEducation`);
-            // Sorteer meteen op score (hoog naar laag)
             educationLeaderboard.value = response.data.sort((a, b) => b.total_score - a.total_score);
 
             if (educationLeaderboard.value.length > 0) {
-                 // De hoogste staat nu altijd bovenaan na het sorteren
                 topEducation.value = educationLeaderboard.value[0].opleiding;
             } else {
-                topEducation.value = null; // Reset als er geen data is
+                topEducation.value = null;
             }
 
         } catch (err) {
@@ -156,10 +144,9 @@ export default {
         }
     };
 
-    // Computed property om de gebruikerslijst te filteren
     const filteredUserLeaderboard = computed(() => {
       if (!searchQuery.value) {
-        return userLeaderboard.value; // Geef de volledige lijst terug als er geen zoekterm is
+        return userLeaderboard.value;
       }
       const lowerCaseQuery = searchQuery.value.toLowerCase();
       return userLeaderboard.value.filter(user => {
@@ -168,37 +155,31 @@ export default {
       });
     });
 
-     // Functie om de originele index (rank) te vinden, zelfs na filteren
     const originalIndex = (userId) => {
         return userLeaderboard.value.findIndex(user => user.id === userId);
     };
 
     const clearSearch = () => {
-      searchQuery.value = ''; // Reset de zoekterm
+      searchQuery.value = '';
     };
 
-    // Haal de data op bij het mounten van de component
     onMounted(() => {
       fetchUserLeaderboard();
       fetchEducationLeaderboard();
     });
 
-    // Exposeer alles wat nodig is in de template
     return {
-      userLeaderboard, // Originele lijst nog steeds nodig voor originalIndex
+      userLeaderboard,
       userLoading,
       userError,
-      usernameMap, // Nog steeds nodig voor weergave
+      usernameMap,
       educationLeaderboard,
       educationLoading,
       educationError,
       topEducation,
-      searchQuery, // Voor de v-model van de input
-      clearSearch, // Voor de clear button
-      filteredUserLeaderboard, // Voor de v-for loop
-      originalIndex // Voor het bepalen van de rank en stijl
-      // getUsername, // Niet meer direct nodig in template, maar kan blijven als helper
-      // isLeaderboardRoute, // Alleen nodig als je logica hebt die afhangt van de route
+      searchQuery,
+      clearSearch,
+      filteredUserLeaderboard,
     };
   },
 };
@@ -230,19 +211,17 @@ export default {
 .leaderboard-section {
   width: 48%;
   margin: 10px;
-  min-width: 300px; /* Voorkomt dat de secties te smal worden */
+  min-width: 300px;
 }
 
-/* Styling voor de zoekbalk container */
 .search-bar-container {
     width: 100%;
-    margin-bottom: 15px; /* Ruimte onder de zoekbalk */
+    margin-bottom: 15px;
     display: flex;
-    justify-content: center; /* Centreer de zoekbalk in de sectie */
-    align-items: center; /* Centreer de inhoud verticaal */
+    justify-content: center;
+    align-items: center;
 }
 
-/* Styling voor de zoekbalk zelf */
 .search-input {
     padding: 8px 12px;
     border: 1px solid #ccc;
@@ -314,22 +293,19 @@ export default {
 .clearButton {
   background: #e60000;
   cursor: pointer;
-  font-size: 1.5rem; /* Bepaalt grootte van de 'X' */
+  font-size: 1.5rem;
   color: white;
-  margin-left: 10px; /* Houdt ruimte tussen input en button */
+  margin-left: 10px;
   border: none;
-  border-radius: 5px; /* Behoud afronding */
-
-  /* --- Toegevoegd/Aangepast voor centreren --- */
-  display: inline-flex; /* Maakt flexbox mogelijk binnen de button */
-  align-items: center;  /* Verticaal centreren van de 'X' */
-  justify-content: center; /* Horizontaal centreren van de 'X' */
-  line-height: 1;      /* Voorkomt dat extra lijnhoogte stoort */
-  /* Optioneel: Vaste grootte instellen indien nodig om beter bij input te passen */
-  height: 38px; /* Probeer dit in te stellen op ongeveer de hoogte van de input */
-  width: 38px;  /* Maak het vierkant indien gewenst */
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 38px;
+  width: 38px;
   padding: 0.4em 0.5em 0.3em 0.5em;
-  box-sizing: border-box; /* Zorgt dat padding binnen de height/width valt */
+  box-sizing: border-box;
 }
 
 @media (max-width: 800px) {
@@ -344,7 +320,7 @@ export default {
   }
 
   .search-input {
-      width: 90%; /* Meer breedte op mobiel */
+      width: 90%;
   }
 }
 </style>
