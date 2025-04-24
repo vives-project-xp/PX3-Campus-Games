@@ -154,8 +154,10 @@ export default {
         message.value = data.message || 'Beloning ontvangen!';
         showCards.value = false;
         selectedCard.value = null;
+        
+        if (data.rewardClaimed) {
         emit('reward-collected');
-
+        }
       } catch (error) {
         isError.value = true;
         message.value = error.message;

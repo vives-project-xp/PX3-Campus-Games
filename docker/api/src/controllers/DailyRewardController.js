@@ -1,8 +1,10 @@
 import db from '../db.js';
 import { updateScoreOnAddingCard } from './ScoreUpdateController.js';
 
+
 export const claimDailyReward = async (req, res) => {
   const connection = await db.getConnection();
+   
   try {
     const userId = Number(req.body.userId);
     if (!userId || isNaN(userId)) {
@@ -60,6 +62,7 @@ export const claimDailyReward = async (req, res) => {
 
 export const confirmCardSelection = async (req, res) => {
   const connection = await db.getConnection();
+ 
   try {
     const { userId, cardId } = req.body;
     
@@ -95,10 +98,12 @@ export const confirmCardSelection = async (req, res) => {
       'UPDATE users SET last_reward_claimed = NOW() WHERE id = ?',
       [userId]
     );
-
+    
     res.json({ 
       success: true,
-      message: 'Kaart succesvol toegevoegd aan je collectie!'
+      message: 'Kaart succesvol toegevoegd aan je collectie!',
+      rewardClaimed:true
+      
     });
 
   } catch (error) {
@@ -116,18 +121,20 @@ export const confirmCardSelection = async (req, res) => {
 export const checkDailyReward = async (req, res) => {
   const connection = await db.getConnection();
   try {
-    const userId = Number(req.user?.id || req.query.userId);
+    const userId = Number(req.user?.id || req.body.userId || req.query.userId);
     if (!userId) {
       return res.status(401).json({ hasReward: false });
     }
 
     const [claimed] = await connection.execute(
-      'SELECT 1 FROM users WHERE id = ? AND last_reward_claimed >= CURDATE()',
+      `SELECT last_reward_claimed 
+       FROM users 
+       WHERE id = ? AND (last_reward_claimed IS NULL OR last_reward_claimed < UTC_DATE())`,
       [userId]
     );
 
     res.json({ 
-      hasReward: claimed.length === 0,
+      hasReward: claimed.length > 0, // Omgekeerde logica: true als er NIET vandaag is geclaimd
       lastClaimed: claimed[0]?.last_reward_claimed 
     });
   } catch (error) {
