@@ -141,6 +141,7 @@
     border: none; 
     padding: 0; 
     box-sizing: border-box; 
+    border-radius: 10px;
 }
 
 .logo-image {
