@@ -96,11 +96,16 @@
         margin-top: 40px;
     }
 
-.logo {
+    .logo {
     width: 100%;
     max-height: 50vh;
     text-align: center;
     margin-bottom: 2rem;
+    margin-top: 40px;
+    background-color: #fd0100; 
+    border: none; 
+    padding: 0; 
+    box-sizing: border-box; 
 }
 
 .logo-image {
