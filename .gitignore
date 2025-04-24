@@ -13,4 +13,7 @@
 /docker/db/data
 /docker/db/*
 /docker/package-lock.json
+/docker/node_modules
+/docker/api/node_modules
+/docker/api/package-lock.json
 
