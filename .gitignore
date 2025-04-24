@@ -16,5 +16,6 @@
 /docker/node_modules
 /docker/api/node_modules
 /docker/api/package-lock.json
-
+/docker/vue/node_modules
+/docker/vue/package-lock.json
 
