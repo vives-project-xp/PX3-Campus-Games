@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="{ selected: isSelected, grayscale: grayscale }" @click="$emit('click')">
-    <img :src="cardImage" :alt="cardName" class="card-image" />
+    <img :src="cardImage" :alt="cardName" class="card-image" :class="{ blurred: grayscale }"/>
     <p class="card-name">{{ cardName }}</p>
   </div>
 </template>
@@ -75,5 +75,10 @@ export default {
 
 .card.grayscale {
   filter: grayscale(100%);
+}
+
+.card-image.blurred {
+  filter: blur(5px);
+  mask-image: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%);
 }
 </style>

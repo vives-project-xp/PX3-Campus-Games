@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+import swaggerDocs from './utils/swagger.js';
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -48,12 +49,6 @@ app.use('/api/Cards', (req, res, next) => {
   next();
 }, express.static(path.join(__dirname, 'Cards')));
 
-app.use((req, res) => {
-  res.status(404).send('Route niet gevonden');
-});
-
-
-
 // Create an HTTP server using the Express app
 const server = http.createServer(app);
 
@@ -91,7 +86,15 @@ io.on('connection', (socket) => {
 // Export io and userSockets for use in controllers (e.g., TradingController.js)
 export { io, userSockets };
 
+// Generate Swagger documentation
+swaggerDocs(app, port); 
+
 // Start the server
 server.listen(port, () => {
   console.log(`🚀 vives-card-game-backend draait op http://localhost:${port}`);
+});
+
+
+app.use((req, res) => {
+  res.status(404).send('Route niet gevonden');
 });

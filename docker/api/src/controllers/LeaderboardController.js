@@ -18,6 +18,38 @@ const getUserScoreById = async (req, res) => {
     }
 };
 
+const getScoreByEducation = async (req, res) => {
+    try {
+        const query = `SELECT opleiding, user_score FROM users`; // Fetch all opleiding and user_score
+        const [rows] = await db.execute(query);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Geen gebruikers gevonden." });
+        }
+
+        const educationScores = {}; // Object to store total scores per opleiding
+
+        // Calculate total scores
+        for (const row of rows) {
+            if (!educationScores[row.opleiding]) {
+                educationScores[row.opleiding] = 0;
+            }
+            educationScores[row.opleiding] += row.user_score;
+        }
+
+        // Convert object to array for response
+        const result = Object.keys(educationScores).map(opleiding => ({
+            opleiding: opleiding,
+            total_score: educationScores[opleiding],
+        }));
+
+        res.json(result); // Send the array of opleiding and total_score
+    } catch (error) {
+        console.error("Fout bij ophalen van totale score per opleiding:", error);
+        res.status(500).json({ error: "Kan totale score niet ophalen" });
+    }
+};
+
 const getUsersScores = async (req, res) => {
     try {
         const query = `SELECT id, user_score FROM users ORDER BY user_score DESC limit 10`;
@@ -38,6 +70,7 @@ const getUsersScores = async (req, res) => {
 
 export { 
     getUserScoreById,
+    getScoreByEducation,
     getUsersScores
     
 };

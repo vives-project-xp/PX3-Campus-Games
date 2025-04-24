@@ -193,104 +193,128 @@ export default {
 </script>
 
 <style scoped>
+/* Basis container styling */
 .daily-reward {
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f5f5f5;
-  border-radius: 10px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
   text-align: center;
   max-width: 1200px;
   width: 95%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Titel styling */
+.card-selection h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+/* Claim knop styling */
 .reward-button {
   background-color: #4CAF50;
   color: white;
-  padding: 12px 24px;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-bottom: 20px;
-}
-
-.card-selection {
-  margin-top: 20px;
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.card-item {
-  width: 100%;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.card-item:hover {
-  transform: scale(1.05);
-}
-
-.card-item.selected {
-  box-shadow: 0 0 0 3px #2196F3;
   border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Aanpassingen voor PlayingCard zonder de component te wijzigen */
-.card-item :deep(.card) {
-  width: 100%;
-  height: 100%;
+.reward-button:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.reward-button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Cards container */
+.cards-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Uitgelijnd aan de bovenkant */
+  gap: 2rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
 }
 
+/* Kaart styling */
+.card-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 280px;
+}
+
+/* Card naam in ROOD */
+.card-item :deep(.card-name) {
+  font-size: 1.2rem;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  color: #ff0000; /* Rode tekst */
+  width: 100%;
+  background-color: white; /* Witte achtergrond voor betere leesbaarheid */
+  margin-top: -5px; /* Compenseer voor de afgeronde hoeken */
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Afbeeldingen die niet worden afgesneden */
 .card-item :deep(.card-image) {
   width: 100%;
-  height: auto;
-  max-height: 180px;
-  object-fit: contain;
+  height: 300px;
+  object-fit: contain; /* Behoudt aspect ratio zonder afsnijden */
+  object-position: center;
+  background-color: #f5f5f5; /* Achtergrond voor transparante afbeeldingen */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border: 1px solid #eee; /* Subtiele rand */
 }
 
-.card-item :deep(.card-name) {
-  font-size: 0.9em;
-  padding: 8px;
+/* Hover effect */
+.card-item:hover {
+  transform: translateY(-5px);
 }
 
-.actions {
-  margin-top: 20px;
+.card-item:hover :deep(.card-name) {
+  color: #cc0000; /* Donkerder rood bij hover */
 }
 
-.confirm-button {
-  background-color: #2196F3;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
+/* Geselecteerde kaart */
+.card-item.selected {
+  box-shadow: 0 0 0 3px #2196F3;
 }
 
 /* Responsive aanpassingen */
-@media (max-width: 1000px) {
-  .cards-grid {
-    grid-template-columns: repeat(3, 1fr);
+@media (max-width: 768px) {
+  .cards-container {
+    gap: 1.5rem;
+  }
+  
+  .card-item {
+    width: 240px;
+  }
+  
+  .card-item :deep(.card-image) {
+    height: 250px;
   }
 }
 
-@media (max-width: 700px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 480px) {
+  .card-item {
+    width: 100%;
+    max-width: 280px;
   }
 }
 </style>

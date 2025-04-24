@@ -22,7 +22,7 @@ CREATE TABLE Cards_dex (
     cardName VARCHAR(100) NOT NULL UNIQUE,
     health INT DEFAULT 0,
     attack INT DEFAULT 0,
-    ability ENUM('heal', 'block', 'damage_multiplier', 'free_switch') NOT NULL,
+    ability ENUM('heal', 'block', 'extra_action', 'free_switch') NOT NULL,
     rarity ENUM('Common', 'Uncommon', 'Rare', 'Ultra Rare', 'Legendary') NOT NULL,
     info TEXT,
     opleiding ENUM('gezondheidszorg', 'handel&business', 'onderwijs&sociaal', 'technology&bio') NOT NULL,
@@ -134,21 +134,22 @@ VALUES
 'gezondheidszorg', '/Cards/Virus_Vplg.png');
 
 -- Onderwijs & Sociaal
+-- nieuwe ability
 INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) 
 VALUES 
-('Kleuterjuf', 260, 80, 'damage_multiplier', 'Common', 
+('Kleuterjuf', 260, 80, 'extra_action', 'Common', 
 'Een kleuterjuf begeleidt jonge kinderen bij hun eerste stappen in het leren en ontwikkelen. Ze zorgt voor een veilige en speelse leeromgeving.', 
 'onderwijs&sociaal', '/Cards/Kleuterjuf_OwSo.png'),
 
-('Leerkracht Secundair', 180, 120, 'damage_multiplier', 'Uncommon', 
+('Leerkracht Secundair', 180, 120, 'extra_action', 'Uncommon', 
 'Een leerkracht in het secundair onderwijs begeleidt en inspireert jongeren in hun leerproces. Met kennis en geduld helpt hij hen groeien naar de toekomst.', 
 'onderwijs&sociaal', '/Cards/Leerkrachtsecundair_OwSo.png'),
 
-('HR Manager', 160, 140, 'damage_multiplier', 'Rare', 
+('HR Manager', 160, 140, 'extra_action', 'Rare', 
 'De HR-manager zorgt voor een sterke werkcultuur door talent aan te trekken, medewerkers te ondersteunen en een positieve werkomgeving te creëren.', 
 'onderwijs&sociaal', '/Cards/HRManager_OwSo.png'),
 
-('Psycholoog', 140, 160, 'damage_multiplier', 'Uncommon', 
+('Psycholoog', 140, 160, 'extra_action', 'Uncommon', 
 'Een psycholoog is iemand die de menselijke geest en het gedrag bestudeert. Ze helpen mensen om te gaan met problemen zoals stress, angst of verdriet, en geven advies om zich beter te voelen.', 
 'onderwijs&sociaal', '/Cards/Psycholoog_OwSo.png');
 
@@ -167,23 +168,5 @@ VALUES
 'De hotelmanager houdt alles draaiende in een hotel. Van gastvrijheid tot logistiek, hij zorgt ervoor dat elke gast een perfecte ervaring heeft.', 
 'handel&business', '/Cards/Hotelmanager_HnBd.png');
 
--- Voeg een paar gebruikers toe
-INSERT INTO users (userName, opleiding, userPassword)
-VALUES 
-('admin1', 'technology&bio', 'admin1'),
-('admin2', 'technology&bio', 'admin2');
 
--- Voeg kaarten toe aan gebruikers
-INSERT INTO user_cards (user_id, card_id, quantity)
-VALUES 
-(1, 1, 1), 
-(1, 2, 1), 
-(1, 3, 1), 
-(1, 4, 1), 
-(1, 5, 1),
-(2, 1, 1), 
-(2, 2, 1), 
-(2, 3, 1), 
-(2, 4, 1), 
-(2, 5, 1);
 
