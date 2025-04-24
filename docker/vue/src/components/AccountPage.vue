@@ -100,6 +100,11 @@ export default {
 </script>
 
 <style scoped>
+body, html, main {
+  margin: 0 !important; /* Use !important to ensure override */
+  padding: 0 !important;
+}
+
 .account-container {
   padding: 20px; /* Default padding for larger screens */
   text-align: center;

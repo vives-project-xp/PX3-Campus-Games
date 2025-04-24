@@ -36,11 +36,6 @@ export default {
   --font-family: 'Open Sans', sans-serif;
 }
 
-html, body {
-  padding: 0rem 1rem 0rem 1rem;
-  margin-top: 1rem;
-}
-
 #app {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
@@ -57,5 +52,10 @@ main {
   flex-grow: 1;
   width: 100%;
   box-sizing: border-box;
+}
+
+html, body {
+  padding: 0rem 1rem 0rem 1rem;
+  margin-top: 1rem;
 }
 </style>
