@@ -125,47 +125,47 @@ export default {
     };
 
     const confirmSelection = async () => {
-      if (!selectedCard.value) return;
-      
-      isSelecting.value = true;
-      message.value = '';
-      isError.value = false;
+  if (!selectedCard.value) return;
+  
+  isSelecting.value = true;
+  message.value = '';
+  isError.value = false;
 
-      try {
-        const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
-        const response = await fetch(`${API_URL}/api/daily/select`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ 
-            userId: userIdToSend,
-            cardId: selectedCard.value.card_id
-          })
-        });
+  try {
+    const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
+    const response = await fetch(`${API_URL}/api/daily/select`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({ 
+        userId: userIdToSend,
+        cardId: selectedCard.value.card_id
+      })
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (!response.ok || !data.success) {
-          throw new Error(data.error || data.message || 'Fout bij bevestigen');
-        }
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || data.message || 'Fout bij bevestigen');
+    }
 
-        message.value = data.message || 'Beloning ontvangen!';
-        showCards.value = false;
-        selectedCard.value = null;
-        
-        if (data.rewardClaimed) {
-        emit('reward-collected');
-        }
-      } catch (error) {
-        isError.value = true;
-        message.value = error.message;
-        console.error('Selection error:', error);
-      } finally {
-        isSelecting.value = false;
-      }
-    };
+    message.value = data.message || 'Beloning ontvangen!';
+    showCards.value = false;
+    selectedCard.value = null;
+    
+    // Update de reward status direct
+    emit('reward-collected', false);
+    
+  } catch (error) {
+    isError.value = true;
+    message.value = error.message;
+    console.error('Selection error:', error);
+  } finally {
+    isSelecting.value = false;
+  }
+};
 
     const checkLoginStatus = () => {
       const token = localStorage.getItem('token');
