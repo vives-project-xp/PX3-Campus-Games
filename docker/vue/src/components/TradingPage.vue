@@ -440,7 +440,6 @@ const fetchTradeUpdates = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
   padding: 3rem 0rem 0rem 0rem;
   text-align: center;
 }
