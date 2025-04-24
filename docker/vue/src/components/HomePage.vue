@@ -1,5 +1,13 @@
 <template>
     <div>
+      <h2>Over ons</h2>
+      <p>
+        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
+        <br>
+        <br>
+        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
+        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
+      </p>
       <h2>Hoe te spelen</h2>
       <h3>Verzamelen:</h3>
       <p>
@@ -43,11 +51,11 @@
       </ul>
       <p> De vijf verschillende zeldzaamheden zijn als volgt:</p>
       <ul class ="default list">
-        <li>Common (grijs)</li>
-        <li>Uncommon (groen)</li>
-        <li>Rare (blauw)</li>
-        <li>Very rare (paars)</li>
-        <li>Ultra rare (goud)</li>
+        <li>Gewoon (grijs)</li>
+        <li>Ongewoon (groen)</li>
+        <li>Zeldzaam (blauw)</li>
+        <li>Zeer zeldzaam (paars)</li>
+        <li>Legendarisch (goud)</li>
       </ul>
       <p> En dit zijn alle mogelijke kaarttypes:</p>
       <ul class ="default list">
@@ -59,14 +67,7 @@
 
 
 
-      <h2>Over ons</h2>
-      <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
-        <br>
-        <br>
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
-        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
-      </p>
+      
       <h3>Ons team:</h3>
       <ul class ="default list">
         <li>Verstraete Domien: Front- en back-end developer</li>
