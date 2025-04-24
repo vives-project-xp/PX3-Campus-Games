@@ -87,8 +87,7 @@ io.on('connection', (socket) => {
 export { io, userSockets };
 
 // Generate Swagger documentation
-swaggerDocs(app, port); // Genereer Swagger documentatie
-console.log(`Swagger(API) documentatie beschikbaar op http://localhost:${port}/docs`);
+swaggerDocs(app, port); 
 
 // Start the server
 server.listen(port, () => {
