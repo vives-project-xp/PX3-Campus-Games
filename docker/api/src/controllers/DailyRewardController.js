@@ -102,8 +102,8 @@ export const confirmCardSelection = async (req, res) => {
     res.json({ 
       success: true,
       message: 'Kaart succesvol toegevoegd aan je collectie!',
-      rewardClaimed:true
-      
+      rewardClaimed: true,
+      hasReward: false // Direct aangeven dat er geen beloning meer is
     });
 
   } catch (error) {

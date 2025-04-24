@@ -27,7 +27,7 @@ WORKDIR /app
 RUN git clone --branch $BRANCH $REPO_URL /app
 
 # Set working directory for frontend
-WORKDIR /app/Frontend/vives-card-game
+WORKDIR /app/docker/vue
 
 # Install frontend dependencies
 RUN npm install --legacy-peer-deps
@@ -36,7 +36,7 @@ RUN npm install --legacy-peer-deps
 RUN npm install -g @vue/cli-service
 
 # Set working directory for backend
-WORKDIR /app/Backend
+WORKDIR /app/docker/api
 
 # Install backend dependencies
 RUN npm install

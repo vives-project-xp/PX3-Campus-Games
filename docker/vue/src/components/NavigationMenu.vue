@@ -45,37 +45,35 @@ export default {
     };
 
     const checkDailyRewardAvailability = async () => {
-  try {
-    const userId = Number(localStorage.getItem('userId'));
-    if (!userId) return;
+      try {
+        const userId = Number(localStorage.getItem('userId'));
+        if (!userId) return;
 
-    const response = await fetch(`${API_URL}/api/daily/check?userId=${userId}`, {
-      headers: { 
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
+        const response = await fetch(`${API_URL}/api/daily/check?userId=${userId}`, {
+          headers: { 
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          hasDailyReward.value = data.hasReward;
+        } else if (response.status === 401) {
+          console.log('Unauthorized, please login');
+        }
+      } catch (error) {
+        console.error('Error checking daily reward:', error);
       }
-    });
+    };
 
-    if (response.ok) {
-      const data = await response.json();
-      hasDailyReward.value = data.hasReward;
-    } else if (response.status === 401) {
-      // Handle unauthorized (maybe redirect to login)
-      console.log('Unauthorized, please login');
-    }
-  } catch (error) {
-    console.error('Error checking daily reward:', error);
-  }
-};
-  const updateRewardStatus = (status) => {
-    hasDailyReward.value = status;
-  };
+    const updateRewardStatus = (status) => {
+      hasDailyReward.value = status;
+    };
 
     onMounted(() => {
       checkDailyRewardAvailability();
-      // Controleer periodiek (elke 5 minuten)
-      const interval = setInterval(checkDailyRewardAvailability, 60000);
-      return () => clearInterval(interval);
+
     });
 
     return { isMenuOpen, hasDailyReward, toggleMenu, closeMenu, updateRewardStatus};
