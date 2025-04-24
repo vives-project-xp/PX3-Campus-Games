@@ -12,7 +12,7 @@ import * as TradingController from "../controllers/TradingController.js";
 
 /**
  * @swagger
- * /register:
+ * /api/register:
  *   post:
  *     summary: Register a new user
  *     tags:
@@ -43,7 +43,7 @@ router.post('/register', UserController.registerUser);
 
 /**
  * @swagger
- * /login:
+ * /api/login:
  *   post:
  *     summary: Login a user
  *     tags:
@@ -71,7 +71,7 @@ router.post('/login', UserController.loginUser);
 
 /**
  * @swagger
- * /getAllUsers:
+ * /api/getAllUsers:
  *   get:
  *     summary: Retrieve all users
  *     tags:
@@ -105,7 +105,7 @@ router.get('/getAllUsers', UserController.getAllUsers);
 
 /**
  * @swagger
- * /getUserBy/{param}/{value}:
+ * /api/getUserBy/{param}/{value}:
  *   get:
  *     summary: Retrieve a user by a specific parameter and value
  *     tags:
@@ -152,7 +152,7 @@ router.get('/getUserBy/:param/:value', UserController.getUserBy);
 
 /**
  * @swagger
- * /deleteUser/{id}:
+ * /api/deleteUser/{id}:
  *   delete:
  *     summary: Delete a user by ID
  *     tags:
@@ -180,7 +180,7 @@ router.delete('/deleteUser/:id', UserController.deleteUser);
 
 /**
  * @swagger
- * /getUserScoreById/{id}:
+ * /api/getUserScoreById/{id}:
  *   get:
  *     summary: Retrieve the score of a user by their ID
  *     tags:
@@ -219,7 +219,7 @@ router.get('/getUserScoreById/:id', LeaderboardController.getUserScoreById);
 
 /**
  * @swagger
- * /getScoreByEducation:
+ * /api/getScoreByEducation:
  *   get:
  *     summary: Retrieve the total scores grouped by education
  *     tags:
@@ -248,7 +248,7 @@ router.get('/getScoreByEducation', LeaderboardController.getScoreByEducation);
 
 /**
  * @swagger
- * /getUsersScores:
+ * /api/getUsersScores:
  *   get:
  *     summary: Retrieve the scores of all users
  *     tags:
@@ -283,7 +283,7 @@ router.get('/getUsersScores', LeaderboardController.getUsersScores);
 
 /**
  * @swagger
- * /addCard:
+ * /api/addCard:
  *   post:
  *     summary: Add a card to a user's collection
  *     tags:
@@ -328,7 +328,7 @@ router.post('/addCard', CardController.addCardToUser);
 
 /**
  * @swagger
- * /userCards/{user_id}:
+ * /api/userCards/{user_id}:
  *   get:
  *     summary: Retrieve all cards owned by a user
  *     tags:
@@ -369,7 +369,7 @@ router.get('/userCards/:user_id', CardController.getUserCards);
 
 /**
  * @swagger
- * /starter-pack:
+ * /api/starter-pack:
  *   post:
  *     summary: Give a starter pack of cards to a user
  *     tags:
@@ -408,7 +408,7 @@ router.post('/starter-pack', CardController.giveStarterPack);
 
 /**
  * @swagger
- * /general-pack:
+ * /api/general-pack:
  *   post:
  *     summary: Give a general pack of cards to a user
  *     tags:
@@ -447,7 +447,7 @@ router.post('/general-pack', CardController.giveGeneralPack);
 
 /**
  * @swagger
- * /getCard_dex:
+ * /api/getCard_dex:
  *   get:
  *     summary: Retrieve the card dex (all available cards)
  *     tags:
@@ -500,7 +500,7 @@ router.get('/getCard_dex', CardController.getCard_dex);
 
 /**
  * @swagger
- * /startTrade:
+ * /api/startTrade:
  *   post:
  *     summary: Start a new trade
  *     tags:
@@ -539,7 +539,7 @@ router.post("/startTrade", TradingController.startTrade);
 
 /**
  * @swagger
- * /joinTrade:
+ * /api/joinTrade:
  *   post:
  *     summary: Join an existing trade
  *     tags:
@@ -577,7 +577,7 @@ router.post("/joinTrade", TradingController.joinTrade);
 
 /**
  * @swagger
- * /selectCard:
+ * /api/selectCard:
  *   post:
  *     summary: Select a card for the trade
  *     tags:
@@ -618,7 +618,7 @@ router.post("/selectCard", TradingController.selectCard);
 
 /**
  * @swagger
- * /getTradeStatus/{tradeCode}:
+ * /api/getTradeStatus/{tradeCode}:
  *   get:
  *     summary: Get the status of a trade
  *     tags:
@@ -656,7 +656,7 @@ router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 
 /**
  * @swagger
- * /fetchTradeUpdates:
+ * /api/fetchTradeUpdates:
  *   post:
  *     summary: Fetch updates for a trade
  *     tags:
@@ -699,7 +699,7 @@ router.post("/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 
 /**
  * @swagger
- * /acceptTrade:
+ * /api/acceptTrade:
  *   post:
  *     summary: Accept a trade
  *     tags:
@@ -741,7 +741,7 @@ router.post("/acceptTrade", TradingController.acceptTrade);
 
 /**
  * @swagger
- * /daily:
+ * /api/daily:
  *   post:
  *     summary: Claim the daily reward
  *     tags:
@@ -790,7 +790,7 @@ router.post('/daily', DailyRewardController.claimDailyReward);
 
 /**
  * @swagger
- * /daily/select:
+ * /api/daily/select:
  *   post:
  *     summary: Confirm the selection of a daily reward card
  *     tags:
@@ -831,7 +831,7 @@ router.post('/daily/select', DailyRewardController.confirmCardSelection);
 
 /**
  * @swagger
- * /daily/check:
+ * /api/daily/check:
  *   get:
  *     summary: Check if the daily reward is available
  *     tags:
