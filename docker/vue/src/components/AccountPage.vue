@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .account-container {
-  padding: 20px;
+  padding: 20px; /* Default padding for larger screens */
   text-align: center;
   display: grid;
   grid-template-areas:
@@ -109,6 +109,17 @@ export default {
     'info'
     'actions';
   gap: 20px;
+  width: 90%; /* Add a percentage width to prevent it from taking full width on larger screens */
+  max-width: 600px; /* Optional: set a maximum width for larger screens */
+  margin: 0 auto; /* Center the container on larger screens */
+}
+
+@media (max-width: 600px) {
+  .account-container {
+    padding: 10px; /* Reduce padding for smaller screens */
+    width: 100%; /* Take full width on smaller screens */
+    margin: 0; /* Remove margin on smaller screens */
+  }
 }
 
 .account-container h1 {
@@ -169,41 +180,3 @@ export default {
   margin-left: 0; /* Resetting the margin as flexbox in actions-box handles spacing */
 }
 </style>
-
-/*.account-container {
-  padding: 20px;
-  text-align: center;
-}
-
-.account-container h1 {
-  margin-bottom: 20px;
-}
-
-.logout-button {
-  background-color: red;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 10px 20px;
-  border: none;
-  font-size: 15px;
-}
-
-.delete-account {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    font-size: 15px;
-    margin-left: 10px;
-}
-
-.userName,
-.totalCards,
-.userId {
-  margin: 10px 0;
-  font-size: 18px;
-  font-weight: bolder;
-}*/
