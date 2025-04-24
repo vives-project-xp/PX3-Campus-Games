@@ -16,34 +16,34 @@
       <div class="leaderboard-section">
         <h2>Individueel scorebord</h2>
         <div class="leaderboard-content">
-          <div v-if="userLoading" class="loading">Aan het laden...</div>
-          <div v-else-if="userError" class="error">{{ userError }}</div>
-          <table v-else-if="filteredUserLeaderboard.length > 0" class="leaderboard-table">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Gebruikersnaam</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="user in filteredUserLeaderboard" :key="user.id" :class="{ 'first': originalIndex(user.id) === 0, 'second': originalIndex(user.id) === 1, 'third': originalIndex(user.id) === 2 }">
-                <td>
-                   <span v-if="originalIndex(user.id) === 0" class="rank-emoji">🥇</span>
-                  <span v-else-if="originalIndex(user.id) === 1" class="rank-emoji">🥈</span>
-                  <span v-else-if="originalIndex(user.id) === 2" class="rank-emoji">🥉</span>
-                  <span v-else>{{ originalIndex(user.id) + 1 }}</span>
-                </td>
-                <td>{{ usernameMap.get(user.id) || 'Laden...' }}</td>
-                <td>{{ user.user_score }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div v-else-if="userLeaderboard.length > 0 && filteredUserLeaderboard.length === 0" class="no-data">
-            Geen gebruikers gevonden met de naam "{{ searchQuery }}".
-          </div>
-          <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
-        </div>
+  <div v-if="userLoading" class="loading">Aan het laden...</div>
+  <div v-else-if="userError" class="error">{{ userError }}</div>
+  <table v-else-if="filteredUserLeaderboard.length > 0" class="leaderboard-table">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Gebruikersnaam</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(user, index) in filteredUserLeaderboard" :key="user.id" :class="{ 'first': originalIndexOf(user.id) === 0, 'second': originalIndexOf(user.id) === 1, 'third': originalIndexOf(user.id) === 2 }">
+        <td>
+          <span v-if="originalIndexOf(user.id) === 0" class="rank-emoji">🥇</span>
+          <span v-else-if="originalIndexOf(user.id) === 1" class="rank-emoji">🥈</span>
+          <span v-else-if="originalIndexOf(user.id) === 2" class="rank-emoji">🥉</span>
+          <span v-else>{{ originalIndexOf(user.id) + 1 }}</span>
+        </td>
+        <td>{{ usernameMap.get(user.id) || 'Laden...' }}</td>
+        <td>{{ user.user_score }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div v-else-if="userLeaderboard.length > 0 && filteredUserLeaderboard.length === 0" class="no-data">
+    Geen gebruikers gevonden met de naam "{{ searchQuery }}".
+  </div>
+  <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
+</div>
       </div>
 
       <div class="leaderboard-section">
@@ -155,7 +155,7 @@ export default {
       });
     });
 
-    const originalIndex = (userId) => {
+    const originalIndexOf = (userId) => {
         return userLeaderboard.value.findIndex(user => user.id === userId);
     };
 
@@ -180,6 +180,7 @@ export default {
       searchQuery,
       clearSearch,
       filteredUserLeaderboard,
+      originalIndexOf,
     };
   },
 };
