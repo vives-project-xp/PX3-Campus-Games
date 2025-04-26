@@ -22,7 +22,15 @@
 
       <!-- Buttons arranged vertically and centered -->
       <div class="buttons-container">
-        <button class="btn" @click="generateQRCode">Maak een QR Code aan</button>
+
+        <button
+          class="btn"
+          @click="generateQRCode"
+          :disabled="qrGenerated"
+          :class="{ 'btn-disabled': qrGenerated }"
+        >Maak een QR Code aan
+        </button>
+
         <button class="btn" @click="startScanning">Scan QR Code</button>
       </div>
     </div>
@@ -129,7 +137,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from "axios";
 import QRCode from "qrcode";
@@ -142,10 +150,11 @@ export default {
   setup() {
     const tradeCode = ref(null);
     const qrCodeUrl = ref(null);
+    const qrGenerated = ref(false);
     const scanner = ref(null);
     const isScanning = ref(false);
     const tradeJoined = ref(false);
-    const userId = localStorage.getItem('userId');
+    const userId = ref(localStorage.getItem('userId'));
     const userCards = ref([]);
     const selectedCard = ref(null);
     const showSelectCardMessage = ref(false);
@@ -155,7 +164,6 @@ export default {
     const hasAccepted = ref(false);
     const friendAccepted = ref(false);
     
-    // New reactive properties for the received card popup
     const showNewCardPopup = ref(false);
     const receivedCard = ref(null);
     
@@ -207,6 +215,7 @@ const checkLoginStatus = () => {
           userId
         });
 
+        qrGenerated.value = true;
         qrCodeUrl.value = await QRCode.toDataURL(tradeCode.value);
       } catch (error) {
         console.error("Error generating QR code:", error);
@@ -375,6 +384,29 @@ const fetchTradeUpdates = async () => {
     }
 };
 
+const deleteTrade = async () => {
+
+console.log("Sending:", {
+tradeCode: tradeCode.value,
+userId: userId.value
+});
+
+
+try {
+  await fetch(`${API_URL}/api/exitTrade`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      tradeCode: tradeCode.value,
+      userId: userId.value,
+    }),
+  });
+} catch (err) {
+  console.error("exitTrade failed:", err);
+}
+};
 
     // Popup functionality: refresh the page or navigate to collection
     const closePopup = () => {
@@ -386,29 +418,30 @@ const fetchTradeUpdates = async () => {
     };
 
     onMounted(() => {
-      checkLoginStatus();
-      socket.emit('register', userId);
-      loadUserCards();
-      fetchTradeUpdates();
+  window.addEventListener("beforeunload",  deleteTrade);
+  checkLoginStatus();
+  socket.emit('register', userId);
+  loadUserCards();
+  fetchTradeUpdates();
 
-      socket.on('tradeUpdated', (data) => {
+  socket.on('tradeUpdated', (data) => {
     if (data.tradeCode === tradeCode.value) {
-        console.log("Received update [ fetchTradeUpdates() ] - Forced:", data.forceUpdate);
-        fetchTradeUpdates();
+      console.log("Received update [ fetchTradeUpdates() ] - Forced:", data.forceUpdate);
+      fetchTradeUpdates();
     }
+  });
 });
 
-      socket.on('tradeCompleted', (data) => {
-      if (data.tradeCode === tradeCode.value) {
-        receivedCard.value = data.receivedCard;
-        showNewCardPopup.value = true;
-      }
+// delete a trade when leaving/re-loading the page
+onBeforeUnmount(() => {
+  window.removeEventListener("beforeunload", deleteTrade);
 });
-    });
 
     return {
+      deleteTrade,
       tradeCode,
       qrCodeUrl,
+      qrGenerated,
       tradeJoined,
       userCards,
       selectedCard,
@@ -631,6 +664,14 @@ const fetchTradeUpdates = async () => {
   font-size: 1rem;
   cursor: pointer;
 }
+
+.btn-disabled {
+  background-color: #a0a0a0;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 
 /* Close Button for Modal */
 .close-btn {

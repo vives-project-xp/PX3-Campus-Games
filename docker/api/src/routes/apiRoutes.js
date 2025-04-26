@@ -25,12 +25,16 @@ router.post('/general-pack', CardController.giveGeneralPack);
 router.get('/getCard_dex', CardController.getCard_dex);
 
 // trading
+router.get("/getActiveTrades", TradingController.getActiveTrades);
+
 router.post("/startTrade", TradingController.startTrade);
 router.post("/joinTrade", TradingController.joinTrade);
 router.post("/selectCard", TradingController.selectCard);
 router.get("/getTradeStatus/:tradeCode", TradingController.getTradeStatus);
 router.post("/fetchTradeUpdates", TradingController.fetchTradeUpdates);
 router.post("/acceptTrade", TradingController.acceptTrade);
+router.post("/deleteTrade", TradingController.deleteTrade);
+
 //router.post("/tradeCards", TradingController.tradeCards); (this is called in "acceptTrade" function)
 
 //Daily rewards

@@ -229,19 +229,19 @@ export default {
 }
 
 .first {
-    color: gold;
+    color: rgb(232, 182, 0);
     font-weight: bold;
     /*border: 2px solid gold;*/
 }
 
 .second {
-    color: silver;
+    color: rgb(165, 165, 165);
     font-weight: bold;
     /*border: 2px solid silver;*/
 }
 
 .third {
-    color: #cd7f32;
+    color: #ab641d;
     font-weight: bold;
     /*border: 2px solid #cd7f32;*/
 }
