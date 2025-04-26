@@ -286,7 +286,7 @@ export default {
 }
 .card-wrapper {
   position: relative;
-  width: 100%;
+  width: 90%;
 }
 
 .card-wrapper::after {
@@ -315,7 +315,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(16%, 1fr));
   grid-auto-rows: 1fr;
-  gap: 0.4rem;
+  gap: 0,4rem;
   justify-items: center;
   max-height: calc(6 * (auto)); /* 6 rows */
   overflow-y: auto;

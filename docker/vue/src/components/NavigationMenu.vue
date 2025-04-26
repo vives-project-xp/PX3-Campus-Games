@@ -4,7 +4,7 @@
       <span class="hamburger-icon"></span>
       <span class="hamburger-icon"></span>
       <span class="hamburger-icon"></span>
-      <span v-if="hasDailyReward" class="notification-badge"></span>
+      <span v-if="hasDailyReward" class="notification-badge">★</span>
     </button>
 
     <div v-if="isMenuOpen" class="menu-overlay" @click="closeMenu"></div>
@@ -49,29 +49,34 @@ export default {
         const userId = Number(localStorage.getItem('userId'));
         if (!userId) return;
 
-        const response = await fetch(`${API_URL}/api/daily/check`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        const response = await fetch(`${API_URL}/api/daily/check?userId=${userId}`, {
+          headers: { 
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
           }
         });
 
         if (response.ok) {
           const data = await response.json();
           hasDailyReward.value = data.hasReward;
+        } else if (response.status === 401) {
+          console.log('Unauthorized, please login');
         }
       } catch (error) {
         console.error('Error checking daily reward:', error);
       }
     };
 
+    const updateRewardStatus = (status) => {
+      hasDailyReward.value = status;
+    };
+
     onMounted(() => {
       checkDailyRewardAvailability();
-      // Controleer periodiek (elke 5 minuten)
-      const interval = setInterval(checkDailyRewardAvailability, 300000);
-      return () => clearInterval(interval);
+
     });
 
-    return { isMenuOpen, hasDailyReward, toggleMenu, closeMenu };
+    return { isMenuOpen, hasDailyReward, toggleMenu, closeMenu, updateRewardStatus};
   }
 };
 </script>
@@ -82,11 +87,17 @@ export default {
   position: absolute;
   top: -5px;
   right: -5px;
-  width: 12px;
-  height: 12px;
+  width: 18px; /* Iets groter voor de ster */
+  height: 18px;
   background-color: #ff4757;
   border-radius: 50%;
   border: 2px solid var(--secondary-color);
+  color: white;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .menu-button {

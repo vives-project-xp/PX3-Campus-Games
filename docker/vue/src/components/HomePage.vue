@@ -1,4 +1,15 @@
 <template>
+  <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
+    <div class="about-section">
+      <h2>Over ons</h2>
+      <p>
+        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
+        <br>
+        <br>
+        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
+        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
+      </p>
+    </div>
     <div>
       <h2>Hoe te spelen</h2>
       <h3>Verzamelen:</h3>
@@ -27,6 +38,8 @@
       <p>
         <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
       </p>
+    </div>
+      <div>
 
 
 
@@ -43,11 +56,11 @@
       </ul>
       <p> De vijf verschillende zeldzaamheden zijn als volgt:</p>
       <ul class ="default list">
-        <li>Common (grijs)</li>
-        <li>Uncommon (groen)</li>
-        <li>Rare (blauw)</li>
-        <li>Very rare (paars)</li>
-        <li>Ultra rare (goud)</li>
+        <li>Gewoon</li>
+        <li>Ongewoon</li>
+        <li>Zeldzaam</li>
+        <li>Zeer zeldzaam</li>
+        <li>Legendarisch</li>
       </ul>
       <p> En dit zijn alle mogelijke kaarttypes:</p>
       <ul class ="default list">
@@ -56,17 +69,12 @@
         <li>Marketing en Business 🤝</li>
         <li>Onderwijs en Sociaal 🎓</li>
       </ul>
+    </div>
+      <div>
 
 
 
-      <h2>Over ons</h2>
-      <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
-        <br>
-        <br>
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
-        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
-      </p>
+      
       <h3>Ons team:</h3>
       <ul class ="default list">
         <li>Verstraete Domien: Front- en back-end developer</li>
@@ -114,12 +122,44 @@
 
   <style scoped>
   h2 {
+    text-align: left;
     font-size:40px;
+    padding: 0;
+    margin: 0;
   }
 
   p{
     font-size:20px;
   }
+  .logo {
+    width: 100%;
+    max-height: 50vh;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 40px;
+    background-color: #fd0100; 
+    border: none; 
+    padding: 0; 
+    box-sizing: border-box; 
+    border-radius: 10px;
+}
+
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+  .about-section {
+  
+  border: 2px solid grey; 
+  border-radius: 10px;    
+  padding-left: 20px;
+  padding-right: 20px;          
+  margin: 20px 0;         
+  background-color: lightgray;
+  box-shadow: 0 5px 5px lightslategray;
+}
 
   .pageLink {
     color: var(--secondary-color);
