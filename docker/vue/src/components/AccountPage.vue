@@ -1,14 +1,27 @@
 <template>
   <div class="account-container">
     <h1>Account Details</h1>
-    <div class="info-box">
-      <p class="userName">Gebruikersnaam: {{ username }}</p>
-      <p class="totalCards">Totaal aantal verzamelde kaarten: {{ totalCards }}</p>
-      <p class="userId">Gebruikers ID: {{ userId }}</p>
+
+    <div class="info-grid">
+      <div class="info-box username-box">
+        <span class="label">Gebruikersnaam:</span>
+        <span class="value">{{ username }}</span>
+      </div>
+
+      <div class="info-box total-cards-box">
+        <span class="label">Verzamelde Kaarten:</span>
+        <span class="value">{{ totalCards }}</span>
+      </div>
+
+      <div class="info-box userid-box">
+        <span class="label">Gebruikers ID:</span>
+        <span class="value">{{ userId }}</span>
+      </div>
     </div>
+
     <div class="actions-box">
-      <button class="logout-button" @click="logout">Uitloggen</button>
-      <button class="delete-account" @click="deleteAccount">Account verwijderen</button>
+      <button class="action-button logout-button" @click="logout">Uitloggen</button>
+      <button class="action-button delete-account-button" @click="deleteAccount">Account verwijderen</button>
     </div>
   </div>
 </template>
@@ -100,88 +113,147 @@ export default {
 </script>
 
 <style scoped>
+/* reset */
 body, html, main {
-  margin: 0 !important; /* Use !important to ensure override */
-  padding: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+    font-family: sans-serif;
+    min-height: 100vh; /* Ensure body/html take at least full viewport height */
+    display: flex; /* Use flexbox for centering content */
+    justify-content: center; /* Center content horizontally */
+    align-items: flex-start; /* Align content to the top */
 }
 
 .account-container {
-  padding: 20px; /* Default padding for larger screens */
-  text-align: center;
-  display: grid;
-  grid-template-areas:
-    'title'
-    'info'
-    'actions';
-  gap: 20px;
-  width: 90%; /* Add a percentage width to prevent it from taking full width on larger screens */
-  max-width: 600px; /* Optional: set a maximum width for larger screens */
-  margin: 0 auto; /* Center the container on larger screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 750px; /* Max width on desktop */
+    margin: 40px auto; /* Center the container */
+    background-color: #fff; /* White background for container */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
-@media (max-width: 600px) {
-  .account-container {
-    padding: 10px; /* Reduce padding for smaller screens */
-    width: 100%; /* Take full width on smaller screens */
-    margin: 0; /* Remove margin on smaller screens */
-  }
+h1 {
+    color: red;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.account-container h1 {
-  grid-area: title;
-  margin-bottom: 0;
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
 }
 
 .info-box {
-  grid-area: info;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f9f9f9; /* Light background */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px; /* Padding inside the box */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #eaeaea;
+    border: 2px solid #ff4d4d;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-.userName,
-.totalCards,
-.userId {
-  margin: 5px 0;
-  font-size: 18px;
-  font-weight: bolder;
+.info-box .label {
+    font-size: 1.1em;
+    font-weight: semi-bold;
+    color: #373737;
+    margin-bottom: 5px;
+}
+
+.info-box .value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #222;
 }
 
 .actions-box {
-  grid-area: actions;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  background-color: #f9f9f9; /* Light background */
-  border-radius: 10px; /* Rounded corners */
-  padding: 15px; /* Padding inside the box */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #eaeaea;
+    border: 2px solid #ff4d4d;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 .logout-button {
-  background-color: red;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 10px 20px;
-  border: none;
-  font-size: 15px;
-  width: 150px; /* Added a width for better visual */
+    background-color: red;
+    color: white;
 }
 
-.delete-account {
-  background-color: black;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 10px 20px;
-  border: none;
-  font-size: 15px;
-  width: 150px; /* Added a width for better visual */
-  margin-left: 0; /* Resetting the margin as flexbox in actions-box handles spacing */
+.delete-account-button {
+    background-color: black;
+    color: white;
+}
+
+@media (max-width: 480px) {
+    .account-container {
+        margin: 40px auto;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .info-box {
+        padding: 10px;
+    }
+
+    .info-box .label {
+        font-size: 0.8em;
+    }
+
+    .info-box .value {
+        font-size: 1em;
+    }
+
+    .action-button {
+        padding: 10px 15px;
+    }
+
+    .actions-box {
+        gap: 10px;
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .actions-box .action-button {
+         width: 100%;
+    }
 }
 </style>

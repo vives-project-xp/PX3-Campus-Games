@@ -3,47 +3,47 @@
     <h1 class="heading">Scoreborden</h1>
 
     <div class="search-bar-container">
-          <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="Zoek op gebruikersnaam..."
-            class="search-input"
-          />
-          <button class="clearButton" @click="clearSearch">✖</button>
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Zoek op gebruikersnaam..."
+        class="search-input"
+      />
+      <button class="clearButton" @click="clearSearch">✖</button>
     </div>
 
     <div class="leaderboards-wrapper">
       <div class="leaderboard-section">
         <h2>Individueel scorebord</h2>
         <div class="leaderboard-content">
-  <div v-if="userLoading" class="loading">Aan het laden...</div>
-  <div v-else-if="userError" class="error">{{ userError }}</div>
-  <table v-else-if="filteredUserLeaderboard.length > 0" class="leaderboard-table">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Gebruikersnaam</th>
-        <th>Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(user, index) in filteredUserLeaderboard" :key="user.id" :class="{ 'first': originalIndexOf(user.id) === 0, 'second': originalIndexOf(user.id) === 1, 'third': originalIndexOf(user.id) === 2 }">
-        <td>
-          <span v-if="originalIndexOf(user.id) === 0" class="rank-emoji">🥇</span>
-          <span v-else-if="originalIndexOf(user.id) === 1" class="rank-emoji">🥈</span>
-          <span v-else-if="originalIndexOf(user.id) === 2" class="rank-emoji">🥉</span>
-          <span v-else>{{ originalIndexOf(user.id) + 1 }}</span>
-        </td>
-        <td>{{ usernameMap.get(user.id) || 'Laden...' }}</td>
-        <td>{{ user.user_score }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div v-else-if="userLeaderboard.length > 0 && filteredUserLeaderboard.length === 0" class="no-data">
-    Geen gebruikers gevonden met de naam "{{ searchQuery }}".
-  </div>
-  <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
-</div>
+          <div v-if="userLoading" class="loading">Aan het laden...</div>
+          <div v-else-if="userError" class="error">{{ userError }}</div>
+          <table v-else-if="filteredUserLeaderboard.length > 0" class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Gebruikersnaam</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(user, index) in filteredUserLeaderboard" :key="user.id" :class="{ 'first': originalIndexOf(user.id) === 0, 'second': originalIndexOf(user.id) === 1, 'third': originalIndexOf(user.id) === 2 }">
+                <td>
+                  <span v-if="originalIndexOf(user.id) === 0" class="rank-emoji">🥇</span>
+                  <span v-else-if="originalIndexOf(user.id) === 1" class="rank-emoji">🥈</span>
+                  <span v-else-if="originalIndexOf(user.id) === 2" class="rank-emoji">🥉</span>
+                  <span v-else>{{ originalIndexOf(user.id) + 1 }}</span>
+                </td>
+                <td>{{ usernameMap.get(user.id) || 'Laden...' }}</td>
+                <td>{{ user.user_score }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else-if="userLeaderboard.length > 0 && filteredUserLeaderboard.length === 0" class="no-data">
+            Geen gebruikers gevonden met de naam "{{ searchQuery }}".
+          </div>
+          <div v-else class="no-data">Geen scorebord data beschikbaar.</div>
+        </div>
       </div>
 
       <div class="leaderboard-section">
@@ -187,6 +187,19 @@ export default {
 </script>
 
 <style scoped>
+body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #fff;
+    color: #333;
+    font-family: sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
 .leaderboard-container {
   display: flex;
   flex-direction: column;
@@ -207,31 +220,47 @@ export default {
   display: flex;
   justify-content: space-around;
   width: 100%;
+  gap: 20px; /* Add some gap between the two sections */
 }
 
 .leaderboard-section {
-  width: 48%;
-  margin: 10px;
+  width: 48%; /* Adjust width slightly to accommodate gap */
+  margin: 0; /* Remove margin as gap on wrapper is used */
   min-width: 300px;
+  background-color: #fff; /* White background for the section container */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  padding: 15px; /* Add padding inside the section */
+  box-sizing: border-box; /* Include padding in width */
+  display: flex; /* Use flex to arrange heading and content */
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderboard-section h2 {
+    margin-top: 0;
+    color: #333; /* Darker color for section titles */
+    margin-bottom: 15px;
+    text-align: center;
 }
 
 .search-bar-container {
-    width: 100%;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  margin-bottom: 20px; /* Increase margin below search bar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search-input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 90%;
-    max-width: 400px;
-    font-size: 1rem;
-    height: 38px;
-    box-sizing: border-box;
+  padding: 10px 15px; /* Increase padding */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 400px;
+  font-size: 1rem;
+  height: 40px; /* Adjust height */
+  box-sizing: border-box;
 }
 
 .leaderboard-content {
@@ -245,17 +274,32 @@ export default {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  background-color: #fff; /* White background for the table itself */
 }
 
 .leaderboard-table th,
 .leaderboard-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 12px; /* Increase padding for better spacing */
+  border: none; /* Remove all borders */
   text-align: center;
 }
 
 .leaderboard-table th {
-  background-color: #f2f2f2;
+  background-color: transparent; /* No background */
+  color: #333; /* Dark text */
+  font-weight: bold;
+  border-bottom: 2px solid #333; /* Stronger bottom border */
+  text-transform: uppercase; /* Uppercase header text */
+  font-size: 0.9em; /* Slightly smaller font for header */
+}
+
+.leaderboard-table td {
+  border-bottom: 1px solid #eee; /* Light grey bottom border for rows */
+  color: #555; /* Default text color for data */
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: none; /* Remove bottom border from the last row */
 }
 
 .loading,
@@ -271,28 +315,30 @@ export default {
   font-size: 1.2em;
 }
 
-.first td { 
-  color: rgb(255, 187, 0);
+/* Keep existing styles for top ranks/leaders, adjust colors if needed for contrast */
+.first td {
+  color: gold; /* Gold color for 1st place */
   font-weight: bold;
 }
 
 .second td {
-  color: rgb(157, 157, 157);
+  color: silver; /* Silver color for 2nd place */
   font-weight: bold;
 }
 
 .third td {
-  color: #bb6c1e;
+  color: #cd7f32; /* Bronze color for 3rd place */
   font-weight: bold;
 }
 
-.leader {
-    color: gold;
+.leader { /* Style for the leading education type */
+    color: red; /* Use red to make the leader stand out */
     font-weight: bold;
 }
 
+
 .clearButton {
-  background: #e60000;
+  background: red; /* Keep clear button red */
   cursor: pointer;
   font-size: 1.5rem;
   color: white;
@@ -303,9 +349,9 @@ export default {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  height: 38px;
-  width: 38px;
-  padding: 0.4em 0.5em 0.3em 0.5em;
+  height: 40px; /* Match search input height */
+  width: 40px; /* Make it square */
+  padding: 0; /* Remove padding, use flexbox for centering */
   box-sizing: border-box;
 }
 
@@ -313,15 +359,44 @@ export default {
   .leaderboards-wrapper {
     flex-direction: column;
     align-items: center;
+    gap: 15px; /* Adjust gap for stacked layout */
   }
 
   .leaderboard-section {
     width: 95%;
-    margin: 15px 0;
+    margin: 0; /* Remove margin when stacked */
+    padding: 10px; /* Adjust padding */
   }
 
   .search-input {
-      width: 90%;
+    width: 90%;
   }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+      padding: 8px; /* Reduce padding on smaller screens */
+  }
+
+  .leaderboard-section h2 {
+      font-size: 1.2em; /* Adjust heading size */
+      margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+    .search-bar-container {
+        flex-direction: column; /* Stack search input and button */
+        gap: 10px;
+    }
+
+    .search-input {
+        width: 100%; /* Full width when stacked */
+        max-width: none;
+    }
+
+    .clearButton {
+        width: 100%; /* Full width when stacked */
+        margin-left: 0;
+    }
 }
 </style>
