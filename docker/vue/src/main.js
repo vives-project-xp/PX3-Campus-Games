@@ -3,7 +3,7 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import CollectionPage from './components/CollectionPage.vue';
 import CodexPage from './components/CodexPage.vue';
-import GamePage from './components/GamePage.vue';
+/*import GamePage from './components/GamePage.vue';*/
 import ShopPage from './components/ShopPage.vue';
 import HomePage from './components/HomePage.vue';
 import TradingPage from './components/TradingPage.vue';
