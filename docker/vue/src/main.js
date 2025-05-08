@@ -3,8 +3,8 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import CollectionPage from './components/CollectionPage.vue';
 import CodexPage from './components/CodexPage.vue';
-import GamePage from './components/GamePage.vue';
-import ShopPage from './components/ShopPage.vue';
+/*import GamePage from './components/GamePage.vue';*/
+/*import ShopPage from './components/ShopPage.vue';*/
 import HomePage from './components/HomePage.vue';
 import TradingPage from './components/TradingPage.vue';
 import AccountPage from './components/AccountPage.vue';
@@ -19,8 +19,8 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/collection', component: CollectionPage },
   { path: '/codex', component: CodexPage },
-  { path: '/game', component: GamePage },
-  { path: '/shop', component: ShopPage },
+  /*{ path: '/game', component: GamePage },*/
+  /*{ path: '/shop', component: ShopPage },*/
   { path: '/trading', component: TradingPage },
   { path: '/account', component: AccountPage },
   { path: '/login', component: LoginPage },

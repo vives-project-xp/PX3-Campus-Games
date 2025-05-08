@@ -9,11 +9,13 @@
     <div class="about-section">
       <h2>Over ons</h2>
       <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
+        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
         <br>
         <br>
         Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
         Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
+        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
+Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
       </p>
     </div>
     
@@ -61,6 +63,38 @@
     </div>
 
     <div>
+    <div v-if="isContentVisible" class="content-container">
+      
+      
+      <h3>Verzamelen:</h3>
+      <p>
+        Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je verzamelde kaarten bekijken. Er zijn snelle filters beschikbaar om per type te filteren, en met de zoekbalk kun je specifieke kaarten vinden.
+      </p>
+      
+      <h3>Codex:</h3>
+      <p>
+        In <b><a class="pageLink" @click="goToCodex">de codex</a></b> vind je zowel alle door jou verzamelde kaarten als alle beschikbare kaarten in het spel. Hier kun je gebruikmaken van dezelfde filters en zoekfunctie als op de collectiepagina.
+        Klik op een kaart om de details te bekijken. De kaart wordt dan uitvergroot weergegeven, met alle informatie duidelijk zichtbaar in de linkerbovenhoek.
+      </p>
+      
+      <h3>Ruilen:</h3>
+      <p>
+        Je kunt kaarten ruilen met andere studenten via <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b>. Hier kun je:
+
+        <ul> <li>Een QR-code genereren</li> <li>De QR-code van een medestudent scannen</li> </ul> Nadat de verbinding tot stand is gebracht, selecteer je de kaarten die je wilt ruilen.
+        Je krijgt direct te zien welke kaarten je in ruil ontvangt. Bij akkoord bevestig je de ruil, waarna de kaarten automatisch tussen de accounts worden uitgewisseld.
+      </p>
+      
+      <h3>Scorebord</h3>
+      <p>
+        <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
+      </p>
+    </div>
+  </div>
+      <div>
+
+
+
       <h2>De kaarten</h2>
       <p> Elke kaart geeft volgende info weer:</p>
       <ul class ="default list">
@@ -77,7 +111,7 @@
         <li>Gewoon</li>
         <li>Ongewoon</li>
         <li>Zeldzaam</li>
-        <li>Zeer zeldzaam</li>
+        <li>Uiterst zeldzaam</li>
         <li>Legendarisch</li>
       </ul>
       <p> En dit zijn alle mogelijke kaarttypes:</p>
