@@ -17,6 +17,7 @@
     - [Stijlrichtlijnen](#Stijlrichtlijnen)
     - [Tools en Nabewerking](#Tools-en-Nabewerking)
     - [Bestandsbeheer](#Bestandsbeheer)
+- [Installatie](#installatie)
 
 ## Doel
 Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
@@ -106,3 +107,69 @@ Om efficiënt samen te werken en de kwaliteit te waarborgen, volgen we deze rich
 
 Het artwork speelt een cruciale rol in de visuele identiteit van ons spel. Door AI-generatie te combineren met handmatige nabewerking zorgen we voor een unieke en hoogwaardige uitstraling die past bij de cartoonstijl van onze game.
 
+## Installatie
+
+Volg deze stappen om de applicatie lokaal op te zetten:
+
+### Vereisten
+1. **Windows of Linux**:
+   - Zorg ervoor dat je een van deze besturingssystemen gebruikt.
+2. **Docker Desktop**:
+   - Installeer Docker Desktop (voor Windows) of Docker (voor Linux).
+   - Zorg ervoor dat Docker actief is en correct werkt.
+
+### Stappen
+1. **Clone de repository**:
+   - Open een terminal en voer het volgende commando uit:
+     ```bash
+     git clone https://github.com/vives-project-xp/PX3-Campus-Games.git
+     ```
+   - Dit zal de repository naar je lokale machine klonen.
+
+2. **Navigeer naar de projectmap**:
+   - Ga naar de map van het project:
+     ```bash
+     cd PX3-Campus-Games
+     ```
+
+3. **Ga naar de Docker-map**:
+   - Navigeer naar de [docker](http://_vscodecontentref_/0)-map:
+     ```bash
+     cd docker
+     ```
+
+4. **Configureer de `.env`-file**:
+   - Maak een `.env`-bestand in de docker folder van het project als deze nog niet bestaat.
+   - Voeg de volgende variabelen toe en stel de gewenste poorten in:
+     ```env
+      DB_ROOT_PASSWORD=DBrootPswrd
+      DB_DATABASE=DBname
+      DB_USER=DBuser
+      DB_PASSWORD=DBpswrd
+      API_HOST=1000
+      VUE_HOST=2000
+      JWT_SECRET=your_secret_key
+     ```
+   - Zorg ervoor dat de opgegeven poorten beschikbaar zijn op je systeem.
+
+
+
+5. **Start de applicatie**:
+   - Gebruik Docker Compose om de applicatie te bouwen en te starten:
+     ```bash
+     docker compose up --build
+     ```
+
+6. **Toegang tot de applicatie**:
+   - Zodra de containers zijn gestart, kun je de applicatie openen in je browser via de poort die je hebt ingesteld in de `.env`-file:
+     ```
+     http://localhost:<FRONTEND_PORT>
+     ```
+
+### Veelvoorkomende Problemen
+- **Docker werkt niet**:
+  - Controleer of Docker Desktop actief is (voor Windows) of dat de Docker-service draait (voor Linux).
+- **Poortconflict**:
+  - Zorg ervoor dat de poorten die je in de `.env`-file hebt opgegeven niet in gebruik zijn door een andere applicatie.
+- **.env ontbreekt**:
+  - Controleer of je een `.env`-bestand hebt aangemaakt en dat de variabelen correct zijn ingesteld.
