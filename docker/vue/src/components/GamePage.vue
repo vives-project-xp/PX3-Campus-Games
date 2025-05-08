@@ -274,4 +274,5 @@ function selectCard(card) {
     log.value.push(`${currentPlayer.value.name} wisselt naar ${card.name}!`);
     showSwitchMenu.value = false;
   }
-}-->
+}
+-->
