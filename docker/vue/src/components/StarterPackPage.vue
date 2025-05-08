@@ -3,11 +3,16 @@
     <h2>Starter Pack</h2>
     <button
       @click="handleClaimButtonClick"
-      :disabled="hasCards"
+      :disabled="hasCards || isLoading"
       class="reward-button"
     >
+      <img
+        v-if="!isLoading"
+        src="@/assets/cardpack.png"
+        alt="Claim Starter Pack"
+        class="card-pack-image"
+      />
       <span v-if="isLoading">Laden...</span>
-      <span v-else>{{ hasCards ? 'Starter Pack Claimed' : 'Claim Starter Pack' }}</span>
     </button>
     <div v-if="message" :class="{'error-message': isError, 'info-message': !isError}">
       {{ message }}
@@ -98,31 +103,37 @@ export default {
   margin-top: 1rem;
 }
 
-/* Styling for the button to match the daily reward button */
+/* Claim button styling */
 .reward-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  background: none; /* Remove default background */
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem; /* Added margin top to separate from the title */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.3s ease;
+  margin-top: 1rem; /* Keep margin top */
+  display: inline-block; /* Ensure image behaves like inline */
 }
 
 .reward-button:hover {
-  background-color: #43a047;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
 }
 
 .reward-button:disabled {
-  background-color: #a5d6a7;
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
+
+.card-pack-image {
+  width: 150px; /* Adjust size as needed */
+  height: auto;
+  display: block; /* Prevent extra space below image */
+}
+
+.reward-button span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
 </style>

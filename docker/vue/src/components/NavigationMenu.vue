@@ -15,8 +15,8 @@
       <router-link to="/collection" @click="closeMenu">Collectie</router-link>
       <router-link to="/codex" @click="closeMenu">Codex</router-link>
       <router-link to="/trading" @click="closeMenu">Ruilen</router-link>
-      <router-link to="/game" @click="closeMenu">Game</router-link>
-      <!--<router-link to="/shop" @click="closeMenu">Winkel</router-link>-->
+      <!--<router-link to="/game" @click="closeMenu">Game</router-link>
+      <router-link to="/shop" @click="closeMenu">Winkel</router-link>-->
       <router-link to="/daily" @click="closeMenu">
         Dagelijkse Beloning
         <span v-if="hasDailyReward" class="menu-notification">!</span>
