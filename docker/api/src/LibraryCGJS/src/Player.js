@@ -1,7 +1,7 @@
 class Player {
   constructor(name, cards) {
       this.name = name;
-      this.activeCard = cards.pop(0);
+      this.activeCard = cards.shift();
       this.benchedCards = cards;
       this.ap = 1;
   }

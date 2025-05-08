@@ -19,6 +19,16 @@
           </ul>
         </div>
       </div>
+      <div v-if="showSwitchMenu" class="switch-menu">
+       <h3>Kies een kaart om te wisselen:</h3>
+        <ul>
+          <li v-for="card in availableSwitchCards" :key="card.name">
+            <button @click="selectCard(card)">
+            {{ card.toString() }}
+            </button>
+          </li>
+        </ul>
+      </div>
 
       <div class="actions">
         <p><strong>Actieve speler:</strong> {{ currentPlayer.name }} (AP: {{ currentPlayer.ap }})</p>
@@ -41,10 +51,14 @@
       <p>Winnaar: {{ winner }}</p>
     </div>
   </div>
+  
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+const showSwitchMenu = ref(false)
+const isFreeSwitch = ref(false)
+const availableSwitchCards = ref([])
 
 // === Card Klasse ===
 class Card {
@@ -57,55 +71,44 @@ class Card {
     this.ability = ability
     this.block = 0
     this.tempEffects = []
-    this.hasAttackedThisTurn = false; // Track if card attacked this turn
+    this.hasAttackedThisTurn = false
   }
 
   attack(target, ap) {
-      if (this.health <= 0) {
-          console.log(`${this.name} is defeated and cannot attack!`);
-          return 0;
-      }
+    if (this.health <= 0 || ap <= 0) return 0
 
-      if (ap <= 0) {
-          return 0;
-      }
+    let baseDamage = this.damage
+    if (this.hasAttackedThisTurn) {
+      baseDamage = Math.floor(baseDamage * 0.5)
+    }
 
-      let baseDamage = this.damage;
-      
-      // Apply 50% damage penalty if already attacked this turn
-      if (this.hasAttackedThisTurn) {
-          baseDamage = Math.floor(baseDamage * 0.5);
-          console.log(`${this.name} deals reduced damage (50%) this turn!`);
-      }
+    const actualDamage = Math.min(target.health, baseDamage)
+    target.health -= actualDamage
+    this.hasAttackedThisTurn = true
 
-      const actualDamage = Math.min(target.health, baseDamage);
-      target.health -= actualDamage;
-      this.hasAttackedThisTurn = true; // Mark that this card attacked
-
-      if (target.health <= 0) {
-          target.health = 0;
-      }
-
-      return actualDamage;
+    if (target.health < 0) target.health = 0
+    return actualDamage
   }
 
   useAbility(player) {
-    if (this.ability === 'heal') {
-      const healAmount = 75
-      this.health = Math.min(this.maxHealth, this.health + healAmount)
-      return `${this.name} heals for ${healAmount} HP!`
-    } else if (this.ability === 'block') {
-      this.block = 80
-      this.health += this.block
-      return `${this.name} gains ${this.block} temporary HP!`
-    } else if (this.ability === 'free_switch') {
-      player.switchCard(true)
-      return `${player.name} switches cards for free!`
-    } else if (this.ability === "extra_action") {
-          player.ap += 2; // Grants +2 AP (net +1 after cost)
-          return `${player.name} gains 1 AP!`;
+    switch (this.ability) {
+      case 'heal':
+        const healAmount = 75
+        this.health = Math.min(this.maxHealth, this.health + healAmount)
+        return `${this.name} heals for ${healAmount} HP!`
+      case 'block':
+        this.block = 80
+        this.health += this.block
+        return `${this.name} gains ${this.block} temporary HP!`
+      case 'free_switch':
+        player.switchCard(true)
+        return `${player.name} switches cards for free!`
+      case 'extra_action':
+        player.ap += 2
+        return `${player.name} gains 1 AP!`
+      default:
+        return 'Invalid ability'
     }
-    return 'Invalid ability'
   }
 
   removeBlock() {
@@ -140,7 +143,7 @@ class Player {
     this.benchedCards = this.benchedCards.filter(c => c !== selectedCard)
     this.benchedCards.push(this.activeCard)
     this.activeCard = selectedCard
-    if (!free) this.ap--  // Verlaag AP na een wissel
+    if (!free) this.ap--
   }
 
   checkAndSwapCard() {
@@ -150,7 +153,7 @@ class Player {
   }
 
   hasCardsLeft() {
-    return this.activeCard.health > 0 || this.benchedCards.some(card => card.health > 0)
+    return this.activeCard.health > 0 || this.benchedCards.some(c => c.health > 0)
   }
 }
 
@@ -175,18 +178,16 @@ const opponent = ref(null)
 const turnCount = ref(1)
 const attackCount = ref(0)
 
-// Gebruik `onMounted` om het spel te initialiseren en de eerste speler te bepalen
 onMounted(() => {
-  const firstPlayer = Math.random() < 0.5 ? player1 : player2
-  const secondPlayer = firstPlayer === player1 ? player2 : player1
+  const first = Math.random() < 0.5 ? player1 : player2
+  const second = first === player1 ? player2 : player1
 
-  currentPlayer.value = firstPlayer
-  opponent.value = secondPlayer
+  currentPlayer.value = first
+  opponent.value = second
 
   log.value.push(`${currentPlayer.value.name} begint het spel!`)
-  currentPlayer.value.ap = 1 // Eerste speler krijgt 1 AP
+  currentPlayer.value.ap = 1
   currentPlayer.value.activeCard.removeBlock()
-  
 })
 
 function attack() {
@@ -195,17 +196,16 @@ function attack() {
     return
   }
 
-  const isSecond = attackCount.value >= 1
   const damage = currentPlayer.value.activeCard.attack(opponent.value.activeCard, currentPlayer.value.ap)
   log.value.push(`${currentPlayer.value.activeCard.name} valt aan voor ${damage} schade!`)
 
-  currentPlayer.value.ap--  // Verlaag AP na de aanval
+  currentPlayer.value.ap--
   attackCount.value++
   checkDefeated()
 }
 
 function useAbility() {
-  if (currentPlayer.value.ap <= 0 && (currentPlayer.value.activeCard.ability !== 'free_switch' || "extra_action")) {
+  if (currentPlayer.value.ap <= 0 && currentPlayer.value.activeCard.ability !== 'free_switch') {
     log.value.push('Niet genoeg AP!')
     return
   }
@@ -213,11 +213,12 @@ function useAbility() {
   const result = currentPlayer.value.activeCard.useAbility(currentPlayer.value)
   log.value.push(result)
 
-  if (currentPlayer.value.activeCard.ability !== 'free_switch'|| currentPlayer.activeCard.ability !== "extra_action") {
+  if (currentPlayer.value.activeCard.ability !== 'free_switch', 'extra_action') {
     currentPlayer.value.ap--  // Verlaag AP na het gebruiken van een ability
   }
   checkDefeated()
 }
+
 
 function switchCard() {
   if (currentPlayer.value.ap <= 0 && currentPlayer.value.activeCard.ability !== 'free_switch') {
@@ -231,42 +232,56 @@ function switchCard() {
     return
   }
 
-  const selectedCard = available[0]
-  currentPlayer.value.benchedCards.push(currentPlayer.value.activeCard)
-  currentPlayer.value.benchedCards = currentPlayer.value.benchedCards.filter(c => c !== selectedCard)
-  currentPlayer.value.activeCard = selectedCard
+  // Bij een gewone wissel, kaarten laten kiezen
+  isFreeSwitch.value = false
+  availableSwitchCards.value = available
+  showSwitchMenu.value = true
+}
 
-  log.value.push(`${currentPlayer.value.name} wisselt naar ${selectedCard.name}!`)
-  if (currentPlayer.value.activeCard.ability !== 'free_switch') {
-    currentPlayer.value.ap--  // Verlaag AP na het wisselen van kaart
+function selectCard(card) {
+  // Als free_switch actief is, wordt de kaart gewisseld zonder AP te kosten
+  if (isFreeSwitch.value) {
+    const bench = currentPlayer.value.benchedCards;
+    bench.push(currentPlayer.value.activeCard);
+    currentPlayer.value.activeCard = card;
+    currentPlayer.value.benchedCards = bench.filter(c => c !== card);
+
+    log.value.push(`${currentPlayer.value.name} wisselt naar ${card.name} zonder kosten!`);
+    showSwitchMenu.value = false; // Laat het menu open voor een nieuwe kaartkeuze
+    isFreeSwitch.value = false; // Zet free_switch terug naar false
+  } else {
+    // Als free_switch niet actief is, wordt de wissel met kosten uitgevoerd
+    const bench = currentPlayer.value.benchedCards;
+    bench.push(currentPlayer.value.activeCard);
+    currentPlayer.value.activeCard = card;
+    currentPlayer.value.benchedCards = bench.filter(c => c !== card);
+
+    if (!isFreeSwitch.value) {
+      currentPlayer.value.ap--; // Verminder AP bij gewone wissel
+    }
+
+    log.value.push(`${currentPlayer.value.name} wisselt naar ${card.name}!`);
+    showSwitchMenu.value = false;
   }
 }
 
+
+
 function endTurn() {
-  // Zet de beurt om en verhoog de AP voor de nieuwe beurt
   opponent.value.checkAndSwapCard()
 
-  // Wissel de actieve speler
   const temp = currentPlayer.value
   currentPlayer.value = opponent.value
   opponent.value = temp
 
-  // Verhoog de beurt
   turnCount.value++
-
-  // Zorg ervoor dat speler 1 de eerste beurt met 1 AP begint, daarna krijgt elke speler 2 AP
-  if (turnCount.value === 1) {
-    currentPlayer.value.ap = 1  // Ronde 1: speler krijgt 1 AP
-  } else {
-    currentPlayer.value.ap = 2  // Na ronde 1: speler krijgt 2 AP
-  }
+  currentPlayer.value.ap = turnCount.value === 1 ? 1 : 2
 
   currentPlayer.value.activeCard.removeBlock()
   attackCount.value = 0
 
-  // Nu pas de log bij
   log.value.push(`${currentPlayer.value.name} is aan de beurt!`)
-  checkGameOver()  // Controleer of het spel is afgelopen
+  checkGameOver()
 }
 
 function checkDefeated() {
@@ -311,6 +326,20 @@ function checkGameOver() {
   margin: 5px;
   padding: 10px;
   font-size: 16px;
+}
+
+.switch-menu {
+  background: #eef;
+  border: 2px solid #88f;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.switch-menu button {
+  margin: 5px;
+  padding: 10px;
+  font-weight: bold;
 }
 
 .log {
