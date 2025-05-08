@@ -57,27 +57,36 @@ class Card {
     this.ability = ability
     this.block = 0
     this.tempEffects = []
+    this.hasAttackedThisTurn = false; // Track if card attacked this turn
   }
 
   attack(target, ap) {
-    if (this.health <= 0) {
-      console.log(`${this.name} is defeated and cannot attack!`)
-      return 0
-    }
+      if (this.health <= 0) {
+          console.log(`${this.name} is defeated and cannot attack!`);
+          return 0;
+      }
 
-    if (ap <= 0) {
-      return 0
-    }
+      if (ap <= 0) {
+          return 0;
+      }
 
-    let baseDamage = this.damage
-    const actualDamage = Math.min(target.health, baseDamage)
-    target.health -= actualDamage
+      let baseDamage = this.damage;
+      
+      // Apply 50% damage penalty if already attacked this turn
+      if (this.hasAttackedThisTurn) {
+          baseDamage = Math.floor(baseDamage * 0.5);
+          console.log(`${this.name} deals reduced damage (50%) this turn!`);
+      }
 
-    if (target.health <= 0) {
-      target.health = 0
-    }
+      const actualDamage = Math.min(target.health, baseDamage);
+      target.health -= actualDamage;
+      this.hasAttackedThisTurn = true; // Mark that this card attacked
 
-    return actualDamage
+      if (target.health <= 0) {
+          target.health = 0;
+      }
+
+      return actualDamage;
   }
 
   useAbility(player) {
@@ -174,7 +183,7 @@ onMounted(() => {
   log.value.push(`${currentPlayer.value.name} begint het spel!`)
   currentPlayer.value.ap = 1 // Eerste speler krijgt 1 AP
   currentPlayer.value.activeCard.removeBlock()
-  endTurn()
+  
 })
 
 function attack() {
