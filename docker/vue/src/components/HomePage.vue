@@ -12,21 +12,34 @@
     </div>
     <div>
       <h2>Hoe te spelen</h2>
+    <button cl
+      @click="toggleContent" 
+      class="toggle-button"
+    >
+      {{ isContentVisible ? 'Verberg uitleg' : 'Toon uitleg:' }}
+    </button>
+
+    <div v-if="isContentVisible" class="content-container">
+      
+      
       <h3>Verzamelen:</h3>
       <p>
         Elke gebruiker krijgt een pack met 3 kaarten als ze een account aanmaken. Daarna kun je dagelijks een kaart claimen door simpelweg in te loggen, je krijgt dan de optie om te kiezen tussen 3 kaarten.
         <br> Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je eigen kaarten bekijken. Er zijn ook snelle filters die je kunt gebruiken om te filteren per type en om specifieke kaarten te vinden is er ook de zoekbalk.
       </p>
+      
       <h3>Codex:</h3>
       <p>
         In <b><a class="pageLink" @click="goToCodex">de codex</a></b> kun je alle kaarten bekijken die je hebt verzameld, alsook alle kaarten in het spel. Hier zijn dezelfde filters en zoekbalk beschikbaar als op de collectiepagina.
         <br> Om de details van een kaart te zien kun je op de kaart klikken, deze zal dan uitvergroot worden en linksboven zie je dan alle info van de kaart.
       </p>
+      
       <h3>Ruilen:</h3>
       <p>
-        Het is mogelijk om met andere studenten  te ruilen, dit kan door naar <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b> te gaan. Hier kun je een QR-code aanmaken, of die van je medestudent scannen, als dit gebeurt is kun je de kaart(en) selecteren die je wilt ruilen.
-        <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar heet account van de juiste speler overgezet.
+        Het is mogelijk om met andere studenten te ruilen, dit kan door naar <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b> te gaan. Hier kun je een QR-code aanmaken, of die van je medestudent scannen, als dit gebeurt is kun je de kaart(en) selecteren die je wilt ruilen.
+        <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar het account van de juiste speler overgezet.
       </p>
+      
       <h3>Game:</h3>
       <p>
         Op <b><a class="pageLink" @click="goToGamePage">de gamepagina</a></b> kunnen er games tussen 2 spelers gespeeld worden, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
@@ -34,11 +47,13 @@
         <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
         <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
       </p>
+      
       <h3>Scorebord</h3>
       <p>
         <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
       </p>
     </div>
+  </div>
       <div>
 
 
@@ -95,8 +110,16 @@
   <script>
   export default {
         name: 'home-page',
+        data() {
+    return {
+      isContentVisible: false
+    } 
+  },
 
         methods: {
+          toggleContent() {
+          this.isContentVisible = !this.isContentVisible;
+        },
           goToCodex() {
             this.$router.push('/codex');
           },
@@ -121,6 +144,7 @@
   </script>
 
   <style scoped>
+  
   h2 {
     text-align: left;
     font-size:40px;
@@ -171,4 +195,56 @@
     list-style-type: disc;
     font-size: 18px;
   }
+  .toggle-button {
+    padding: 15px;
+        width: 25%;
+        padding: 1rem;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 1rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-size: 15px;
+}
+
+
+.content-container {
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 25px;
+  background-color: #fff;
+  margin: 20px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+h2 {
+  color: #333;
+  margin-top: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+h3 {
+  color: #fd0100; /* Rode kleur voor subkopjes */
+  margin-top: 20px;
+}
+
+.pageLink {
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.pageLink:hover {
+  color: #004499;
+  text-decoration: none;
+}
+
+p {
+  line-height: 1.6;
+  color: #555;
+}
   </style>
