@@ -166,6 +166,11 @@ Volg deze stappen om de applicatie lokaal op te zetten:
      http://localhost:<FRONTEND_PORT>
      ```
 
+7. **API-documentatie**:
+   - De API-documentatie is beschikbaar op de volgende URL's:
+     - Swagger UI: [http://localhost:<BACKEND_PORT>/docs](http://localhost:<BACKEND_PORT>/docs)
+     - JSON-formaat: [http://localhost:<BACKEND_PORT>/docs.json](http://localhost:<BACKEND_PORT>/docs.json)
+
 ### Veelvoorkomende Problemen
 - **Docker werkt niet**:
   - Controleer of Docker Desktop actief is (voor Windows) of dat de Docker-service draait (voor Linux).
