@@ -57,27 +57,36 @@ class Card {
     this.ability = ability
     this.block = 0
     this.tempEffects = []
+    this.hasAttackedThisTurn = false; // Track if card attacked this turn
   }
 
   attack(target, ap) {
-    if (this.health <= 0) {
-      console.log(`${this.name} is defeated and cannot attack!`)
-      return 0
-    }
+      if (this.health <= 0) {
+          console.log(`${this.name} is defeated and cannot attack!`);
+          return 0;
+      }
 
-    if (ap <= 0) {
-      return 0
-    }
+      if (ap <= 0) {
+          return 0;
+      }
 
-    let baseDamage = this.damage
-    const actualDamage = Math.min(target.health, baseDamage)
-    target.health -= actualDamage
+      let baseDamage = this.damage;
+      
+      // Apply 50% damage penalty if already attacked this turn
+      if (this.hasAttackedThisTurn) {
+          baseDamage = Math.floor(baseDamage * 0.5);
+          console.log(`${this.name} deals reduced damage (50%) this turn!`);
+      }
 
-    if (target.health <= 0) {
-      target.health = 0
-    }
+      const actualDamage = Math.min(target.health, baseDamage);
+      target.health -= actualDamage;
+      this.hasAttackedThisTurn = true; // Mark that this card attacked
 
-    return actualDamage
+      if (target.health <= 0) {
+          target.health = 0;
+      }
+
+      return actualDamage;
   }
 
   useAbility(player) {
@@ -92,6 +101,9 @@ class Card {
     } else if (this.ability === 'free_switch') {
       player.switchCard(true)
       return `${player.name} switches cards for free!`
+    } else if (this.ability === "extra_action") {
+          player.ap += 2; // Grants +2 AP (net +1 after cost)
+          return `${player.name} gains 1 AP!`;
     }
     return 'Invalid ability'
   }
@@ -174,7 +186,7 @@ onMounted(() => {
   log.value.push(`${currentPlayer.value.name} begint het spel!`)
   currentPlayer.value.ap = 1 // Eerste speler krijgt 1 AP
   currentPlayer.value.activeCard.removeBlock()
-  endTurn()
+  
 })
 
 function attack() {
@@ -201,7 +213,7 @@ function useAbility() {
   const result = currentPlayer.value.activeCard.useAbility(currentPlayer.value)
   log.value.push(result)
 
-  if (currentPlayer.value.activeCard.ability !== 'free_switch') {
+  if (currentPlayer.value.activeCard.ability !== 'free_switch', 'extra_action') {
     currentPlayer.value.ap--  // Verlaag AP na het gebruiken van een ability
   }
   checkDefeated()
