@@ -57,16 +57,15 @@ export default {
     };
 
     const fetchTotalCards = async () => {
-      if (userId) {
-        try {
-          const response = await axios.get(`${API_URL}/api/userCards/${userId}`);
-          totalCards.value = response.data.length;
-        } catch (error) {
-          console.error('Error fetching user cards for total count:', error);
-          totalCards.value = 0;
-        }
+      const response = await axios.get(`${API_URL}/api/userCards/${userId}`);
+      if (Array.isArray(response.data)) {
+        const totalCount = response.data.reduce((sum, card) => {
+          return sum + (card && typeof card.quantity === 'number' ? card.quantity : 0);
+        }, 0); // Start the sum at 0
+        totalCards.value = totalCount;
       } else {
-        totalCards.value = 0;
+        console.error('API did not return a list of user cards:', response.data);
+        totalCards.value = 0; // Display 0 or show an error
       }
     };
 
@@ -113,17 +112,17 @@ export default {
 </script>
 
 <style scoped>
-/* reset */
+/* css reset */
 body, html, main {
     margin: 0 !important;
     padding: 0 !important;
-    background-color: #fff; /* White background */
-    color: #333; /* Dark text color */
+    background-color: #fff;
+    color: #333;
     font-family: sans-serif;
-    min-height: 100vh; /* Ensure body/html take at least full viewport height */
-    display: flex; /* Use flexbox for centering content */
-    justify-content: center; /* Center content horizontally */
-    align-items: flex-start; /* Align content to the top */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .account-container {
@@ -131,9 +130,9 @@ body, html, main {
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    max-width: 750px; /* Max width on desktop */
-    margin: 40px auto; /* Center the container */
-    background-color: #fff; /* White background for container */
+    max-width: 750px;
+    margin: 40px auto;
+    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
