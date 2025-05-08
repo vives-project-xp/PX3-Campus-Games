@@ -3,11 +3,11 @@
     <div class="about-section">
       <h2>Over ons</h2>
       <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen.
+        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
         <br>
         <br>
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen. 
-        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
+        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
+Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
       </p>
     </div>
     <div>
@@ -24,28 +24,21 @@
       
       <h3>Verzamelen:</h3>
       <p>
-        Elke gebruiker krijgt een pack met 3 kaarten als ze een account aanmaken. Daarna kun je dagelijks een kaart claimen door simpelweg in te loggen, je krijgt dan de optie om te kiezen tussen 3 kaarten.
-        <br> Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je eigen kaarten bekijken. Er zijn ook snelle filters die je kunt gebruiken om te filteren per type en om specifieke kaarten te vinden is er ook de zoekbalk.
+        Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je verzamelde kaarten bekijken. Er zijn snelle filters beschikbaar om per type te filteren, en met de zoekbalk kun je specifieke kaarten vinden.
       </p>
       
       <h3>Codex:</h3>
       <p>
-        In <b><a class="pageLink" @click="goToCodex">de codex</a></b> kun je alle kaarten bekijken die je hebt verzameld, alsook alle kaarten in het spel. Hier zijn dezelfde filters en zoekbalk beschikbaar als op de collectiepagina.
-        <br> Om de details van een kaart te zien kun je op de kaart klikken, deze zal dan uitvergroot worden en linksboven zie je dan alle info van de kaart.
+        In <b><a class="pageLink" @click="goToCodex">de codex</a></b> vind je zowel alle door jou verzamelde kaarten als alle beschikbare kaarten in het spel. Hier kun je gebruikmaken van dezelfde filters en zoekfunctie als op de collectiepagina.
+        Klik op een kaart om de details te bekijken. De kaart wordt dan uitvergroot weergegeven, met alle informatie duidelijk zichtbaar in de linkerbovenhoek.
       </p>
       
       <h3>Ruilen:</h3>
       <p>
-        Het is mogelijk om met andere studenten te ruilen, dit kan door naar <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b> te gaan. Hier kun je een QR-code aanmaken, of die van je medestudent scannen, als dit gebeurt is kun je de kaart(en) selecteren die je wilt ruilen.
-        <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar het account van de juiste speler overgezet.
-      </p>
-      
-      <h3>Game:</h3>
-      <p>
-        Op <b><a class="pageLink" @click="goToGamePage">de gamepagina</a></b> kunnen er games tussen 2 spelers gespeeld worden, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
-        <br> De speler die kop of munt juist had begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
-        <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
-        <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
+        Je kunt kaarten ruilen met andere studenten via <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b>. Hier kun je:
+
+        <ul> <li>Een QR-code genereren</li> <li>De QR-code van een medestudent scannen</li> </ul> Nadat de verbinding tot stand is gebracht, selecteer je de kaarten die je wilt ruilen.
+        Je krijgt direct te zien welke kaarten je in ruil ontvangt. Bij akkoord bevestig je de ruil, waarna de kaarten automatisch tussen de accounts worden uitgewisseld.
       </p>
       
       <h3>Scorebord</h3>
@@ -74,7 +67,7 @@
         <li>Gewoon</li>
         <li>Ongewoon</li>
         <li>Zeldzaam</li>
-        <li>Zeer zeldzaam</li>
+        <li>Uiterst zeldzaam</li>
         <li>Legendarisch</li>
       </ul>
       <p> En dit zijn alle mogelijke kaarttypes:</p>
