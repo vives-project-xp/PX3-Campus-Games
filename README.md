@@ -181,3 +181,14 @@ Volg deze stappen om de applicatie lokaal op te zetten:
   - Zorg ervoor dat de poorten die je in de `.env`-file hebt opgegeven niet in gebruik zijn door een andere applicatie.
 - **.env ontbreekt**:
   - Controleer of je een `.env`-bestand hebt aangemaakt en dat de variabelen correct zijn ingesteld.
+- **Databasegebruiker ontbreekt of heeft onvoldoende rechten**:
+  - Zorg ervoor dat je een databasegebruiker hebt aangemaakt met een wachtwoord.
+  - Geef de gebruiker de juiste permissies om de database te kunnen benaderen en bewerken.
+  - Controleer of de database-instellingen correct zijn opgegeven in de `.env`-file:
+    ```env
+    DB_ROOT_PASSWORD=DBrootPswrd
+    DB_DATABASE=DBname
+    DB_USER=DBuser
+    DB_PASSWORD=DBpswrd
+    ```
+  - Als de database niet toegankelijk is, controleer dan of de gebruiker toegang heeft tot de opgegeven database.
