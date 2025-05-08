@@ -160,13 +160,13 @@ const log = ref([])
 
 const player1 = reactive(new Player('Player 1', [
   new Card('WarriorFS', 160, 140, 'free_switch'),
-  new Card('WarriorDM', 220, 100, 'damage_multiplier'),
+  new Card('WarriorDM', 220, 100, 'extra_action'),
   new Card('KnightB', 260, 80, 'block')
 ]))
 
 const player2 = reactive(new Player('Player 2', [
   new Card('PriestFS', 180, 120, 'free_switch'),
-  new Card('BerserkerDM', 270, 80, 'damage_multiplier'),
+  new Card('BerserkerDM', 270, 80, 'extra_action'),
   new Card('PaladinB', 300, 60, 'block')
 ]))
 
@@ -205,7 +205,7 @@ function attack() {
 }
 
 function useAbility() {
-  if (currentPlayer.value.ap <= 0 && currentPlayer.value.activeCard.ability !== 'free_switch') {
+  if (currentPlayer.value.ap <= 0 && (currentPlayer.value.activeCard.ability !== 'free_switch' || "extra_action")) {
     log.value.push('Niet genoeg AP!')
     return
   }
@@ -213,7 +213,7 @@ function useAbility() {
   const result = currentPlayer.value.activeCard.useAbility(currentPlayer.value)
   log.value.push(result)
 
-  if (currentPlayer.value.activeCard.ability !== 'free_switch', 'extra_action') {
+  if (currentPlayer.value.activeCard.ability !== 'free_switch'|| currentPlayer.activeCard.ability !== "extra_action") {
     currentPlayer.value.ap--  // Verlaag AP na het gebruiken van een ability
   }
   checkDefeated()
