@@ -101,6 +101,9 @@ class Card {
     } else if (this.ability === 'free_switch') {
       player.switchCard(true)
       return `${player.name} switches cards for free!`
+    } else if (this.ability === "extra_action") {
+          player.ap += 2; // Grants +2 AP (net +1 after cost)
+          return `${player.name} gains 1 AP!`;
     }
     return 'Invalid ability'
   }
@@ -210,7 +213,7 @@ function useAbility() {
   const result = currentPlayer.value.activeCard.useAbility(currentPlayer.value)
   log.value.push(result)
 
-  if (currentPlayer.value.activeCard.ability !== 'free_switch') {
+  if (currentPlayer.value.activeCard.ability !== 'free_switch', 'extra_action') {
     currentPlayer.value.ap--  // Verlaag AP na het gebruiken van een ability
   }
   checkDefeated()
