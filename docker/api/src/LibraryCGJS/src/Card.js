@@ -50,8 +50,13 @@ class Card {
           this.health += this.block;
           return `${this.name} gains ${this.block} temporary HP!`;
       } else if (this.ability === "free_switch") {
-          player.switchCard(true);
-          return `${player.name} switches cards for free!`;
+        
+            isFreeSwitch.value = true
+            availableSwitchCards.value = player.benchedCards.filter(c => c.health > 0)
+            showSwitchMenu.value = true
+            return `${player.name} mag gratis wisselen!`
+          
+          
       } else if (this.ability === "extra_action") {
           player.ap += 2; // Grants +2 AP (net +1 after cost)
           return `${player.name} gains 1 AP!`;
