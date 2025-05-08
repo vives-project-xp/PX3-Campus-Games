@@ -57,7 +57,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import { API_URL } from '../config';
 
@@ -66,6 +66,7 @@ export default {
   components: { PlayingCard },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const allCards = ref([]);
     const userCards = ref([]);
     const searchQuery = ref('');
