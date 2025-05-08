@@ -205,7 +205,7 @@ function attack() {
 }
 
 function useAbility() {
-  if (currentPlayer.value.ap <= 0 && currentPlayer.value.activeCard.ability !== 'free_switch') {
+  if (currentPlayer.value.ap <= 0 && (currentPlayer.value.activeCard.ability !== 'free_switch' || "extra_action")) {
     log.value.push('Niet genoeg AP!')
     return
   }
@@ -213,7 +213,17 @@ function useAbility() {
   const result = currentPlayer.value.activeCard.useAbility(currentPlayer.value)
   log.value.push(result)
 
-  if (currentPlayer.value.activeCard.ability !== 'free_switch', 'extra_action') {
+  // Check for free_switch ability
+  if (currentPlayer.value.activeCard.ability === 'free_switch') {
+   showSwitchMenu.value = true
+    isFreeSwitch.value = true
+    availableSwitchCards.value = available
+
+  } else if (!['free_switch', 'extra_action'].includes(currentPlayer.value.activeCard.ability)) {
+    currentPlayer.value.ap--
+  }
+
+  if (currentPlayer.value.activeCard.ability !== 'free_switch'|| currentPlayer.activeCard.ability !== "extra_action") {
     currentPlayer.value.ap--  // Verlaag AP na het gebruiken van een ability
   }
   checkDefeated()
