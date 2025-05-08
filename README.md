@@ -110,6 +110,36 @@ Om efficiënt samen te werken en de kwaliteit te waarborgen, volgen we deze rich
 
 Het artwork speelt een cruciale rol in de visuele identiteit van ons spel. Door AI-generatie te combineren met handmatige nabewerking zorgen we voor een unieke en hoogwaardige uitstraling die past bij de cartoonstijl van onze game.
 
+### Kaarten toevoegen aan de database
+
+Volg deze stappen om handmatig nieuwe kaarten toe te voegen aan de database:
+
+#### 1. Voeg de kaart handmatig toe aan de draaiende container
+Als je applicatie een Dockerized MariaDB- of MySQL-database gebruikt, kun je data als volgt invoeren:
+
+1. **Open de databasecontainer**:
+   ```bash
+   docker exec -it db mysql -u webuser -p
+   ```
+   - Vervang `db` door de naam van je MariaDB-container.
+   - Voer het wachtwoord in wanneer hierom wordt gevraagd.
+
+2. **Gebruik de juiste database en voeg de kaart toe**:
+   ```sql
+   USE kaartspel_db;
+
+   INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) VALUES ('name', 100, 50, 'extra_action', 'Rare', 'omschrijving', 'opliendingsType', 'Cards/pngNaam');
+   ```
+
+#### 2. Voeg dezelfde invoer toe aan `restore.sql`
+1. Open je `restore.sql`-bestand en voeg dezelfde SQL-insert toe op de juiste locatie (Na --opleiding. achter de voorgaande value inputs):
+   ```sql
+    ('name', 100, 50, 'extra_action', 'Rare', 'omschrijving', 'opliendingsType', 'Cards/pngNaam');
+   ```
+    De laatste insert voor die opleiding heeft een ; nodig alle voorgaande eindigen met een , .
+
+2. Zorg ervoor dat je dubbele sleutels voorkomt als je meerdere keren herstelt. Gebruik bijvoorbeeld `INSERT IGNORE` of `REPLACE INTO`, afhankelijk van het gewenste gedrag.
+
 ## Installatie
 
 Volg deze stappen om de applicatie lokaal op te zetten:
@@ -192,3 +222,4 @@ Volg deze stappen om de applicatie lokaal op te zetten:
     DB_PASSWORD=DBpswrd
     ```
   - Als de database niet toegankelijk is, controleer dan of de gebruiker toegang heeft tot de opgegeven database.
+
