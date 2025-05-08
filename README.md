@@ -136,7 +136,7 @@ Als je applicatie een Dockerized MariaDB- of MySQL-database gebruikt, kun je dat
    ```sql
     ('name', 100, 50, 'extra_action', 'Rare', 'omschrijving', 'opliendingsType', 'Cards/pngNaam');
    ```
-    De laatste insert voor die opleiding heeft een ; nodig alle voorgaande eindigen met een , .
+    De laatste insert voor die opleiding heeft een `;` nodig alle voorgaande eindigen met een `,` .
 
 2. Zorg ervoor dat je dubbele sleutels voorkomt als je meerdere keren herstelt. Gebruik bijvoorbeeld `INSERT IGNORE` of `REPLACE INTO`, afhankelijk van het gewenste gedrag.
 
