@@ -19,7 +19,7 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/collection', component: CollectionPage },
   { path: '/codex', component: CodexPage },
-  { path: '/game', component: GamePage },
+  /*{ path: '/game', component: GamePage },*/
   { path: '/shop', component: ShopPage },
   { path: '/trading', component: TradingPage },
   { path: '/account', component: AccountPage },
