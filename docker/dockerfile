@@ -7,7 +7,7 @@ ENV NPM_VERSION=9
 ENV REPO_URL="https://github.com/vives-project-xp/PX3-Campus-Games.git"
 ENV BRANCH="main"
 ENV PORT 3000
-ENV PORT_FRONT 8000
+ENV PORT_FRONT 5000
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y \
@@ -42,7 +42,7 @@ WORKDIR /app/docker/api
 RUN npm install
 
 # Expose necessary ports
-EXPOSE 8000 3000
+EXPOSE 5000 3000
 
 # Pull latest changes and start both frontend and backend
 CMD ["sh", "-c", "cd /app && git pull origin $BRANCH && cd Backend && npm run dev & cd ../Frontend/vives-card-game && npm run serve"]
