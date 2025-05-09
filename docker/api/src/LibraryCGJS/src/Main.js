@@ -1,3 +1,5 @@
+const e = require("express");
+
 function setupGame() {
   const allCards = [
       new Card("WarriorFS", 160, 140, "free_switch"),
@@ -68,12 +70,15 @@ function playGame() {
                   console.log("Not enough AP!");
               }
           } else if (action === "2") { // Ability
-              if (currentPlayer.ap > 0 || currentPlayer.activeCard.ability === "free_switch") {
+              if (currentPlayer.ap > 0 || currentPlayer.activeCard.ability === "free_switch" || currentPlayer.activeCard.ability === "extra_action") {
                   const abilityResult = currentPlayer.activeCard.useAbility(currentPlayer);
                   console.log(abilityResult);
                   if (!abilityResult.includes("free")) {
                       currentPlayer.ap--;
                   }
+                  else if (currentPlayer.activeCard.ability === "extra_action") { 
+                      currentPlayer.ap += 1; // Grants +1 AP 
+                  }   
               } else {
                   console.log("Not enough AP!");
               }

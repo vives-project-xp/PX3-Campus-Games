@@ -1,54 +1,85 @@
 <template>
   <div class="account-container">
     <h1>Account Details</h1>
-    <p>Gebruikersnaam: {{ username }}</p>
-    <button class="logout-button" @click="logout">Uitloggen</button>
-    <button class="delete-account" @click="deleteAccount">Account verwijderen</button>
+
+    <div class="info-grid">
+      <div class="info-box username-box">
+        <span class="label">Gebruikersnaam:</span>
+        <span class="value">{{ username }}</span>
+      </div>
+
+      <div class="info-box total-cards-box">
+        <span class="label">Verzamelde Kaarten:</span>
+        <span class="value">{{ totalCards }}</span>
+      </div>
+
+      <div class="info-box userid-box">
+        <span class="label">Gebruikers ID:</span>
+        <span class="value">{{ userId }}</span>
+      </div>
+    </div>
+
+    <div class="actions-box">
+      <button class="action-button logout-button" @click="logout">Uitloggen</button>
+      <button class="action-button delete-account-button" @click="deleteAccount">Account verwijderen</button>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import { API_URL } from '../config';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
-  data() {
-    return {
-      username: '',
-    };
-  },
-  mounted() {
-    this.fetchUsername();
-  },
-  methods: {
-    fetchUsername() {
+  setup() {
+    const username = ref('');
+    const totalCards = ref(0);
+    const userId = localStorage.getItem('userId');
+    const router = useRouter();
+
+    const fetchUsername = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
           const base64Url = token.split('.')[1];
           const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
           const payload = JSON.parse(atob(base64));
-          this.username = payload.username;
+          username.value = payload.username;
         } catch (error) {
           console.error('Error decoding token:', error);
-          this.logout();
+          logout();
         }
       } else {
-        this.$router.push('/login');
+        router.push('/login');
       }
-    },
-    logout() {
+    };
+
+    const fetchTotalCards = async () => {
+      const response = await axios.get(`${API_URL}/api/userCards/${userId}`);
+      if (Array.isArray(response.data)) {
+        const totalCount = response.data.reduce((sum, card) => {
+          return sum + (card && typeof card.quantity === 'number' ? card.quantity : 0);
+        }, 0); // Start the sum at 0
+        totalCards.value = totalCount;
+      } else {
+        console.error('API did not return a list of user cards:', response.data);
+        totalCards.value = 0; // Display 0 or show an error
+      }
+    };
+
+    const logout = () => {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-      this.username = '';
-      this.$router.push('/login');
-    },
+      username.value = '';
+      router.push('/login');
+    };
 
-    async deleteAccount() {
+    const deleteAccount = async () => {
       if (confirm('Ben je zeker dat je dit account permanent wil verwijderen?')) {
         const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
-        
+
         try {
           await axios.delete(`${API_URL}/api/deleteUser/${userId}`, {
             headers: {
@@ -56,45 +87,172 @@ export default {
             },
           });
           alert('Account succesvol verwijderd.');
-          this.logout();
+          logout();
         } catch (error) {
           console.error('Error deleting account:', error);
           alert('Er is een error opgetreden tijdens het verwijderen van het account.');
         }
       }
-    },
+    };
+
+    onMounted(() => {
+      fetchUsername();
+      fetchTotalCards();
+    });
+
+    return {
+      username,
+      totalCards,
+      logout,
+      deleteAccount,
+      userId,
+    };
   },
 };
 </script>
 
 <style scoped>
-.account-container {
-  padding: 20px;
-  text-align: center;
+/* css reset */
+body, html, main {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #fff;
+    color: #333;
+    font-family: sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.account-container h1 {
-  margin-bottom: 20px;
+.account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 750px;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+h1 {
+    color: red;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.info-box {
+    background-color: #eaeaea;
+    border: 2px solid #ff4d4d;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.info-box .label {
+    font-size: 1.1em;
+    font-weight: semi-bold;
+    color: #373737;
+    margin-bottom: 5px;
+}
+
+.info-box .value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #222;
+}
+
+.actions-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    padding: 20px;
+    background-color: #eaeaea;
+    border: 2px solid #ff4d4d;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.action-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 .logout-button {
-  background-color: red;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 10px 20px;
-  border: none;
-  font-size: 15px;
+    background-color: red;
+    color: white;
 }
 
-.delete-account {
+.delete-account-button {
     background-color: black;
     color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    font-size: 15px;
-    margin-left: 10px;
+}
+
+@media (max-width: 480px) {
+    .account-container {
+        margin: 40px auto;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .info-box {
+        padding: 10px;
+    }
+
+    .info-box .label {
+        font-size: 0.8em;
+    }
+
+    .info-box .value {
+        font-size: 1em;
+    }
+
+    .action-button {
+        padding: 10px 15px;
+    }
+
+    .actions-box {
+        gap: 10px;
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .actions-box .action-button {
+         width: 100%;
+    }
 }
 </style>

@@ -21,3 +21,12 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+/docker/.env
+/docker/db/data
+/docker/db/*
+/docker/package-lock.json
+/docker/node_modules
+/docker/api/node_modules
+/docker/api/package-lock.json
+/docker/vue/node_modules
+/docker/vue/package-lock.json

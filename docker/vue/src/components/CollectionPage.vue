@@ -17,7 +17,7 @@
       <div class="search-box">
         <div class="total-cards">
           <img src="@/assets/total_cards_icon.png" alt="Total Cards Icon" class="icon" />
-          <span>{{ filteredCards.length }}</span>
+          <span>{{ totalCards }}</span>
         </div>
         <div class="search-input">
           <input type="text" v-model="searchQuery" placeholder="Zoek kaarten..." />
@@ -57,7 +57,7 @@
 
 <script>
 import PlayingCard from './PlayingCard.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import { API_URL } from '../config';
 
@@ -65,6 +65,7 @@ export default {
   name: 'CollectionPage',
   components: { PlayingCard },
   setup() {
+    const router = useRouter();
     const route = useRoute();
     const allCards = ref([]);
     const userCards = ref([]);
@@ -75,6 +76,16 @@ export default {
 
     const isCollectionRoute = computed(() => route.path === '/collection');
     const rarityOrder = ['common', 'uncommon', 'rare', 'ultra rare', 'legendary'];
+
+    const totalCards = computed(() => {
+      if (!allCards.value || allCards.value.length === 0) {
+        return 0;
+      }
+      return allCards.value.reduce((sum, card) => {
+        return sum + (card && typeof card.quantity === 'number' ? card.quantity : 0);
+      }, 0);
+    });
+
 
     const filteredCards = computed(() => {
       let filtered = allCards.value;
@@ -104,10 +115,17 @@ export default {
         }
       }
 
-      return filtered.map((card) => ({
-        ...card,
-        artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
-      }));
+      return filtered.map((card) => {
+          const artworkPath = card.artwork_path ? card.artwork_path.split('/').pop() : '';
+           try {
+             return {
+               ...card,
+               artwork_path: require(`@/assets/Cards/${artworkPath}`),
+             };
+           } catch (e) {
+             console.error("Error requiring image:", e);
+           }
+      });
     });
 
     const sortCards = (key) => {
@@ -126,24 +144,42 @@ export default {
     const fetchAllCards = async () => {
       try {
         const userId = localStorage.getItem('userId');
+         if (!userId) {
+            console.error("userId not found in localStorage");
+            route.push('/login');
+            return;
+        }
         const response = await fetch(`${API_URL}/api/userCards/${userId}`);
+        if (!response.ok) {
+             throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         allCards.value = data;
       } catch (error) {
         console.error('Error fetching all cards:', error);
+        allCards.value = [];
       }
     };
 
-    const fetchUserCards = async () => {
-      try {
+    /*const fetchUserCards = async () => {
+       try {
         const userId = localStorage.getItem('userId');
+         if (!userId) {
+            console.error("userId not found in localStorage for fetchUserCards");
+            return;
+        }
         const response = await fetch(`${API_URL}/api/userCards/${userId}`);
+         if (!response.ok) {
+             throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
+         // Assuming the response data is an array of card objects with card_id
         userCards.value = data.map((card) => card.card_id); // Only card IDs
       } catch (error) {
         console.error('Error fetching user cards:', error);
+         userCards.value = []; // Set to empty array on error
       }
-    };
+    };*/
 
     const showCardDetails = (card) => {
       selectedCard.value = card;
@@ -156,16 +192,15 @@ export default {
     const checkLoginStatus = () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        route.push('/login');
+        router.push('/login');
       }
     };
 
     onMounted(async () => {
       checkLoginStatus();
-      await fetchAllCards();
-      await fetchUserCards();
+      await fetchAllCards()
     });
-    
+
     return {
       isCollectionRoute,
       filteredCards,
@@ -173,6 +208,7 @@ export default {
       clearSearch,
       sortCards,
       userCards,
+      totalCards,
       showCardDetails,
       selectedCard,
       closeCardDetails,

@@ -88,19 +88,26 @@
 
 <style scoped>
 .login-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 90%;
-        margin: auto;
-        margin-top: 40px;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    max-width: 500px;
+    margin: auto;
+    margin-top: 40px;
+}
 
 .logo {
-    width: 100%;
-    max-height: 50vh;
-    text-align: center;
-    margin-bottom: 2rem;
+width: 100%;
+max-height: 50vh;
+text-align: center;
+ margin-bottom: 2rem;
+ margin-top: 40px;  
+ background-color: #fd0100; 
+ border: none; 
+ padding: 0; 
+ box-sizing: border-box; 
+ border-radius: 10px;
 }
 
 .logo-image {
@@ -123,6 +130,7 @@
     margin-bottom: 1rem;
     border: 0.1rem solid #ccc;
     border-radius: 0.6rem;
+    box-sizing: border-box;
 }
 
 .error-space {
@@ -131,25 +139,25 @@
     text-align: center;
 }
 
-    .login-button {
-        padding: 15px;
-        width: 100%;
-        padding: 1.5rem;
-        background-color: red;
-        color: white;
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-        font-size: 15px;
-    }
+.login-button {
+    width: 100%;
+    padding: 1.2rem;
+    background-color: red;
+    font-size: 1.2rem;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    font-size: 15px;
+}
 
-    .signup-text {
-        margin-top: 1rem;
-        color: black;
-        text-align: center;
-    }
+.signup-text {
+     margin-top: 1rem;
+     color: black;
+    text-align: center;
+}
 
 .signup-link {
     color: red;

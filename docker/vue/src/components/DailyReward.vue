@@ -1,19 +1,24 @@
 <template>
   <div class="daily-reward">
-    <button 
+    <button
       v-if="!showCards"
       @click="claimReward"
       :disabled="isLoading"
       class="reward-button"
     >
-      <span v-if="isLoading">Laden...</span>
-      <span v-else>Claim Dagelijkse Beloning</span>
+      <img
+        v-if="!isLoading"
+        src="@/assets/cardpack.png"
+        alt="Claim Dagelijkse Beloning"
+        class="card-pack-image"
+      />
+      <span v-else>Laden...</span>
     </button>
 
     <div v-if="showCards" class="card-selection">
       <h3>Kies je dagelijkse beloning:</h3>
       <div class="cards-container">
-        <div 
+        <div
           v-for="card in rewardCards"
           :key="card.card_id"
           @click="selectCard(card)"
@@ -29,9 +34,9 @@
           />
         </div>
       </div>
-      
+
       <div v-if="selectedCard" class="actions">
-        <button 
+        <button
           @click="confirmSelection"
           :disabled="isSelecting"
           class="confirm-button"
@@ -76,14 +81,14 @@ export default {
       isLoading.value = true;
       message.value = '';
       isError.value = false;
-      
+
       try {
         const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
         if (!userIdToSend) throw new Error('Gebruiker niet ingelogd');
 
         const response = await fetch(`${API_URL}/api/daily`, {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
@@ -108,7 +113,7 @@ export default {
             artwork_path: require(`@/assets/Cards/${imagePath}`)
           };
         });
-        
+
         showCards.value = true;
 
       } catch (error) {
@@ -126,7 +131,7 @@ export default {
 
     const confirmSelection = async () => {
       if (!selectedCard.value) return;
-      
+
       isSelecting.value = true;
       message.value = '';
       isError.value = false;
@@ -135,11 +140,11 @@ export default {
         const userIdToSend = props.userId || Number(localStorage.getItem('userId'));
         const response = await fetch(`${API_URL}/api/daily/select`, {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             userId: userIdToSend,
             cardId: selectedCard.value.card_id
           })
@@ -154,7 +159,9 @@ export default {
         message.value = data.message || 'Beloning ontvangen!';
         showCards.value = false;
         selectedCard.value = null;
-        emit('reward-collected');
+
+        // Update de reward status direct
+        emit('reward-collected', false);
 
       } catch (error) {
         isError.value = true;
@@ -211,32 +218,38 @@ export default {
   margin-bottom: 1.5rem;
   color: #2c3e50;
 }
+
 /* Claim knop styling */
 .reward-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  background: none; /* Verwijder de standaard achtergrond */
+  border: none; /* Verwijder de rand */
+  padding: 0; /* Verwijder de padding */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: inline-block; /* Zorg ervoor dat de afbeelding inline is */
 }
 
 .reward-button:hover {
-  background-color: #43a047;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
 }
 
 .reward-button:disabled {
-  background-color: #a5d6a7;
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+}
+
+.card-pack-image {
+  width: 150px; /* Pas de grootte naar wens aan */
+  height: auto;
+  display: block; /* Voorkom extra ruimte onder de afbeelding */
+}
+
+.reward-button span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 /* Cards container */
@@ -296,18 +309,70 @@ export default {
   box-shadow: 0 0 0 3px #2196F3;
 }
 
+/* Confirm button styling */
+.confirm-button {
+  background-color: #007bff;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-button:disabled {
+  background-color: #b3d7ff;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Feedback message styling */
+.feedback {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.feedback.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+}
+
+.feedback:not(.error) {
+  background-color: #e6f7e6;
+  color: #388e3c;
+  border: 1px solid #388e3c;
+}
+
 /* Responsive aanpassingen */
 @media (max-width: 768px) {
   .cards-container {
     gap: 1.5rem;
   }
-  
+
   .card-item {
     width: 240px;
   }
-  
+
   .card-item :deep(.card-image) {
     height: 250px;
+  }
+
+  .card-pack-image {
+    width: 120px;
   }
 }
 
@@ -315,6 +380,10 @@ export default {
   .card-item {
     width: 100%;
     max-width: 280px;
+  }
+
+  .card-pack-image {
+    width: 100px;
   }
 }
 </style>

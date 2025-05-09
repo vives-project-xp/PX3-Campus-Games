@@ -3,20 +3,25 @@
 ![logo_campus_games](https://github.com/user-attachments/assets/83abe292-f3c2-4d02-8858-8ffd983cb7be)
 
 ## Inhoud
-- [Vives Card Game](#Vives-Card-game)
-- [Inhoud](#Inhoud)
-- [Doel](#Doel)
+- [Vives Card Game](#vives-card-game)
+- [Inhoud](#inhoud)
+- [Doel](#doel)
 - [npm versies](#npm-versies)
-- [Team](#Team)
-- [Hoe werkt het](#Hoe-werkt-het)
-  - [Collectie](#Collectie)
-  - [Ruilen](#Ruilen)
-  - [Game](#Game)
-- [Artwork](#Artwork)
-    - [Generatieproces](#Generatieproces)
-    - [Stijlrichtlijnen](#Stijlrichtlijnen)
-    - [Tools en Nabewerking](#Tools-en-Nabewerking)
-    - [Bestandsbeheer](#Bestandsbeheer)
+- [Team](#team)
+- [Hoe werkt het](#hoe-werkt-het)
+  - [Collectie](#collectie)
+  - [Ruilen](#ruilen)
+  - [Game](#game)
+- [Artwork](#artwork)
+  - [Kaart template](#kaart-template)
+  - [Generatieproces](#generatieproces)
+  - [Stijlrichtlijnen](#stijlrichtlijnen)
+  - [Tools en Nabewerking](#tools-en-nabewerking)
+  - [Bestandsbeheer](#bestandsbeheer)
+- [Installatie](#installatie)
+  - [Vereisten](#vereisten)
+  - [Stappen](#stappen)
+  - [Veelvoorkomende Problemen](#veelvoorkomende-problemen)
 
 ## Doel
 Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en te verrenigen. 
@@ -28,7 +33,6 @@ Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelij
 - backend : 10.2.3
 
 ## Team
-(taken: frontend, backend, graphics designer, game logic, database, ambassadeur, Robotics)
 
 - Verstraete Domien: Front/Back-end developer
 
@@ -105,4 +109,117 @@ Om efficiënt samen te werken en de kwaliteit te waarborgen, volgen we deze rich
 
 
 Het artwork speelt een cruciale rol in de visuele identiteit van ons spel. Door AI-generatie te combineren met handmatige nabewerking zorgen we voor een unieke en hoogwaardige uitstraling die past bij de cartoonstijl van onze game.
+
+### Kaarten toevoegen aan de database
+
+Volg deze stappen om handmatig nieuwe kaarten toe te voegen aan de database:
+
+#### 1. Voeg de kaart handmatig toe aan de draaiende container
+Als je applicatie een Dockerized MariaDB- of MySQL-database gebruikt, kun je data als volgt invoeren:
+
+1. **Open de databasecontainer**:
+   ```bash
+   docker exec -it db mysql -u webuser -p
+   ```
+   - Vervang `db` door de naam van je MariaDB-container.
+   - Voer het wachtwoord in wanneer hierom wordt gevraagd.
+
+2. **Gebruik de juiste database en voeg de kaart toe**:
+   ```sql
+   USE kaartspel_db;
+
+   INSERT INTO Cards_dex (cardName, health, attack, ability, rarity, info, opleiding, artwork_path) VALUES ('name', 100, 50, 'extra_action', 'Rare', 'omschrijving', 'opliendingsType', 'Cards/pngNaam');
+   ```
+
+#### 2. Voeg dezelfde invoer toe aan `restore.sql`
+1. Open je `restore.sql`-bestand en voeg dezelfde SQL-insert toe op de juiste locatie (Na --opleiding. achter de voorgaande value inputs):
+   ```sql
+    ('name', 100, 50, 'extra_action', 'Rare', 'omschrijving', 'opliendingsType', 'Cards/pngNaam');
+   ```
+    De laatste insert voor die opleiding heeft een `;` nodig alle voorgaande eindigen met een `,` .
+
+2. Zorg ervoor dat je dubbele sleutels voorkomt als je meerdere keren herstelt. Gebruik bijvoorbeeld `INSERT IGNORE` of `REPLACE INTO`, afhankelijk van het gewenste gedrag.
+
+## Installatie
+
+Volg deze stappen om de applicatie lokaal op te zetten:
+
+### Vereisten
+1. **Windows of Linux**:
+   - Zorg ervoor dat je een van deze besturingssystemen gebruikt.
+2. **Docker Desktop**:
+   - Installeer Docker Desktop (voor Windows) of Docker (voor Linux).
+   - Zorg ervoor dat Docker actief is en correct werkt.
+
+### Stappen
+1. **Clone de repository**:
+   - Open een terminal en voer het volgende commando uit:
+     ```bash
+     git clone https://github.com/vives-project-xp/PX3-Campus-Games.git
+     ```
+   - Dit zal de repository naar je lokale machine klonen.
+
+2. **Navigeer naar de projectmap**:
+   - Ga naar de map van het project:
+     ```bash
+     cd PX3-Campus-Games
+     ```
+
+3. **Ga naar de Docker-map**:
+   - Navigeer naar de [docker](http://_vscodecontentref_/0)-map:
+     ```bash
+     cd docker
+     ```
+
+4. **Configureer de `.env`-file**:
+   - Maak een `.env`-bestand in de docker folder van het project als deze nog niet bestaat.
+   - Voeg de volgende variabelen toe en stel de gewenste poorten in:
+     ```env
+      DB_ROOT_PASSWORD=DBrootPswrd
+      DB_DATABASE=DBname
+      DB_USER=DBuser
+      DB_PASSWORD=DBpswrd
+      API_HOST=1000
+      VUE_HOST=2000
+      JWT_SECRET=your_secret_key
+     ```
+   - Zorg ervoor dat de opgegeven poorten beschikbaar zijn op je systeem.
+
+
+
+5. **Start de applicatie**:
+   - Gebruik Docker Compose om de applicatie te bouwen en te starten:
+     ```bash
+     docker compose up --build
+     ```
+
+6. **Toegang tot de applicatie**:
+   - Zodra de containers zijn gestart, kun je de applicatie openen in je browser via de poort die je hebt ingesteld in de `.env`-file:
+     ```
+     http://localhost:<FRONTEND_PORT>
+     ```
+
+7. **API-documentatie**:
+   - De API-documentatie is beschikbaar op de volgende URL's:
+     - Swagger UI: [http://localhost:<BACKEND_PORT>/docs](http://localhost:<BACKEND_PORT>/docs)
+     - JSON-formaat: [http://localhost:<BACKEND_PORT>/docs.json](http://localhost:<BACKEND_PORT>/docs.json)
+
+### Veelvoorkomende Problemen
+- **Docker werkt niet**:
+  - Controleer of Docker Desktop actief is (voor Windows) of dat de Docker-service draait (voor Linux).
+- **Poortconflict**:
+  - Zorg ervoor dat de poorten die je in de `.env`-file hebt opgegeven niet in gebruik zijn door een andere applicatie.
+- **.env ontbreekt**:
+  - Controleer of je een `.env`-bestand hebt aangemaakt en dat de variabelen correct zijn ingesteld.
+- **Databasegebruiker ontbreekt of heeft onvoldoende rechten**:
+  - Zorg ervoor dat je een databasegebruiker hebt aangemaakt met een wachtwoord.
+  - Geef de gebruiker de juiste permissies om de database te kunnen benaderen en bewerken.
+  - Controleer of de database-instellingen correct zijn opgegeven in de `.env`-file:
+    ```env
+    DB_ROOT_PASSWORD=DBrootPswrd
+    DB_DATABASE=DBname
+    DB_USER=DBuser
+    DB_PASSWORD=DBpswrd
+    ```
+  - Als de database niet toegankelijk is, controleer dan of de gebruiker toegang heeft tot de opgegeven database.
 

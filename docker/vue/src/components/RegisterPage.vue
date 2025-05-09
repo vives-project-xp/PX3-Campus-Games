@@ -107,7 +107,8 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90%;
+    width: 95%;
+    max-width: 500px;
     margin: auto;
     margin-top: 40px;
 }
@@ -117,6 +118,12 @@ export default {
     max-height: 50vh;
     text-align: center;
     margin-bottom: 2rem;
+    margin-top: 40px;
+    background-color: #fd0100; 
+    border: none; 
+    padding: 0; 
+    box-sizing: border-box; 
+    border-radius: 10px;
 }
 
 .logo-image {
@@ -139,6 +146,7 @@ export default {
     margin-bottom: 1rem;
     border: 0.1rem solid #ccc;
     border-radius: 0.6rem;
+    box-sizing: border-box;
 }
 
 .error-space {
@@ -149,8 +157,9 @@ export default {
 
 .signup-button {
     width: 100%;
-    padding: 1.5rem;
+    padding: 1.2rem;
     background-color: red;
+    font-size: 1.2rem;
     color: white;
     border: none;
     border-radius: 1rem;
