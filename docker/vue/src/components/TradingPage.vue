@@ -177,6 +177,7 @@ export default {
           card.cardName.toLowerCase().includes(searchQuery.value.toLowerCase())
         );
       }
+      console.log("Filtered Cards:", filtered);
       return filtered.map((card) => ({
         ...card,
         artwork_path: getImage(card.artwork_path),
@@ -185,12 +186,12 @@ export default {
 
     // Function to correctly resolve image paths
     const getImage = (fileName) => {
-      try {
-        return require(`@/assets/Cards/${fileName.split('/').pop()}`);
-      } catch (error) {
-        console.error("Image not found:", fileName);
+      if (!fileName) {
+        console.error("Invalid file name:", fileName);
         return "";
       }
+
+      return `./assets/cards${fileName}`;
     };
 
 const checkLoginStatus = () => {
@@ -267,13 +268,15 @@ const checkLoginStatus = () => {
     };
 
     const loadUserCards = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/userCards/${userId}`);
-        userCards.value = response.data;
-      } catch (error) {
-        console.error("Error loading user cards:", error);
-      }
-    };
+  try {
+      console.log("Fetching user cards for userId:", userId.value);
+      const response = await axios.get(`${API_URL}/api/userCards/${userId.value}`);
+      console.log("API Response:", response.data);
+      userCards.value = response.data;
+    } catch (error) {
+      console.error("Error loading user cards:", error);
+    }
+  };
 
     const openCardSelection = () => {
       showCardSelection.value = true;
