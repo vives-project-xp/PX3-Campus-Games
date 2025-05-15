@@ -726,10 +726,4 @@ onBeforeUnmount(() => {
     flex-direction: column;
   }
 }
-
-.background {
-  position: relative;
-  z-index: -100;
-
-}
 </style>
