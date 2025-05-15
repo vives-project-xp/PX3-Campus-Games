@@ -47,7 +47,7 @@
       </div>
 
       <div class="leaderboard-section">
-        <h2>Scorebord per studiegebied</h2>
+        <h2>Scorebord studiegebied</h2>
         <div class="leaderboard-content">
           <div v-if="educationLoading" class="loading">Aan het laden...</div>
           <div v-else-if="educationError" class="error">{{ educationError }}</div>
