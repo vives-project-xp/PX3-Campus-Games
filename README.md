@@ -12,6 +12,7 @@
   - [Collectie](#collectie)
   - [Ruilen](#ruilen)
   - [Game](#game)
+  - [Scorebord](#scorebord)
 - [Artwork](#artwork)
   - [Kaart template](#kaart-template)
   - [Generatieproces](#generatieproces)
@@ -57,6 +58,9 @@ Voor een kaart te ruilen met een andere speler zullen ze beiden fysiek aanwezig 
 
 ### Game
 Voor de Game volgt hetzelfde principe als het ruilen. Qr-code die gegenereert wordt en gescanned door de andere gebruiker. 
+
+### Scorebord
+Elke kaart heeft een zeldzaamheid (Gewoon, Ongewoon, Zeldzaam, Ultra zeldzaam, Legendarisch). Deze zeldzaamheden corospenderen met een waarde. Hoe zeldzamer de kaart, hoe hoger de waarde. Met deze waarde kan je op het scorebord komen. De top 10 gebruikers met de hoogste score wordt gedisplayed op de scorebord pagina. De opleidingen hebben een apart scorebord. Zo kan je zien welke opleiding momenteel de hoogste score heeft. Zo onstaat er ook een beetje competitie tussen de opleidingen.
 
 ## Artwork
 
