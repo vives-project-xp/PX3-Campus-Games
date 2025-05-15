@@ -71,7 +71,7 @@ Elke kaart heeft een zeldzaamheid (Gewoon, Ongewoon, Zeldzaam, Ultra zeldzaam, L
 Een belangrijk onderdeel van de kaarten is het artwork, dat een herkenbare en aantrekkelijke visuele stijl moet hebben. We hebben gekozen voor een cartoonstijl, omdat deze toegankelijk en visueel aantrekkelijk is voor een breed publiek.
 
 ### Kaart template
-we maken gebruik van een template voor de kaarten zodat we enkel de kleur, attack, abilitie en levens moeten aanpassen en de afbeelding er in plaatsen.
+we maken gebruik van een template voor de kaarten zodat we enkel de kleur, de naam en het icoon van het studiegebied moeten aanpassen en de afbeelding er in plaatsen.
 
 <img src="https://github.com/user-attachments/assets/9a12f915-8ce8-4f75-9b07-1f745147d5a2" width="200" height="300">
 
@@ -98,11 +98,8 @@ Om een consistente stijl te behouden, hanteren we de volgende richtlijnen:
 - Achtergronden: Minimalistisch met subtiele details om de focus op de personages te leggen
 
 ### Tools en Nabewerking
-Voor de generaties en nabewerking maken we gebruik van:
+Voor de generaties en nabewerking maken we gebruik van Adobe express. Na enkele AI image generators uit te testen en hun functies te vergelijken hebben we gekozen voor Adobe Express. Hiervoor hebben we een subscriptie aangevraagd omdat er maar 40 generaties per week mogelijk waren en omdat we al 4 generaties per prompt gebruikten konden we maar max 10 kaarten per week maken. Met de subscriptie hebben we een veel groter aantal generaties per week en kunnen we ook meer functies gebruiken. Als de afbeeldingen zijn gegenereerd kunnen we ze nog indien nodig bewerken met Adobe Express. Dit is ook een grote reden waarom we hiervoor hebben gekozen.
 
-- AI-tools: Voor het genereren van ruwe afbeeldingen
-
-- Adobe Express: Voor correcties en stijlbewaking
 
 ### Bestandsbeheer
 Om efficiënt samen te werken en de kwaliteit te waarborgen, volgen we deze richtlijnen voor bestandsbeheer:
