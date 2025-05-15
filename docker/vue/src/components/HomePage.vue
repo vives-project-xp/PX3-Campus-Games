@@ -247,7 +247,6 @@ p {
 .login-button {
     padding: 10px 20px;
     font-size: 50px;
-    width: 100%;
     font-weight: semi-bold;
     background-color: white;
     color: red;
