@@ -138,6 +138,10 @@
         <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
     </div>
   </div>
+
+  <div class="call-to-action">
+      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
+  </div>
 </template>
 
 <script>
