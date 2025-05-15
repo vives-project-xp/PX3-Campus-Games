@@ -39,7 +39,20 @@ export const getActiveTrades = (req, res) => {
 // generate a unique trade code and store the trade session
 export const startTrade = (req, res) => {
     const tradeCode = uuidv4();
-    activeTrades[tradeCode] = { user1: null, user2: null, user1Card: null, user2Card: null, user1Accepted: false, user2Accepted: false };
+    const userId = req.body.userId;
+
+    if (!userId) {
+        console.error("User ID is required");
+        return res.status(400).json({ error: "User ID is required" });
+    }
+
+    activeTrades[tradeCode] = { 
+        user1: userId,
+        user2: null,
+        createdAt: new Date().toISOString()
+    };
+
+    console.log("New trade created:", activeTrades[tradeCode]);
 
     res.json({ tradeCode });
 };
@@ -50,54 +63,61 @@ export const joinTrade = (req, res) => {
     console.log("Received data:", { tradeCode, userId });
 
     if (!tradeCode || !userId) {
+        console.error("Missing trade code or user ID");
         return res.status(400).json({ error: "Missing trade code or user ID" });
     }
 
     if (!activeTrades[tradeCode]) {
+        console.error("Invalid trade code:", tradeCode);
         return res.status(400).json({ error: "Invalid trade code" });
     }
 
     let bothJoined = false;
 
-    // Voeg de gebruiker toe aan de juiste plek in de trade
-    if (!activeTrades[tradeCode].user1) {
-        activeTrades[tradeCode].user1 = userId;
-    } else if (!activeTrades[tradeCode].user2) {
-        activeTrades[tradeCode].user2 = userId;
-        bothJoined = true; // Beide gebruikers zijn nu in de trade
-    } else {
-        return res.status(400).json({ error: "Trade is already full" });
+    try {
+        // Voeg de gebruiker toe aan de juiste plek in de trade
+        if (!activeTrades[tradeCode].user1) {
+            activeTrades[tradeCode].user1 = userId;
+        } else if (!activeTrades[tradeCode].user2) {
+            activeTrades[tradeCode].user2 = userId;
+            bothJoined = true; // Beide gebruikers zijn nu in de trade
+        } else {
+            console.error("Trade is already full:", activeTrades[tradeCode]);
+            return res.status(400).json({ error: "Trade is already full" });
+        }
+
+        console.log(`Trade Code: ${tradeCode}`);
+        console.log(`User 1: ${activeTrades[tradeCode].user1}`);
+        console.log(`User 2: ${activeTrades[tradeCode].user2}`);
+
+        // Notify both users to update their trade session
+        if (bothJoined) {
+            notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
+            notifyUserToUpdate(activeTrades[tradeCode].user2, tradeCode);
+        } else {
+            // Notify the first user to update their trade session
+            notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
+        }
+
+        res.json({
+            message: "Joined trade successfully",
+            tradeCode,
+            user1: activeTrades[tradeCode].user1,
+            user2: activeTrades[tradeCode].user2,
+        });
+    } catch (error) {
+        console.error("Error in joinTrade:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-
-    console.log(`Trade Code: ${tradeCode}`);
-    console.log(`User 1: ${activeTrades[tradeCode].user1}`);
-    console.log(`User 2: ${activeTrades[tradeCode].user2}`);
-
-    // Notify both users to update their trade session
-    if (bothJoined) {
-        notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
-        notifyUserToUpdate(activeTrades[tradeCode].user2, tradeCode);
-    } else {
-        // Notify the first user to update their trade session
-        notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
-    }
-
-    res.json({
-        message: "Joined trade successfully",
-        tradeCode,
-        user1: activeTrades[tradeCode].user1,
-        user2: activeTrades[tradeCode].user2,
-    });
 };
 
-const notifyUserToUpdate = async (userId, tradeCode) => {
+const notifyUserToUpdate = (userId, tradeCode) => {
     try {
-        console.log("Notifying user:", userId, "to update trade:", tradeCode);
         const socketId = userSockets[userId];
         if (socketId) {
             io.to(socketId).emit("tradeUpdated", { tradeCode });
         } else {
-            console.error("Socket ID not found for user:", userId);
+            console.warn(`Socket ID not found for user: ${userId}`);
         }
     } catch (error) {
         console.error("Error notifying user to update:", error);
@@ -112,22 +132,33 @@ export const selectCard = (req, res) => {
         return res.status(400).json({ error: "Trade not found" });
     }
 
-    if (activeTrades[tradeCode].user1 === userId) {
-        activeTrades[tradeCode].user1Card = card;
-    } else if (activeTrades[tradeCode].user2 === userId) {
-        activeTrades[tradeCode].user2Card = card;
+    const trade = activeTrades[tradeCode];
+    
+    // Voeg logging toe voor debugging
+    console.log(`Selecting card for trade ${tradeCode}`, {
+        user1: trade.user1,
+        user2: trade.user2,
+        currentUser: userId
+    });
+
+    if (trade.user1 === userId) {
+        trade.user1Card = card;
+    } else if (trade.user2 === userId) {
+        trade.user2Card = card;
     } else {
         return res.status(400).json({ error: "User not part of this trade" });
     }
 
-    // Notify both users of the card selection update
-    notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
-    notifyUserToUpdate(activeTrades[tradeCode].user2, tradeCode);
+    // Forceer een volledige status update naar beide gebruikers
+    io.to(tradeCode).emit("tradeUpdated", {
+        tradeCode,
+        forceUpdate: true,  // Nieuwe vlag voor complete refresh
+        tradeStatus: trade  // Stuur de volledige trade status mee
+    });
 
-    // Return the updated trade state so the frontend updates immediately
     res.json({
         message: "Card selected successfully",
-        tradeStatus: activeTrades[tradeCode] // Send the updated trade state
+        tradeStatus: trade
     });
 };
 
@@ -240,15 +271,8 @@ export const tradeCards = async (tradeCode) => {
         // Add trade point to users
         await addTradePoint(user1); 
         await addTradePoint(user2); 
-
-       io.to(userSockets[trade.user1]).emit("tradeCompleted", { 
-        tradeCode,
-        receivedCard: trade.user2Card 
-      });
-      io.to(userSockets[trade.user2]).emit("tradeCompleted", { 
-        tradeCode,
-        receivedCard: trade.user1Card 
-      });
+        //
+       
   
       console.log("TradingController.js 3");
       console.log("Trade completed successfully");

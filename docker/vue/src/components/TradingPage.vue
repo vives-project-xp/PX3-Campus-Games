@@ -145,6 +145,9 @@ import QrScanner from "qr-scanner";
 import { io } from 'socket.io-client';
 import { API_URL } from "../config";
 
+// Create socket ONCE for the whole file
+const socket = io(API_URL);
+
 export default {
   components: { PlayingCard },
   setup() {
@@ -168,7 +171,6 @@ export default {
     const receivedCard = ref(null);
     
     const router = useRouter();
-    const socket = io(API_URL);
 
     const filteredCards = computed(() => {
       let filtered = userCards.value;
@@ -185,12 +187,14 @@ export default {
     });
 
     const getImage = (fileName) => {
-      if (!fileName) {
-        console.error("Invalid file name:", fileName);
-        return "";
-      }
-
-      return `./assets/cards${fileName}`;
+      if (!fileName) return "";
+      try {
+      
+      return require(`@/assets${fileName}`);
+      } catch (e) {
+      console.error("Error loading image:", e);
+      return ""; // Fallback als de afbeelding niet gevonden wordt
+    }
     };
 
 const checkLoginStatus = () => {
@@ -206,21 +210,22 @@ const checkLoginStatus = () => {
     };
 
     const generateQRCode = async () => {
-      try {
-        const response = await axios.post(`${API_URL}/api/startTrade`);
-        tradeCode.value = response.data.tradeCode;
-
-        await axios.post(`${API_URL}/api/joinTrade`, {
-          tradeCode: tradeCode.value,
-          userId
+    try {
+        const response = await axios.post(`${API_URL}/api/startTrade`, {
+            userId: userId.value  // Verstuur de userId bij het aanmaken van de trade
         });
-
+        
+        tradeCode.value = response.data.tradeCode;
         qrGenerated.value = true;
         qrCodeUrl.value = await QRCode.toDataURL(tradeCode.value);
-      } catch (error) {
+        
+        // Je hoeft niet nogmaals joinTrade aan te roepen, want de gebruiker is al geregistreerd
+        socket.emit('joinTradeRoom', tradeCode.value);  // Voeg toe aan de trade room
+        
+    } catch (error) {
         console.error("Error generating QR code:", error);
-      }
-    };
+    }
+};
 
     const startScanning = () => {
   const videoElem = document.querySelector('.video'); // Use existing video element
@@ -258,12 +263,20 @@ const checkLoginStatus = () => {
 
 const joinTrade = async (code) => {
   try {
-    socket.emit('register', String(userId.value)); // Register socket before joining
-    await axios.post(`${API_URL}/api/joinTrade`, { tradeCode: code, userId: String(userId.value) });
+    console.log("Joining trade with code:", code, "and userId:", userId.value);
+    const response = await axios.post(`${API_URL}/api/joinTrade`, {
+      tradeCode: code,
+      userId: userId.value
+    });
+
     tradeCode.value = code;
-    startPollingForTrade(); // Always poll until both users are present
+    socket.emit('register', { userId: userId.value, tradeCode: code });
+
+    console.log("Successfully joined trade:", response.data);
+    tradeJoined.value = true;
+    await fetchTradeUpdates();
   } catch (error) {
-    console.error("Error joining trade:", error);
+    console.error("Error joining trade:", error.response?.data || error.message);
   }
 };
 
@@ -283,25 +296,30 @@ const joinTrade = async (code) => {
     };
 
     const selectCard = async (card) => {
-      selectedCard.value = card;
-      showCardSelection.value = false;
-      try {
+    selectedCard.value = card;
+    showCardSelection.value = false;
+    try {
         const response = await axios.post(`${API_URL}/api/selectCard`, {
-          tradeCode: tradeCode.value,
-          userId: userId.value,
-          card: card
+            tradeCode: tradeCode.value,
+            userId: userId.value,  // Zorg dat je .value gebruikt voor refs
+            card
         });
+        
         if (response.data.tradeStatus) {
-          if (response.data.tradeStatus.user1 === userId) {
-            friendCard.value = response.data.tradeStatus.user2Card;
-          } else {
-            friendCard.value = response.data.tradeStatus.user1Card;
-          }
+            updateFriendCard(response.data.tradeStatus);
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error selecting card:", error);
-      }
-    };
+    }
+};
+
+const updateFriendCard = (tradeStatus) => {
+    if (tradeStatus.user1 === userId.value) {
+        friendCard.value = tradeStatus.user2Card;
+    } else {
+        friendCard.value = tradeStatus.user1Card;
+    }
+};
 
     const acceptTrade = async () => {
   // Add this validation check FIRST
@@ -361,6 +379,60 @@ const fetchTradeUpdates = async () => {
   }
 };
 
+const updateTradeState = (tradeStatus) => {
+    // Update trade joined status
+    if (tradeStatus.user1 && tradeStatus.user2) {
+        tradeJoined.value = true;
+    }
+
+    // Update card displays voor beide gebruikers
+    if (userId.value === tradeStatus.user1) {
+        friendCard.value = tradeStatus.user2Card;
+    } else {
+        friendCard.value = tradeStatus.user1Card;
+    }
+
+    // Update selected card
+    if (userId.value === tradeStatus.user1 && tradeStatus.user1Card) {
+        selectedCard.value = tradeStatus.user1Card;
+    } else if (userId.value === tradeStatus.user2 && tradeStatus.user2Card) {
+        selectedCard.value = tradeStatus.user2Card;
+    }
+
+    // Update acceptance status
+    if (userId.value === tradeStatus.user1) {
+        friendAccepted.value = tradeStatus.user2Accepted;
+        hasAccepted.value = tradeStatus.user1Accepted;
+    } else {
+        friendAccepted.value = tradeStatus.user1Accepted;
+        hasAccepted.value = tradeStatus.user2Accepted;
+    }
+
+    // === NEW: Handle trade completion for both users ===
+    if (tradeStatus.user1Accepted && tradeStatus.user2Accepted) {
+        // Only show popup if not already shown
+        if (!showNewCardPopup.value) {
+            if (userId.value === tradeStatus.user1) {
+                receivedCard.value = tradeStatus.user2Card;
+            } else {
+                receivedCard.value = tradeStatus.user1Card;
+            }
+            showNewCardPopup.value = true;
+        }
+    }
+};
+
+// Pas de socket listener aan
+socket.on('tradeUpdated', (data) => {
+    if (data.tradeCode === tradeCode.value) {
+        console.log("Trade update received", data);
+        if (data.forceUpdate || data.tradeStatus) {
+            updateTradeState(data.tradeStatus || data);
+        }
+        fetchTradeUpdates();
+    }
+});
+
 const deleteTrade = async () => {
 
 console.log("Sending:", {
@@ -408,19 +480,27 @@ const startPollingForTrade = () => {
     onMounted(() => {
   window.addEventListener("beforeunload", deleteTrade);
   checkLoginStatus();
-  socket.emit('register', String(userId.value));
   loadUserCards();
+
+  // Register for socket updates
+  socket.emit('register', userId.value);
+
+  // Only register the socket event ONCE
+  socket.off('tradeUpdated'); // Remove any previous listeners
+  socket.on('tradeUpdated', (data) => {
+    if (data.tradeCode === tradeCode.value) {
+      console.log("Trade update received", data);
+      if (data.forceUpdate || data.tradeStatus) {
+        updateTradeState(data.tradeStatus || data);
+      }
+      fetchTradeUpdates();
+    }
+  });
 
   // Always start polling if not joined
   if (!tradeJoined.value) {
     startPollingForTrade();
   }
-
-  socket.on('tradeUpdated', (data) => {
-    if (data.tradeCode === tradeCode.value) {
-      fetchTradeUpdates();
-    }
-  });
 });
 
 // delete a trade when leaving/re-loading the page

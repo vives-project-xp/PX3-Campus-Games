@@ -65,21 +65,17 @@ const io = new SocketIOServer(server, {
 const userSockets = {};
 
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+  console.log('New socket connection:', socket.id);
+  
+  socket.on('register', (userId) => {
+    userSockets[userId] = socket.id;
+    console.log(`User ${userId} registered with socket id ${socket.id}`);
+  });
 
-    socket.on('register', ({ userId, tradeCode }) => {
-        console.log(`User ${userId} joined trade ${tradeCode}`);
-        socket.join(tradeCode); // Voeg de gebruiker toe aan de kamer met de tradeCode
-    });
-
-    socket.on('tradeUpdated', (tradeCode) => {
-        console.log(`Broadcasting update for trade ${tradeCode}`);
-        io.to(tradeCode).emit('tradeUpdated', { tradeCode });
-    });
-
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
+  socket.on('joinTradeRoom', (tradeCode) => {
+    socket.join(tradeCode);
+    console.log(`User joined trade room: ${tradeCode}`);
+  });
 });
 
 // Export io and userSockets for use in controllers (e.g., TradingController.js)
