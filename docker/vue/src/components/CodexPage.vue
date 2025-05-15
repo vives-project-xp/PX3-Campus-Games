@@ -285,7 +285,7 @@ export default {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background-color: #dc3545;
+  background-color: red;
   color: white;
 }
 

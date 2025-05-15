@@ -325,7 +325,7 @@ export default {
 }
 
 .confirm-button:hover {
-  background-color: #0056b3;
+  background-color: #cc0000;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }

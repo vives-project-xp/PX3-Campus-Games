@@ -208,8 +208,6 @@ export default {
 </script>
 
 <style scoped>
-/* Your existing styles */
-
 h2 {
   text-align: left;
   font-size: 40px;
@@ -269,7 +267,7 @@ p {
 }
 
 .pageLink {
-  color: var(--secondary-color);
+  color: red;
   cursor: pointer;
   text-decoration: underline;
 }
@@ -317,7 +315,7 @@ h3 {
 }
 
 .pageLink {
-  color: #0066cc;
+  color: red;
   cursor: pointer;
   text-decoration: underline;
   font-weight: bold;

@@ -310,7 +310,7 @@ export default {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background-color: #dc3545;
+  background-color: red;
   color: white;
 }
 
@@ -332,7 +332,7 @@ export default {
   right: -8px;
   width: 28px;
   height: 28px;
-  background-color: #2196F3;
+  background-color: red;
   color: white;
   border-radius: 50%;
   display: flex;
