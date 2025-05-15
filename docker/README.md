@@ -1,11 +1,6 @@
 ## Docker map
 In deze map staan de nodige bestanden en alle submappen die gebruikt worden om de site in een docker container te runnen.
 
-## Submappen
- - [api] (#api)
- - [db] (#db)
- - [vue] (#vue)
-
  ## api 
 In de api map staat alles in verband met de API's die we gemaakt hebben.
 
