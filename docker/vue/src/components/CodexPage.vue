@@ -39,6 +39,7 @@
           :health="card.health"
           :grayscale="!userCards.includes(card.card_id)"
           @click="showCardDetails(card)"
+          class="card-wrapper"
         />
       </div>
       <div v-else class="no-cards">Geen kaarten gevonden.</div>
@@ -118,10 +119,22 @@ export default {
         }
       }
 
-      return filtered.map((card) => ({
-        ...card,
-        artwork_path: require(`@/assets/Cards/${card.artwork_path.split('/').pop()}`),
-      }));
+      // Defensive image path handling, like CollectionPage
+      return filtered.map((card) => {
+        const artworkPath = card.artwork_path ? card.artwork_path.split('/').pop() : '';
+        try {
+          return {
+            ...card,
+            artwork_path: require(`@/assets/Cards/${artworkPath}`),
+          };
+        } catch (e) {
+          // fallback to original path if require fails
+          return {
+            ...card,
+            artwork_path: card.artwork_path,
+          };
+        }
+      });
     });
 
     const sortCards = (key) => {
@@ -137,13 +150,18 @@ export default {
       searchQuery.value = '';
     };
 
+    // Fetch all cards like CollectionPage, but for codex
     const fetchAllCards = async () => {
       try {
         const response = await fetch(`${API_URL}/api/getCard_dex`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         allCards.value = data;
       } catch (error) {
         console.error('Error fetching all cards:', error);
+        allCards.value = [];
       }
     };
 
@@ -306,6 +324,13 @@ export default {
   justify-items: center;
   max-height: calc(6 * (auto)); /* 6 rows */
   overflow-y: auto;
+}
+
+
+.card-wrapper {
+  position: relative;
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
 }
 
 .no-cards {
