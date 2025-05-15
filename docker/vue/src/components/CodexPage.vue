@@ -326,7 +326,6 @@ export default {
   overflow-y: auto;
 }
 
-
 .card-wrapper {
   position: relative;
   width: 90%;
