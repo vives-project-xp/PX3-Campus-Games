@@ -287,6 +287,7 @@ export default {
   border-radius: 5px;
   background-color: red;
   color: white;
+  margin-left: 8px;
 }
 
 /* Card Container */
