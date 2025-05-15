@@ -2,10 +2,8 @@ import db from '../db.js';
 import { v4 as uuidv4 } from 'uuid'; // npm install uuid
 import axios from "axios";
 import { addTradePoint, recalculateUserScore } from './ScoreUpdateController.js';
-
-const API_URL = "http://localhost:3000";
-
 import { io, userSockets } from '../server.js';
+const API_URL = "https://api.collectica.devbitapp.be";
 
 const activeTrades = {};
 
@@ -41,7 +39,7 @@ export const getActiveTrades = (req, res) => {
 // generate a unique trade code and store the trade session
 export const startTrade = (req, res) => {
     const tradeCode = uuidv4();
-    activeTrades[tradeCode] = { user1: null, user2: null };
+    activeTrades[tradeCode] = { user1: null, user2: null, user1Card: null, user2Card: null, user1Accepted: false, user2Accepted: false };
 
     res.json({ tradeCode });
 };
@@ -59,13 +57,14 @@ export const joinTrade = (req, res) => {
         return res.status(400).json({ error: "Invalid trade code" });
     }
 
-    let otherUserId = null;
+    let bothJoined = false;
 
+    // Voeg de gebruiker toe aan de juiste plek in de trade
     if (!activeTrades[tradeCode].user1) {
         activeTrades[tradeCode].user1 = userId;
     } else if (!activeTrades[tradeCode].user2) {
         activeTrades[tradeCode].user2 = userId;
-        otherUserId = activeTrades[tradeCode].user1; // Get the first user's ID
+        bothJoined = true; // Beide gebruikers zijn nu in de trade
     } else {
         return res.status(400).json({ error: "Trade is already full" });
     }
@@ -74,9 +73,13 @@ export const joinTrade = (req, res) => {
     console.log(`User 1: ${activeTrades[tradeCode].user1}`);
     console.log(`User 2: ${activeTrades[tradeCode].user2}`);
 
-    // Notify the first user to update their trade session
-    if (otherUserId) {
-        notifyUserToUpdate(otherUserId, tradeCode);
+    // Notify both users to update their trade session
+    if (bothJoined) {
+        notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
+        notifyUserToUpdate(activeTrades[tradeCode].user2, tradeCode);
+    } else {
+        // Notify the first user to update their trade session
+        notifyUserToUpdate(activeTrades[tradeCode].user1, tradeCode);
     }
 
     res.json({
@@ -93,6 +96,8 @@ const notifyUserToUpdate = async (userId, tradeCode) => {
         const socketId = userSockets[userId];
         if (socketId) {
             io.to(socketId).emit("tradeUpdated", { tradeCode });
+        } else {
+            console.error("Socket ID not found for user:", userId);
         }
     } catch (error) {
         console.error("Error notifying user to update:", error);
@@ -280,4 +285,4 @@ export const tradeCards = async (tradeCode) => {
   
     res.json({ success: true });
   };
-  
+

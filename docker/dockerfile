@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 # Set environment variables
 ENV NODE_VERSION=18
 ENV NPM_VERSION=9
-ENV REPO_URL="https://github.com/vives-project-xp/PX3-Campus-Games.git"
+ENV REPO_URL="https://github.com/Belgianwafflecorp/IoTApp-Bioscoop.git"
 ENV BRANCH="main"
 ENV PORT 3000
 ENV PORT_FRONT 5000
