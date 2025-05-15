@@ -161,7 +161,7 @@ export default {
         selectedCard.value = null;
 
         // Update de reward status direct
-        emit('reward-collected', false);
+        emit('reward-collected', true);
 
       } catch (error) {
         isError.value = true;

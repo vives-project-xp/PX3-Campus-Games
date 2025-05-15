@@ -62,7 +62,7 @@
                     });
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId);
-                    this.$router.push('/account');
+                    this.$router.push('/collection');
                 } catch (error) {
                     this.errorMessage = error.response?.data?.error || 'Er is een error opgetreden tijdens het inloggen.';
                 }
