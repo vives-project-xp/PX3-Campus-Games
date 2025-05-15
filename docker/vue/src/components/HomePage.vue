@@ -3,7 +3,7 @@
     <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
     
     <div class="call-to-action">
-      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Aanmelden</button>
+      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
     </div>
 
     <div class="about-section">
@@ -45,15 +45,15 @@
           <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar het account van de juiste speler overgezet.
         </p>
 
-        <h3>Game:</h3>
+      <!--<h3>Game:</h3>
         <p>
           Op <b><a class="pageLink" @click="goToGamePage">de gamepagina</a></b> kunnen er games tussen 2 spelers gespeeld worden, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
           <br> De speler die kop of munt juist had begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
           <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
           <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
-        </p>
+        </p>-->
 
-        <h3>Scorebord</h3>
+        <h3>Scorebord:</h3>
         <p>
           <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
         </p>
