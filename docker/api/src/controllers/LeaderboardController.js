@@ -52,7 +52,7 @@ const getScoreByEducation = async (req, res) => {
 
 const getUsersScores = async (req, res) => {
     try {
-        const query = `SELECT id, user_score FROM users ORDER BY user_score DESC limit 10`;
+        const query = `SELECT id, user_score FROM users ORDER BY user_score DESC`;
         const [rows] = await db.execute(query);
 
         if (rows.length === 0) {
