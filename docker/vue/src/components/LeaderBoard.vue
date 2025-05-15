@@ -145,7 +145,6 @@ export default {
 
     const filteredUserLeaderboard = computed(() => {
       if (!searchQuery.value) {
-        // When no search query, return the full sorted list
         return userLeaderboard.value;
       }
       const lowerCaseQuery = searchQuery.value.toLowerCase();
@@ -156,7 +155,6 @@ export default {
     });
 
     const originalIndexOf = (userId) => {
-        // This still correctly finds the original index for ranking purposes
         return userLeaderboard.value.findIndex(user => user.id === userId);
     };
 
@@ -180,7 +178,7 @@ export default {
       topEducation,
       searchQuery,
       clearSearch,
-      filteredUserLeaderboard, // Keep this computed property as is
+      filteredUserLeaderboard,
       originalIndexOf,
     };
   },
@@ -221,47 +219,47 @@ body, html {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  gap: 20px; /* Add some gap between the two sections */
+  gap: 20px;
   align-items: flex-start;
 }
 
 .leaderboard-section {
-  width: 48%; /* Adjust width slightly to accommodate gap */
-  margin: 0; /* Remove margin as gap on wrapper is used */
+  width: 48%;
+  margin: 0;
   min-width: 300px;
-  background-color: #fff; /* White background for the section container */
+  background-color: #fff; 
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  padding: 15px; /* Add padding inside the section */
-  box-sizing: border-box; /* Include padding in width */
-  display: flex; /* Use flex to arrange heading and content */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px; 
+  box-sizing: border-box; 
+  display: flex; 
   flex-direction: column;
   align-items: center;
 }
 
 .leaderboard-section h2 {
     margin-top: 0;
-    color: #333; /* Darker color for section titles */
+    color: #333; 
     margin-bottom: 15px;
     text-align: center;
 }
 
 .search-bar-container {
   width: 100%;
-  margin-bottom: 20px; /* Increase margin below search bar */
+  margin-bottom: 20px; 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .search-input {
-  padding: 10px 15px; /* Increase padding */
+  padding: 10px 15px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 90%;
   max-width: 400px;
   font-size: 1rem;
-  height: 40px; /* Adjust height */
+  height: 40px; 
   box-sizing: border-box;
 }
 
@@ -270,7 +268,7 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-   max-height: 550px; /* Adjust as needed */
+   max-height: 550px; 
    overflow-y: auto;
 }
 
@@ -279,59 +277,50 @@ body, html {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  background-color: #fff; /* White background for the table itself */
+  background-color: #fff;
 }
 
-/* --- Sticky Header Styles --- */
 .leaderboard-table thead {
-    position: sticky; /* Make the entire thead sticky */
-    top: 0; /* Stick to the top of the scrollable container */
-    background-color: #fff; /* Ensure background is white so content scrolls behind */
-    z-index: 1; /* Ensure header is above scrolling content */
-    box-shadow: 0 2px 0 0 #333; /* Added box-shadow to mimic border-bottom */
-    margin: 0; /* Explicitly set margin to zero */
-    padding: 0; /* Explicitly set padding to zero */
-    /* Added will-change for potential rendering optimization */
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+    box-shadow: 0 2px 0 0 #333;
+    margin: 0;
+    padding: 0;
     will-change: transform, position;
 }
 
 .leaderboard-table thead tr {
-    margin: 0; /* Explicitly set margin to zero */
-    padding: 0; /* Explicitly set padding to zero */
+    margin: 0;
+    padding: 0;
 }
 
 
 .leaderboard-table th {
-  padding: 12px; /* Keep padding for cell content spacing */
-  border: none; /* Remove all borders */
+  padding: 12px;
+  border: none;
   text-align: center;
-  background-color: transparent; /* No background needed here, handled by thead */
-  color: #333; /* Dark text */
+  background-color: transparent;
+  color: #333;
   font-weight: bold;
-  text-transform: uppercase; /* Uppercase header text */
-  font-size: 0.9em; /* Slightly smaller font for header */
+  text-transform: uppercase;
+  font-size: 0.9em;
   position: static;
   top: auto;
   z-index: auto;
 }
 
-/* Removed z-index from tbody */
-/* .leaderboard-table tbody {
-    z-index: 0;
-} */
-/* --- End Sticky Header Styles --- */
-
-
 .leaderboard-table td {
-  padding: 12px; /* Increase padding for better spacing */
-  border: none; /* Remove all borders */
+  padding: 12px;
+  border: none;
   text-align: center;
-  border-bottom: 1px solid #eee; /* Light grey bottom border for rows */
-  color: #555; /* Default text color for data */
+  border-bottom: 1px solid #eee;
+  color: #555;
 }
 
 .leaderboard-table tbody tr:last-child td {
-    border-bottom: none; /* Remove bottom border from the last row */
+    border-bottom: none;
 }
 
 .loading,
@@ -347,30 +336,29 @@ body, html {
   font-size: 1.2em;
 }
 
-/* Keep existing styles for top ranks/leaders, adjust colors if needed for contrast */
 .first td {
-  color: gold; /* Gold color for 1st place */
+  color: gold;
   font-weight: bold;
 }
 
 .second td {
-  color: silver; /* Silver color for 2nd place */
+  color: silver;
   font-weight: bold;
 }
 
 .third td {
-  color: #cd7f32; /* Bronze color for 3rd place */
+  color: #cd7f32;
   font-weight: bold;
 }
 
-.leader { /* Style for the leading education type */
-    color: red; /* Use red to make the leader stand out */
+.leader {
+    color: red;
     font-weight: bold;
 }
 
 
 .clearButton {
-  background: red; /* Keep clear button red */
+  background: red;
   cursor: pointer;
   font-size: 1.5rem;
   color: white;
@@ -381,9 +369,9 @@ body, html {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  height: 40px; /* Match search input height */
-  width: 40px; /* Make it square */
-  padding: 0; /* Remove padding, use flexbox for centering */
+  height: 40px;
+  width: 40px;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -391,14 +379,14 @@ body, html {
   .leaderboards-wrapper {
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Adjust gap for stacked layout */
+    gap: 15px;
     align-items: center;
   }
 
   .leaderboard-section {
     width: 95%;
-    margin: 0; /* Remove margin when stacked */
-    padding: 10px; /* Adjust padding */
+    margin: 0;
+    padding: 10px;
   }
 
   .search-input {
@@ -407,32 +395,32 @@ body, html {
 
   .leaderboard-table th,
   .leaderboard-table td {
-      padding: 8px; /* Reduce padding on smaller screens */
+      padding: 8px;
   }
 
   .leaderboard-section h2 {
-      font-size: 1.2em; /* Adjust heading size */
+      font-size: 1.2em;
       margin-bottom: 10px;
   }
 
-   .leaderboard-content { /* Apply mobile max-height directly to .leaderboard-content */
+   .leaderboard-content {
        max-height: 400px;
    }
 }
 
 @media (max-width: 400px) {
     .search-bar-container {
-        flex-direction: column; /* Stack search input and button */
+        flex-direction: column;
         gap: 10px;
     }
 
     .search-input {
-        width: 100%; /* Full width when stacked */
+        width: 100%;
         max-width: none;
     }
 
     .clearButton {
-        width: 100%; /* Full width when stacked */
+        width: 100%;
         margin-left: 0;
     }
 }
