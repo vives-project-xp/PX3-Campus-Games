@@ -115,9 +115,7 @@ const notifyUserToUpdate = (userId, tradeCode) => {
     try {
         const socketId = userSockets[userId];
         if (socketId) {
-            io.to(socketId).emit("tradeUpdated", { tradeCode });
-        } else {
-            console.warn(`Socket ID not found for user: ${userId}`);
+            io.to(socketId).emit('tradeUpdated', { tradeCode });
         }
     } catch (error) {
         console.error("Error notifying user to update:", error);
@@ -133,14 +131,8 @@ export const selectCard = (req, res) => {
     }
 
     const trade = activeTrades[tradeCode];
-    
-    // Voeg logging toe voor debugging
-    console.log(`Selecting card for trade ${tradeCode}`, {
-        user1: trade.user1,
-        user2: trade.user2,
-        currentUser: userId
-    });
 
+    // Save the selected card
     if (trade.user1 === userId) {
         trade.user1Card = card;
     } else if (trade.user2 === userId) {
@@ -149,17 +141,11 @@ export const selectCard = (req, res) => {
         return res.status(400).json({ error: "User not part of this trade" });
     }
 
-    // Forceer een volledige status update naar beide gebruikers
-    io.to(tradeCode).emit("tradeUpdated", {
-        tradeCode,
-        forceUpdate: true,  // Nieuwe vlag voor complete refresh
-        tradeStatus: trade  // Stuur de volledige trade status mee
-    });
+    // Notify BOTH users to update their UI
+    if (trade.user1) notifyUserToUpdate(trade.user1, tradeCode);
+    if (trade.user2) notifyUserToUpdate(trade.user2, tradeCode);
 
-    res.json({
-        message: "Card selected successfully",
-        tradeStatus: trade
-    });
+    res.json({ success: true, tradeStatus: trade });
 };
 
 // Get the current trade status (does it exist)
