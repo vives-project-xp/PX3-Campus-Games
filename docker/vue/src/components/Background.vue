@@ -27,21 +27,33 @@ const lines = ref([]);
 const numberOfLines = 33;
 const waveAmplitude = 22;
 
+const getSegmentLength = () => {
+  return width.value < 600
+    ? width.value / 3
+    : width.value / 10;
+};
+
 const generateWavyLine = () => {
   const startX = -0.1 * width.value;
   const endX = width.value;
   const yOffset = Math.random() * height.value;
   const thickness = Math.random() + Math.random();
-  const segmentLength = 240;
+  const segmentLength = getSegmentLength();
   const points = [];
 
-  for (let x = startX; x <= endX; x += segmentLength) {
+  for (let x = startX; x < endX; x += segmentLength) {
     const y =
       yOffset +
       Math.sin((x / width.value) * Math.PI * 2 + Math.random() * Math.PI * 2) *
         waveAmplitude;
     points.push({ x, y });
   }
+  // Always add the last point exactly at endX
+  const yEnd =
+    yOffset +
+    Math.sin((endX / width.value) * Math.PI * 2 + Math.random() * Math.PI * 2) *
+      waveAmplitude;
+  points.push({ x: endX, y: yEnd });
 
   if (points.length < 4) return { path: '', thickness };
 
@@ -68,7 +80,7 @@ const generateLines = () => {
 };
 
 const handleResize = () => {
-  width.value = window.innerWidth * 1.4;
+  width.value = window.innerWidth;
   height.value = window.innerHeight;
   generateLines();
 };
@@ -85,8 +97,13 @@ onUnmounted(() => {
 
 <style>
 .background {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   min-height: 100vh;
-  width: 150%;;
+  width: 100vw;
+  height: 100vh;
+  z-index: -100;
+  pointer-events: none;
 }
 </style>
