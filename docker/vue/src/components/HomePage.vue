@@ -3,32 +3,31 @@
     <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
     
     <div class="call-to-action">
-      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Aanmelden</button>
+      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
     </div>
 
     <div class="about-section">
-      <h2>Over ons</h2>
-      <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
-        <br>
-        <br>
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
-        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
-Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
-      </p>
+      <button @click="toggleSection('aboutUs')" class="toggle-button1">
+        {{ visibleSections.aboutUs ? 'Verberg over ons' : 'Over ons' }}
+      </button>
+      <div v-if="visibleSections.aboutUs" class="content-container">
+        <p>
+          Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
+          <br>
+          <br>
+          Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
+          Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
+        </p>
+      </div>
     </div>
     
     <div>
       <h2>Hoe te spelen</h2>
-      <button
-        @click="toggleContent"
-        class="toggle-button"
-      >
-        {{ isContentVisible ? 'Verberg uitleg' : 'Toon uitleg:' }}
+      <button @click="toggleSection('howToPlay')" class="toggle-button2">
+        {{ visibleSections.howToPlay ? 'Verberg uitleg' : 'Toon uitleg' }}
       </button>
 
-      <div v-if="isContentVisible" class="content-container">
+      <div v-if="visibleSections.howToPlay" class="content-container">
         <h3>Verzamelen:</h3>
         <p>
           Elke gebruiker krijgt een pack met 3 kaarten als ze een account aanmaken. Daarna kun je dagelijks een kaart claimen door simpelweg in te loggen, je krijgt dan de optie om te kiezen tussen 3 kaarten.
@@ -47,15 +46,7 @@ Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen e
           <br> Je ziet ook de kaart(en) die je zult krijgen na aflopen van de ruil. Als je akkoord gaat met de ruil, kun je deze bevestigen. De kaarten worden dan automatisch naar het account van de juiste speler overgezet.
         </p>
 
-        <h3>Game:</h3>
-        <p>
-          Op <b><a class="pageLink" @click="goToGamePage">de gamepagina</a></b> kunnen er games tussen 2 spelers gespeeld worden, waarbij elke speler 3 kaarten kan gebruiken. De volgorde waarin de spelers beginnen, wordt bepaald door kop of munt.
-          <br> De speler die kop of munt juist had begint het gevecht en kan een van de drie opties uitvoeren: aanvallen (brengt schade toe aan de actieve kaart van de andere speler), vaardigheid gebruiken (gebruikt de vaardigheid van de actieve kaart) en wisselen (geeft je de optie om je actieve kaart te wisselen met een inactieve kaart). Daarna kan elke speler 2 acties per beurt uitvoeren.
-          <br> Als je alle kaarten van je tegenstander kunt doden, win je het gevecht en verdien je het totale aantal punten van de kaarten die je hebt verslagen.
-          <br> De verliezer krijgt ook wat punten, ze krijgen het aantal punten van de kaart met de laagste zeldzaamheid van de tegenstander.
-        </p>
-
-        <h3>Scorebord</h3>
+        <h3>Scorebord:</h3>
         <p>
           <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
         </p>
@@ -63,51 +54,19 @@ Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen e
     </div>
 
     <div>
-    <div v-if="isContentVisible" class="content-container">
-      
-      
-      <h3>Verzamelen:</h3>
-      <p>
-        Op <b><a class="pageLink" @click="goToCollectionPage">de collectiepagina</a></b> kun je al je verzamelde kaarten bekijken. Er zijn snelle filters beschikbaar om per type te filteren, en met de zoekbalk kun je specifieke kaarten vinden.
-      </p>
-      
-      <h3>Codex:</h3>
-      <p>
-        In <b><a class="pageLink" @click="goToCodex">de codex</a></b> vind je zowel alle door jou verzamelde kaarten als alle beschikbare kaarten in het spel. Hier kun je gebruikmaken van dezelfde filters en zoekfunctie als op de collectiepagina.
-        Klik op een kaart om de details te bekijken. De kaart wordt dan uitvergroot weergegeven, met alle informatie duidelijk zichtbaar in de linkerbovenhoek.
-      </p>
-      
-      <h3>Ruilen:</h3>
-      <p>
-        Je kunt kaarten ruilen met andere studenten via <b><a class="pageLink" @click="goToTradingPage">de ruilpagina</a></b>. Hier kun je:
-
-        <ul> <li>Een QR-code genereren</li> <li>De QR-code van een medestudent scannen</li> </ul> Nadat de verbinding tot stand is gebracht, selecteer je de kaarten die je wilt ruilen.
-        Je krijgt direct te zien welke kaarten je in ruil ontvangt. Bij akkoord bevestig je de ruil, waarna de kaarten automatisch tussen de accounts worden uitgewisseld.
-      </p>
-      
-      <h3>Scorebord</h3>
-      <p>
-        <b><a class="pageLink" @click="goToLeaderboardPage">Het scorebord</a></b> toont je op de hoeveelste plek je staat in de ranking, je gebruikersnaam en je score. De score is het totaal aantal punten van je kaarten bij elkaar opgeteld.
-      </p>
-    </div>
-  </div>
-      <div>
-
-
-
       <h2>De kaarten</h2>
       <p> Elke kaart geeft volgende info weer:</p>
-      <ul class ="default list">
+      <ul class="default list">
         <li>Kaartnaam (centrale titel)</li>
         <li>Artwork (illustratie)</li>
         <li>Zeldzaamheid (kleur van de rand)</li>
-        <li>Kaarttype (cirkel linksboven) </li>
+        <li>Kaarttype (cirkel linksboven)</li>
         <li>Levenspunten (boven de kaartnaam)</li>
         <li>Aanvalspunten (linker voorkant)</li>
         <li>Vaardigheid (rechter vierkant)</li>
       </ul>
       <p> De vijf verschillende zeldzaamheden zijn als volgt:</p>
-      <ul class ="default list">
+      <ul class="default list">
         <li>Gewoon</li>
         <li>Ongewoon</li>
         <li>Zeldzaam</li>
@@ -115,7 +74,7 @@ Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen e
         <li>Legendarisch</li>
       </ul>
       <p> En dit zijn alle mogelijke kaarttypes:</p>
-      <ul class ="default list">
+      <ul class="default list">
         <li>Technology en Bio ⚙</li>
         <li>Gezondheidszorg ❤</li>
         <li>Marketing en Business 🤝</li>
@@ -124,8 +83,8 @@ Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen e
     </div>
 
     <div>
-      <h3>Ons team:</h3>
-      <ul class ="default list">
+      <h2>Ons team:</h2>
+      <ul class="default list">
         <li>Verstraete Domien: Front- en back-end developer</li>
         <li>Meuleman Joshua: Back-end/database developer, 3D designer (indien nodig)</li>
         <li>Brassaert Arthur: Front-end developer</li>
@@ -135,26 +94,33 @@ Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen e
         <li>De Smet Xander: Front-end developer/ graphics designer</li>
         <li>Degeest Bram: Robotics/ back-end developer</li>
       </ul>
-      <h3>Documentatie:</h3>
+      <h2>Documentatie:</h2>
       <p>Alle documentatie is terug te vinden in onze
         <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
+    </div>
+
+    <div class="call-to-action">
+      <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
     </div>
   </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue'; // Import ref and onMounted
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'home-page',
   setup() {
     const router = useRouter();
-    const isContentVisible = ref(false); // Use ref for reactive data
-    const isLoggedIn = ref(false); // Reactive data for login status
+    const visibleSections = ref({
+      aboutUs: false,
+      howToPlay: false
+    });
+    const isLoggedIn = ref(false);
 
-    const toggleContent = () => {
-      isContentVisible.value = !isContentVisible.value; // Access value with .value
+    const toggleSection = (section) => {
+      visibleSections.value[section] = !visibleSections.value[section];
     };
 
     const goToCodex = () => {
@@ -177,42 +143,38 @@ export default {
       router.push('/leaderboard');
     };
 
-    // Function to check login status
     const checkLoginStatus = () => {
       const token = localStorage.getItem('token');
-      isLoggedIn.value = !!token; // Update reactive state
+      isLoggedIn.value = !!token;
     };
 
-    // Check login status when the component is mounted
     onMounted(() => {
       checkLoginStatus();
     });
 
     const goToLogin = () => {
-        router.push('/login');
+      router.push('/login');
     };
 
     return {
-      isContentVisible,
-      isLoggedIn, // Expose isLoggedIn to the template
-      toggleContent,
+      visibleSections,
+      isLoggedIn,
+      toggleSection,
       goToCodex,
       goToTradingPage,
       goToGamePage,
       goToCollectionPage,
       goToLeaderboardPage,
-      goToLogin // Expose goToLogin to the template
+      goToLogin
     };
   }
 };
 </script>
 
 <style scoped>
-/* Your existing styles */
-
 h2 {
   text-align: left;
-  font-size: 40px;
+  font-size: 20px;
   padding: 0;
   margin: 0;
 }
@@ -248,8 +210,8 @@ p {
 
 .login-button {
     padding: 10px 20px;
-    font-size: 5em;
-    font-weight: semi-bold;
+    font-size: 50px;
+    font-weight: bold;
     background-color: white;
     color: red;
     border: 3px solid red;
@@ -264,12 +226,12 @@ p {
   padding-left: 20px;
   padding-right: 20px;
   margin: 20px 0;
-  background-color: lightgray;
+  background-color: white;
   box-shadow: 0 5px 5px lightslategray;
 }
 
 .pageLink {
-  color: var(--secondary-color);
+  color: red;
   cursor: pointer;
   text-decoration: underline;
 }
@@ -279,10 +241,8 @@ p {
   font-size: 18px;
 }
 
-.toggle-button {
-  padding: 15px;
-  width: 25%;
-  padding: 1rem;
+.toggle-button1 {
+  padding: 10px;
   background-color: red;
   color: white;
   border: none;
@@ -290,9 +250,22 @@ p {
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
+.toggle-button2 {
+  padding: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .content-container {
   border: 2px solid #ddd;
@@ -311,20 +284,19 @@ h2 {
 }
 
 h3 {
-  color: #fd0100;
-  /* Rode kleur voor subkopjes */
+  color: red;
   margin-top: 20px;
 }
 
 .pageLink {
-  color: #0066cc;
+  color: red;
   cursor: pointer;
   text-decoration: underline;
   font-weight: bold;
 }
 
 .pageLink:hover {
-  color: #004499;
+  color: #cc0000;
   text-decoration: none;
 }
 
