@@ -122,7 +122,7 @@
     </div>
 
     <div>
-      <h3>Ons team:</h3>
+      <h2>Ons team:</h2>
       <ul class ="default list">
         <li>Verstraete Domien: Front- en back-end developer</li>
         <li>Meuleman Joshua: Back-end/database developer, 3D designer (indien nodig)</li>
@@ -133,7 +133,7 @@
         <li>De Smet Xander: Front-end developer/ graphics designer</li>
         <li>Degeest Bram: Robotics/ back-end developer</li>
       </ul>
-      <h3>Documentatie:</h3>
+      <h2>Documentatie:</h2>
       <p>Alle documentatie is terug te vinden in onze
         <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
     </div>
@@ -208,7 +208,7 @@ export default {
 <style scoped>
 h2 {
   text-align: left;
-  font-size: 40px;
+  font-size: 20px;
   padding: 0;
   margin: 0;
 }
@@ -244,8 +244,8 @@ p {
 
 .login-button {
     padding: 10px 20px;
-    font-size: 5em;
-    font-weight: semi-bold;
+    font-size: 50px;
+    font-weight: bold;
     background-color: white;
     color: red;
     border: 3px solid red;
@@ -276,9 +276,8 @@ p {
 }
 
 .toggle-button {
-  padding: 15px;
-  width: 25%;
-  padding: 1rem;
+  padding: 10px;
+  /*width: 25%;*/
   background-color: red;
   color: white;
   border: none;
@@ -286,7 +285,8 @@ p {
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 
@@ -307,7 +307,7 @@ h2 {
 }
 
 h3 {
-  color: #fd0100;
+  color: red;
   /* Rode kleur voor subkopjes */
   margin-top: 20px;
 }
@@ -320,7 +320,7 @@ h3 {
 }
 
 .pageLink:hover {
-  color: #004499;
+  color: #cc0000;
   text-decoration: none;
 }
 
