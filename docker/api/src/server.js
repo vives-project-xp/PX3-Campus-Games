@@ -17,6 +17,8 @@ const port = process.env.PORT || 3000; // Use PORT from environment variables
 app.use(express.json());
 app.use(cors({
   origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
+  websockets: true, // Allow WebSocket connections
 }));
 
 app.use((req, res, next) => { 
@@ -63,24 +65,21 @@ const io = new SocketIOServer(server, {
 const userSockets = {};
 
 io.on('connection', (socket) => {
-  console.log('New socket connection:', socket.id);
-  
-  // When a client registers, store the mapping between the userId and the socket id
-  socket.on('register', (userId) => {
-    userSockets[userId] = socket.id;
-    console.log(`User ${userId} registered with socket id ${socket.id}`);
-  });
-  
-  // Clean up on disconnect
-  socket.on('disconnect', () => {
-    for (const [userId, id] of Object.entries(userSockets)) {
-      if (id === socket.id) {
-        delete userSockets[userId];
-        console.log(`User ${userId} disconnected.`);
-        break;
-      }
-    }
-  });
+    console.log('A user connected:', socket.id);
+
+    socket.on('register', ({ userId, tradeCode }) => {
+        console.log(`User ${userId} joined trade ${tradeCode}`);
+        socket.join(tradeCode); // Voeg de gebruiker toe aan de kamer met de tradeCode
+    });
+
+    socket.on('tradeUpdated', (tradeCode) => {
+        console.log(`Broadcasting update for trade ${tradeCode}`);
+        io.to(tradeCode).emit('tradeUpdated', { tradeCode });
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected:', socket.id);
+    });
 });
 
 // Export io and userSockets for use in controllers (e.g., TradingController.js)
