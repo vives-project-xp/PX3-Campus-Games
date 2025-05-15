@@ -1,7 +1,6 @@
 <template>
   <div class="leaderboard-container">
     <h1 class="heading">Scoreborden</h1>
-
     <div class="search-bar-container">
       <input
         type="text"
@@ -15,7 +14,7 @@
     <div class="leaderboards-wrapper">
       <div class="leaderboard-section">
         <h2>Individueel scorebord</h2>
-        <div class="leaderboard-content">
+        <div class="leaderboard-content scrollable-leaderboard">
           <div v-if="userLoading" class="loading">Aan het laden...</div>
           <div v-else-if="userError" class="error">{{ userError }}</div>
           <table v-else-if="filteredUserLeaderboard.length > 0" class="leaderboard-table">
@@ -47,7 +46,7 @@
       </div>
 
       <div class="leaderboard-section">
-        <h2>Scorebord studiegebied</h2>
+        <h2>Scorebord per studiegebied</h2>
         <div class="leaderboard-content">
           <div v-if="educationLoading" class="loading">Aan het laden...</div>
           <div v-else-if="educationError" class="error">{{ educationError }}</div>
@@ -146,6 +145,7 @@ export default {
 
     const filteredUserLeaderboard = computed(() => {
       if (!searchQuery.value) {
+        // When no search query, return the full sorted list
         return userLeaderboard.value;
       }
       const lowerCaseQuery = searchQuery.value.toLowerCase();
@@ -156,6 +156,7 @@ export default {
     });
 
     const originalIndexOf = (userId) => {
+        // This still correctly finds the original index for ranking purposes
         return userLeaderboard.value.findIndex(user => user.id === userId);
     };
 
@@ -179,7 +180,7 @@ export default {
       topEducation,
       searchQuery,
       clearSearch,
-      filteredUserLeaderboard,
+      filteredUserLeaderboard, // Keep this computed property as is
       originalIndexOf,
     };
   },
@@ -221,6 +222,7 @@ body, html {
   justify-content: space-around;
   width: 100%;
   gap: 20px; /* Add some gap between the two sections */
+  align-items: flex-start;
 }
 
 .leaderboard-section {
@@ -268,7 +270,10 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
+   max-height: 550px; /* Adjust as needed */
+   overflow-y: auto;
 }
+
 
 .leaderboard-table {
   width: 100%;
@@ -277,23 +282,50 @@ body, html {
   background-color: #fff; /* White background for the table itself */
 }
 
-.leaderboard-table th,
+/* --- Sticky Header Styles --- */
+.leaderboard-table thead {
+    position: sticky; /* Make the entire thead sticky */
+    top: 0; /* Stick to the top of the scrollable container */
+    background-color: #fff; /* Ensure background is white so content scrolls behind */
+    z-index: 1; /* Ensure header is above scrolling content */
+    box-shadow: 0 2px 0 0 #333; /* Added box-shadow to mimic border-bottom */
+    margin: 0; /* Explicitly set margin to zero */
+    padding: 0; /* Explicitly set padding to zero */
+    /* Added will-change for potential rendering optimization */
+    will-change: transform, position;
+}
+
+.leaderboard-table thead tr {
+    margin: 0; /* Explicitly set margin to zero */
+    padding: 0; /* Explicitly set padding to zero */
+}
+
+
+.leaderboard-table th {
+  padding: 12px; /* Keep padding for cell content spacing */
+  border: none; /* Remove all borders */
+  text-align: center;
+  background-color: transparent; /* No background needed here, handled by thead */
+  color: #333; /* Dark text */
+  font-weight: bold;
+  text-transform: uppercase; /* Uppercase header text */
+  font-size: 0.9em; /* Slightly smaller font for header */
+  position: static;
+  top: auto;
+  z-index: auto;
+}
+
+/* Removed z-index from tbody */
+/* .leaderboard-table tbody {
+    z-index: 0;
+} */
+/* --- End Sticky Header Styles --- */
+
+
 .leaderboard-table td {
   padding: 12px; /* Increase padding for better spacing */
   border: none; /* Remove all borders */
   text-align: center;
-}
-
-.leaderboard-table th {
-  background-color: transparent; /* No background */
-  color: #333; /* Dark text */
-  font-weight: bold;
-  border-bottom: 2px solid #333; /* Stronger bottom border */
-  text-transform: uppercase; /* Uppercase header text */
-  font-size: 0.9em; /* Slightly smaller font for header */
-}
-
-.leaderboard-table td {
   border-bottom: 1px solid #eee; /* Light grey bottom border for rows */
   color: #555; /* Default text color for data */
 }
@@ -360,6 +392,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     gap: 15px; /* Adjust gap for stacked layout */
+    align-items: center;
   }
 
   .leaderboard-section {
@@ -381,6 +414,10 @@ body, html {
       font-size: 1.2em; /* Adjust heading size */
       margin-bottom: 10px;
   }
+
+   .leaderboard-content { /* Apply mobile max-height directly to .leaderboard-content */
+       max-height: 400px;
+   }
 }
 
 @media (max-width: 400px) {
