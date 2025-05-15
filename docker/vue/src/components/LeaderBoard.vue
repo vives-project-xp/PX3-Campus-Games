@@ -227,7 +227,7 @@ body, html {
   width: 48%; /* Adjust width slightly to accommodate gap */
   margin: 0; /* Remove margin as gap on wrapper is used */
   min-width: 300px;
-  background-color: #fff; /* White background for the section container */
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
   padding: 15px; /* Add padding inside the section */

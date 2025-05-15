@@ -204,12 +204,10 @@ export default {
 .daily-reward {
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #f8f9fa;
-  border-radius: 12px;
+  background-color:transparent;
   text-align: center;
   max-width: 1200px;
   width: 95%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Titel styling */

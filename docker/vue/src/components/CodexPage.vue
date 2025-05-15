@@ -225,6 +225,7 @@ export default {
 .filter-row {
   display: flex;
   gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
 }
 
 .filter-row button {
