@@ -36,10 +36,15 @@ export default {
   async mounted() {
     await this.checkIfUserHasCards();
   },
+
   methods: {
     async checkIfUserHasCards() {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+          return;
+      }
+
       try {
-        const userId = localStorage.getItem('userId');
         const response = await axios.get(`${API_URL}/api/userCards/${userId}`);
         this.hasCards = response.data.length > 0;
       } catch (error) {
@@ -64,8 +69,16 @@ export default {
       this.message = '';
       this.isError = false;
       this.isLoading = true;
+       const userId = localStorage.getItem('userId'); // Replace with actual user ID
+        if (!userId) {
+            this.message = 'User not logged in or ID not found.';
+            this.isError = true;
+            this.isLoading = false;
+            this.$router.push('/login');
+            return;
+        }
       try {
-        const userId = localStorage.getItem('userId'); // Replace with actual user ID
+
         const response = await axios.post(`${API_URL}/api/starter-pack`, { userId });
         this.message = response.data.message;
         this.isError = false;
@@ -77,6 +90,9 @@ export default {
       } catch (error) {
         this.message = error.response?.data?.error || 'An error occurred while claiming the starter pack.';
         this.isError = true;
+         if (error.response?.status === 401 || error.response?.status === 403) {
+             this.$router.push('/login');
+         }
       } finally {
         this.isLoading = false;
       }
