@@ -62,7 +62,7 @@ Voor de Game volgt hetzelfde principe als het ruilen. Qr-code die gegenereert wo
 ### Scorebord
 Elke kaart heeft een zeldzaamheid (Gewoon, Ongewoon, Zeldzaam, Ultra zeldzaam, Legendarisch). Deze zeldzaamheden corospenderen met een waarde. Hoe zeldzamer de kaart, hoe hoger de waarde. Met deze waarde kan je op het scorebord komen. De top 10 gebruikers met de hoogste score wordt gedisplayed op de scorebord pagina. De studiegebieden hebben een apart scorebord. Zo kan je zien welk studiegebied momenteel de hoogste score heeft. Zo onstaat er ook een beetje competitie tussen de opleidingen.
 
-<img src="https://github.com/user-attachments/assets/ad482bae-b89f-4355-a344-73f73da59000" width="300" height="400" >    <img src="https://github.com/user-attachments/assets/f4e8c0a4-807b-409d-855a-8fd0b7dd9ddd" width="300" height="400">
+<img src="https://github.com/user-attachments/assets/ad482bae-b89f-4355-a344-73f73da59000" width="350" height="400" >    <img src="https://github.com/user-attachments/assets/f4e8c0a4-807b-409d-855a-8fd0b7dd9ddd" width="350" height="400">
 
 
 
