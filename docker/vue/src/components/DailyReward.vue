@@ -306,12 +306,12 @@ export default {
 
 /* Geselecteerde kaart */
 .card-item.selected {
-  box-shadow: 0 0 0 3px #2196F3;
+  box-shadow: 0 0 0 3px red;
 }
 
 /* Confirm button styling */
 .confirm-button {
-  background-color: #007bff;
+  background-color: red;
   color: white;
   padding: 1rem 2rem;
   border: none;
