@@ -14,6 +14,7 @@ services:
       - ./db/data:/var/lib/mysql
       - ./db/custom-config.cnf:/etc/mysql/conf.d/custom-config.cnf
       - ./db/add-on:/docker-entrypoint-initdb.d
+
   api:
     build:
       context: ./api

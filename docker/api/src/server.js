@@ -16,9 +16,9 @@ const port = process.env.PORT || 3000; // Use PORT from environment variables
 
 app.use(express.json());
 app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
-  websockets: true, // Allow WebSocket connections
+  origin: 'https://collectica.devbitapp.be', // Only allow your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // If you use cookies/auth
 }));
 
 app.use((req, res, next) => { 
