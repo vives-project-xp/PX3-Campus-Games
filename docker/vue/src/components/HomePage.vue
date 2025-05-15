@@ -247,7 +247,7 @@ p {
 .login-button {
     padding: 10px 20px;
     font-size: 50px;
-    font-weight: semi-bold;
+    font-weight: bold;
     background-color: white;
     color: red;
     border: 3px solid red;
@@ -278,9 +278,8 @@ p {
 }
 
 .toggle-button {
-  padding: 15px;
-  width: 25%;
-  padding: 1rem;
+  padding: 10px;
+  /*width: 25%;*/
   background-color: red;
   color: white;
   border: none;
@@ -288,7 +287,8 @@ p {
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 
