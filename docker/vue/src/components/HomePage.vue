@@ -7,15 +7,24 @@
     </div>
 
     <div class="about-section">
-      <h2>Over ons</h2>
-      <p>
-        Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
-        <br>
-        <br>
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
-        Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
-      </p>
-    </div>
+  <h2>Over ons</h2>
+  <button
+    @click="toggleContent"
+    class="toggle-button"
+  >
+    {{ isContentVisible ? 'Verberg uitleg' : 'Toon uitleg' }}
+  </button>
+
+  <div v-if="isContentVisible" class="content-container">
+    <p>
+      Ons doel is om een game te ontwikkelen die alle opleidingen met elkaar kan verbinden, zodat studenten samen kunnen spelen en zich verbonden kunnen voelen.
+      <br>
+      <br>
+      Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
+      Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
+    </p>
+  </div>
+</div>
     
     <div>
       <h2>Hoe te spelen</h2>
@@ -23,7 +32,7 @@
         @click="toggleContent"
         class="toggle-button"
       >
-        {{ isContentVisible ? 'Verberg uitleg' : 'Toon uitleg:' }}
+        {{ isContentVisible ? 'Verberg uitleg' : 'Toon uitleg' }}
       </button>
 
       <div v-if="isContentVisible" class="content-container">
@@ -264,7 +273,7 @@ p {
   padding-left: 20px;
   padding-right: 20px;
   margin: 20px 0;
-  background-color: lightgray;
+  background-color: white;
   box-shadow: 0 5px 5px lightslategray;
 }
 
