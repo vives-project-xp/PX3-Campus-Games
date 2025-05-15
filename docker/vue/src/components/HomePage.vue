@@ -14,8 +14,6 @@
         <br>
         Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
         Met deze score word er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed plubliek aan te spreken.
-        Om dit te bereiken, creëren we een online kaartspel dat heel gebruiksvriendelijk is. Spelers kunnen kaarten verdienen, ruilen en tegen elkaar strijden om kaarten en scores te verzamelen.
-Met deze score wordt er een scorebord gemaakt met de hoogste scores. We zorgen ervoor dat de kaarten er aantrekkelijk en eenvoudig uitzien om een breed publiek aan te spreken.
       </p>
     </div>
     
