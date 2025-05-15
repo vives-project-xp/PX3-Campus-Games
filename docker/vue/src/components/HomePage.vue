@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
-    
-    <div class="call-to-action">
+  <div class="logo"><img src="/logo_campus_games.jpg" alt="Vives Campus Games logo" class="logo-image"></div>
+  <div class="call-to-action">
       <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
     </div>
+  <div class ="home-page"> 
+    
+    
+    
 
     <div class="about-section">
       <button @click="toggleSection('aboutUs')" class="toggle-button1">
@@ -99,10 +101,11 @@
         <b><a class="pageLink" href="https://github.com/vives-project-xp/PX3-Campus-Games" target="_blank">github repository</a></b>.</p>
     </div>
 
-    <div class="call-to-action">
+    
+  </div>
+  <div class="call-to-action">
       <button v-if="!isLoggedIn" @click="goToLogin" class="login-button">Start</button>
     </div>
-  </div>
 </template>
 
 <script>
@@ -182,6 +185,15 @@ h2 {
 p {
   font-size: 20px;
 }
+.home-page {
+  border: 2px solid grey;
+  border-radius: 10px;
+  margin: 20px 0;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  box-shadow: 0 5px 5px lightslategray;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
 .logo {
   width: 100%;
@@ -212,22 +224,16 @@ p {
     padding: 10px 20px;
     font-size: 50px;
     font-weight: bold;
-    background-color: white;
-    color: red;
-    border: 3px solid red;
+    background-color: red;
+    color: white;
     border-radius: 10px;
+    border : none;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .about-section {
-  border: 2px solid grey;
-  border-radius: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin: 20px 0;
-  background-color: white;
-  box-shadow: 0 5px 5px lightslategray;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
 }
 
 .pageLink {
@@ -246,7 +252,7 @@ p {
   background-color: red;
   color: white;
   border: none;
-  border-radius: 1rem;
+  border-radius: 10px;
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -259,7 +265,7 @@ p {
   background-color: red;
   color: white;
   border: none;
-  border-radius: 1rem;
+  border-radius: 10px;
   cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;

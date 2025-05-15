@@ -132,7 +132,7 @@ body, html, main {
     padding: 20px;
     max-width: 750px;
     margin: 40px auto;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;

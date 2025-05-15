@@ -250,6 +250,7 @@ export default {
 .filter-row {
   display: flex;
   gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
 }
 
 .filter-row button {
@@ -258,7 +259,7 @@ export default {
   cursor: pointer;
   border: none;
   border-radius: 0.3rem;
-  background-color: white;
+  background-color: transparent; 
   color: rgb(32, 32, 32);
   transition: background-color 0.2s, color 0.3s;
   font-size: 1rem;
@@ -324,6 +325,7 @@ export default {
 .card-wrapper {
   position: relative;
   width: 90%;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
 }
 
 .card-wrapper::after {
