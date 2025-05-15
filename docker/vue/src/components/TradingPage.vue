@@ -344,20 +344,20 @@ const updateFriendCard = (tradeStatus) => {
     hasAccepted.value = true;
 
     // Rest of your existing code...
-    if (response.data.tradeStatus.user1Accepted && response.data.tradeStatus.user2Accepted) {
-      if (response.data.tradeStatus.user1 === userId) {
-        receivedCard.value = response.data.tradeStatus.user2Card;
-      } else {
-        receivedCard.value = response.data.tradeStatus.user1Card;
-      }
-      showNewCardPopup.value = true;
-    } else {
-      if (response.data.tradeStatus.user1 === userId) {
-        friendAccepted.value = response.data.tradeStatus.user2Accepted;
-      } else {
-        friendAccepted.value = response.data.tradeStatus.user1Accepted;
-      }
-    }
+    // if (response.data.tradeStatus.user1Accepted && response.data.tradeStatus.user2Accepted) {
+    //   if (response.data.tradeStatus.user1 === userId) {
+    //     receivedCard.value = response.data.tradeStatus.user2Card;
+    //   } else {
+    //     receivedCard.value = response.data.tradeStatus.user1Card;
+    //   }
+    //   showNewCardPopup.value = true;
+    // } else {
+    //   if (response.data.tradeStatus.user1 === userId) {
+    //     friendAccepted.value = response.data.tradeStatus.user2Accepted;
+    //   } else {
+    //     friendAccepted.value = response.data.tradeStatus.user1Accepted;
+    //   }
+    // }
 
     await fetchTradeUpdates();
 
@@ -373,7 +373,7 @@ const fetchTradeUpdates = async () => {
     if (response.data.user1 && response.data.user2) {
       tradeJoined.value = true;
     }
-    // ...rest of your update logic
+    updateTradeState(response.data);
   } catch (error) {
     console.error("Error fetching trade updates:", error);
   }
@@ -408,13 +408,13 @@ const updateTradeState = (tradeStatus) => {
         hasAccepted.value = tradeStatus.user2Accepted;
     }
 
-    // === NEW: Handle trade completion for both users ===
+    // Show popup for both users when trade is complete
     if (tradeStatus.user1Accepted && tradeStatus.user2Accepted) {
         // Only show popup if not already shown
         if (!showNewCardPopup.value) {
             if (userId.value === tradeStatus.user1) {
                 receivedCard.value = tradeStatus.user2Card;
-            } else {
+            } else if (userId.value === tradeStatus.user2) {
                 receivedCard.value = tradeStatus.user1Card;
             }
             showNewCardPopup.value = true;
@@ -472,8 +472,8 @@ const startPollingForTrade = () => {
   if (pollInterval) clearInterval(pollInterval);
   pollInterval = setInterval(async () => {
     await fetchTradeUpdates();
-    // Only stop polling when both users are present
-    if (tradeJoined.value) clearInterval(pollInterval);
+    // Only stop polling when both users are present AND popup is shown
+    if (tradeJoined.value && showNewCardPopup.value) clearInterval(pollInterval);
   }, 1000);
 };
 
@@ -482,6 +482,16 @@ const startPollingForTrade = () => {
   checkLoginStatus();
   loadUserCards();
 
+//   socket.on('tradeCompleted', (data) => {
+//     if (data.tradeCode === tradeCode.value) {
+//         console.log("Trade completed!", data);
+//         receivedCard.value = data.receivedCard;
+//         showNewCardPopup.value = true;
+        
+//         // Optioneel: vernieuw de kaartenlijst
+//         loadUserCards();
+//     }
+// });
   // Register for socket updates
   socket.emit('register', userId.value);
 
