@@ -370,6 +370,17 @@ export default {
   font-size: 3vh;
   width: 52vh;
   height: 86vh;
-  overflow: hidden;
+  overflow-y: auto;
+}
+
+@media (max-width: 37.5em) {
+  .card-info-box {
+    width: 100%;
+    max-height: 67vh;
+    font-size: 1.5rem;
+    overflow-y: auto;
+    padding: 0.8rem;
+    box-sizing: border-box;
+  }
 }
 </style>
