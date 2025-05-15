@@ -660,7 +660,7 @@ onBeforeUnmount(() => {
 /* Buttons */
 .btn {
   padding: 0.8rem 1rem;
-  background-color: #007bff;
+  background-color: red;
   color: white;
   border: none;
   border-radius: 0.5rem;
