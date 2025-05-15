@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <TopBar />
+    <Background class="background"/>
     <main>
       <router-view></router-view>
     </main>
@@ -13,6 +14,7 @@
 import NavigationMenu from './components/NavigationMenu.vue';
 import BackToTopButton from './components/BackToTopButton.vue';
 import TopBar from './components/TopBar.vue';
+import Background from './components/Background.vue';
 
 export default {
   name: 'App',
@@ -20,6 +22,7 @@ export default {
     NavigationMenu,
     BackToTopButton,
     TopBar,
+    Background,
   },
 };
 </script>
@@ -57,5 +60,15 @@ main {
 html, body {
   padding: 0rem 1rem 0rem 1rem;
   margin-top: 1rem;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -100;
+  pointer-events: none; /* Optional: allows clicks to pass through */
 }
 </style>

@@ -191,7 +191,7 @@ export default {
         return "";
       }
 
-      return `./assets/cards${fileName}`;
+      return `./assets/cards/${fileName}`;
     };
 
 const checkLoginStatus = () => {
@@ -737,5 +737,11 @@ onBeforeUnmount(() => {
   .cards-container {
     flex-direction: column;
   }
+}
+
+.background {
+  position: relative;
+  z-index: -100;
+
 }
 </style>

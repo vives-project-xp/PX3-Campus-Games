@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import Background from './components/Background.vue';
 import CollectionPage from './components/CollectionPage.vue';
 import CodexPage from './components/CodexPage.vue';
 /*import GamePage from './components/GamePage.vue';*/
@@ -13,10 +14,12 @@ import RegisterPage from './components/RegisterPage.vue';
 import StarterPackPage from './components/StarterPackPage.vue';
 import DailyReward from './components/DailyReward.vue';
 import LeaderBoard from './components/LeaderBoard.vue';
+import path from 'path-browserify';
 
 
 const routes = [
   { path: '/', component: HomePage },
+  { path: '/background', component: Background },
   { path: '/collection', component: CollectionPage },
   { path: '/codex', component: CodexPage },
   /*{ path: '/game', component: GamePage },*/
